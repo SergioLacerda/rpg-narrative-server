@@ -1,7 +1,7 @@
 import pytest
 
 from rpg_narrative_server.interfaces.dice.tokenizer import normalize_expression
-from rpg_narrative_server.shared.dice.parser import DiceParser
+from rpg_narrative_server.domain.dice.parser import DiceParser
 from rpg_narrative_server.domain.dice.ast.nodes import RerollNode
 
 

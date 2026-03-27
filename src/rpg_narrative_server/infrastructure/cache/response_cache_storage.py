@@ -10,7 +10,7 @@ def build_file_storage(path: Path):
             return {}
 
         try:
-            return json.loads(path.file.read_text(encoding="utf-8"))
+            return json.loads(path.read_text(encoding="utf-8"))
         except Exception:
             return {}
 

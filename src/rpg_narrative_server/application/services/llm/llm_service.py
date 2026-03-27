@@ -2,7 +2,7 @@ import json
 import hashlib
 import logging
 
-from rpg_narrative_server.infrastructure.resilience.resilience import resilient_call
+from rpg_narrative_server.shared.resilience import resilient_call
 
 logger = logging.getLogger("rpg_narrative_server.llm")
 

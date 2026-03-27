@@ -40,7 +40,7 @@ def test_save_writes_file(tmp_path):
     store._data = {"abc": "campaign_x"}
     store.save()
 
-    assert '"abc": "campaign_x"' in path.file.read_text(encoding="utf-8")
+    assert '"abc": "campaign_x"' in path.read_text(encoding="utf-8")
 
 
 def test_get_returns_none_when_missing(tmp_path):

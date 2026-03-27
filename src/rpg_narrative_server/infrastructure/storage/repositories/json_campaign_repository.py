@@ -36,7 +36,7 @@ class JSONCampaignRepository(CampaignRepositoryPort):
 
         def _read():
             try:
-                return json.loads(path.file.read_text(encoding="utf-8"))
+                return json.loads(path.read_text(encoding="utf-8"))
             except Exception:
                 return []
 

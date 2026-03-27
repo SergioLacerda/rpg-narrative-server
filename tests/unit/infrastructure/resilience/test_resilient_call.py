@@ -1,6 +1,6 @@
 import pytest
 import asyncio
-from rpg_narrative_server.infrastructure.resilience.resilience import resilient_call
+from rpg_narrative_server.shared.resilience import resilient_call
 
 
 @pytest.mark.asyncio

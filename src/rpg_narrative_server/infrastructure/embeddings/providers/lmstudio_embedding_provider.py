@@ -2,7 +2,7 @@ import httpx
 import logging
 from typing import List
 
-from rpg_narrative_server.infrastructure.resilience.resilience import resilient_call
+from rpg_narrative_server.shared.resilience import resilient_call
 
 try:
     from openai import AsyncOpenAI
