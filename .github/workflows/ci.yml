@@ -39,6 +39,16 @@ jobs:
       - name: Type check (mypy)
         run: mypy src || true
 
+      - name: Debug container file
+        run: |
+          echo "---- container.py ----"
+          sed -n '1,80p' src/rpg_narrative_server/bootstrap/container.py
+
+      - name: Debug chroma backend
+        run: |
+          echo "---- chroma_backend.py ----"
+          sed -n '1,40p' src/rpg_narrative_server/infrastructure/storage/backends/chroma_backend.py
+          
       - name: Run tests with coverage
         run: pytest --cov=src/rpg_narrative_server --cov-report=xml --cov-report=term
 
