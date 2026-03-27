@@ -21,27 +21,16 @@ from rpg_narrative_server.infrastructure.embeddings.providers.gemini_embedding_p
     create_gemini_embedding,
 )
 
-from rpg_narrative_server.infrastructure.cache.ttl_cache import TTLCache
-from rpg_narrative_server.infrastructure.cache.response_cache import ResponseCache
-from rpg_narrative_server.infrastructure.cache.response_cache_storage import (
-    build_file_storage,
-)
-
 # storage
 from rpg_narrative_server.infrastructure.storage.vector_store_config import (
     VectorStoreConfig,
 )
 
-from rpg_narrative_server.infrastructure.storage.backends.json_backend import (
-    JSONStorageBackend,
+from rpg_narrative_server.infrastructure.cache.ttl_cache import TTLCache
+from rpg_narrative_server.infrastructure.cache.response_cache import ResponseCache
+from rpg_narrative_server.infrastructure.cache.response_cache_storage import (
+    build_file_storage,
 )
-from rpg_narrative_server.infrastructure.storage.backends.chroma_backend import (
-    ChromaStorageBackend,
-)
-from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import (
-    InMemoryStorageBackend,
-)
-
 
 # vector index
 from rpg_narrative_server.vector_index.builder import VectorIndexBuilder
@@ -181,26 +170,41 @@ class Container:
     # STORAGE
     # ==========================================================
 
-    def _build_storage(self):
+    def _build_storage(
+        self,
+        base_path=None,
+        vector_store_config=None,
+    ):
 
         storage_type = self.settings.app.storage
         base_path = Path(self.settings.app.campaign_file)
-
         vector_store_config = VectorStoreConfig(
             max_file_size_kb=self.settings.app.max_file_size_kb,
             max_entries_per_file=self.settings.app.max_entries_per_file,
         )
 
         if storage_type == "json":
+            from rpg_narrative_server.infrastructure.storage.backends.json_backend import (
+                JSONStorageBackend,
+            )
+
             return JSONStorageBackend(base_path, vector_store_config)
 
         if storage_type == "chroma":
+            from rpg_narrative_server.infrastructure.storage.backends.chroma_backend import (
+                ChromaStorageBackend,
+            )
+
             return ChromaStorageBackend(base_path)
 
         if storage_type == "memory":
+            from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import (
+                InMemoryStorageBackend,
+            )
+
             return InMemoryStorageBackend()
 
-        raise ValueError(f"Unknown storage: {storage_type}")
+        raise ValueError(f"Unknown storage backend: {storage_type}")
 
     # ==========================================================
     # EMBEDDING
