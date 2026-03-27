@@ -1,10 +1,7 @@
 from pathlib import Path
-import chromadb
 
 from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
-from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store import (
-    ChromaVectorStore,
-)
+
 from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
     VectorStoreAdapter,
 )
@@ -16,8 +13,9 @@ from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
 class ChromaStorageBackend(StorageBackend):
 
     def __init__(self, base_path: Path | None = None):
-        self.base = base_path or Path("./data")
+        import chromadb
 
+        self.base = base_path or Path("./data")
         self.base.mkdir(parents=True, exist_ok=True)
 
         self.client = chromadb.Client(
@@ -35,6 +33,10 @@ class ChromaStorageBackend(StorageBackend):
     # ---------------------------------------------------------
 
     def build_vector_store(self):
+        from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store import (
+            ChromaVectorStore,
+        )
+
         collection = self._get_collection("vectors")
         return VectorStoreAdapter(ChromaVectorStore(collection))
 
