@@ -50,6 +50,11 @@ jobs:
           sed -n '1,40p' src/rpg_narrative_server/infrastructure/storage/backends/chroma_backend.py
           
       - name: Run tests with coverage
+        env:
+          DISCORD_TOKEN: test-token
+          ENVIRONMENT: test
+          LLM_PROVIDER: mock
+          EMBEDDING_PROVIDER: mock
         run: pytest --cov=src/rpg_narrative_server --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov
