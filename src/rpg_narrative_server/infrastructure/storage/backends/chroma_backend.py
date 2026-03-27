@@ -1,0 +1,44 @@
+from pathlib import Path
+import chromadb
+
+from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
+from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store import ChromaVectorStore
+from rpg_narrative_server.infrastructure.storage.adapters.vector_store import VectorStoreAdapter
+from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import InMemoryKVStore
+
+
+class ChromaStorageBackend(StorageBackend):
+
+    def __init__(self, base_path: Path | None = None):
+        self.base = base_path or Path("./data")
+
+        self.base.mkdir(parents=True, exist_ok=True)
+
+        self.client = chromadb.Client(
+            chromadb.config.Settings(
+                persist_directory=str(self.base / "chroma"),
+                anonymized_telemetry=False,
+            )
+        )
+
+    def _get_collection(self, name: str):
+        return self.client.get_or_create_collection(name=name)
+
+    # ---------------------------------------------------------
+    # STORES
+    # ---------------------------------------------------------
+
+    def build_vector_store(self):
+        collection = self._get_collection("vectors")
+        return VectorStoreAdapter(
+            ChromaVectorStore(collection)
+        )
+
+    def build_document_store(self):
+        return InMemoryKVStore()
+
+    def build_token_store(self):
+        return InMemoryKVStore()
+
+    def build_metadata_store(self):
+        return InMemoryKVStore()
