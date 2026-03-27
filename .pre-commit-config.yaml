@@ -8,15 +8,26 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
-  # Ruff - apenas linting + auto-fix (não formata)
+  # Ruff - linting + auto-fix
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.7
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
 
-  # Black - formatter oficial do projeto
+  # Black - formatter oficial
   - repo: https://github.com/psf/black
     rev: 24.10.0
     hooks:
       - id: black
+
+  # MyPy - type checking (novo!)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
+    hooks:
+      - id: mypy
+        # args: [--strict]          # descomente se quiser modo strict (recomendado no futuro)
+        # additional_dependencies:  # adicione aqui se mypy reclamar de tipos faltando
+        #   - types-requests
+        #   - types-pyyaml
+        #   - types-python-dateutil

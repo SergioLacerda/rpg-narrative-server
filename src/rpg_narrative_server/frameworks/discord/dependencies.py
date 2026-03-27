@@ -1,8 +1,9 @@
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class BotDependencies:
-    roll_dice: any
-    narrative: any
-    end_session: any
+    roll_dice: Any
+    narrative: Any
+    end_session: Any

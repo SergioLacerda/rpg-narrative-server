@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Optional
+from typing import Iterable, Optional
+import asyncio
 
 
 class EmbeddingGateway(ABC):
@@ -31,17 +32,46 @@ class EmbeddingGateway(ABC):
     # ---------------------------------------------
 
     @abstractmethod
-    async def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> list[float]:
         """
         Generate embedding for a single text.
         """
         raise NotImplementedError
 
-    async def embed_batch(self, texts: Iterable[str]) -> List[List[float]]:
+    async def embed_batch(
+        self,
+        texts: Iterable[str],
+        *,
+        concurrency: int = 5,
+    ) -> list[list[float]]:
         """
-        Optional batch implementation.
+        Default batch implementation.
 
-        Default fallback: sequential calls.
-        Providers can override for performance.
+        - Uses sequential fallback if concurrency=1
+        - Uses limited concurrency otherwise
+        - Providers should override for native batch support
         """
-        return [await self.embed(t) for t in texts]
+
+        texts_list = list(texts)
+
+        if not texts_list:
+            return []
+
+        # -----------------------------------------
+        # Sequential (safe fallback)
+        # -----------------------------------------
+        if concurrency <= 1:
+            return [await self.embed(t) for t in texts_list]
+
+        # -----------------------------------------
+        # Concurrent execution (bounded)
+        # -----------------------------------------
+        semaphore = asyncio.Semaphore(concurrency)
+
+        async def _embed_one(text: str) -> list[float]:
+            async with semaphore:
+                return await self.embed(text)
+
+        tasks = [_embed_one(t) for t in texts_list]
+
+        return await asyncio.gather(*tasks)

@@ -1,9 +1,13 @@
-class DummyLLM:
-    def __init__(self, result="ACTION"):
-        self.result = result
-        self.calls = []
+from typing import Any
+from rpg_narrative_server.application.dto.llm_request import LLMRequest
 
-    async def generate(self, request):
+
+class DummyLLM:
+    def __init__(self, result: str = "ACTION") -> None:
+        self.result = result
+        self.calls: list[dict[str, Any]] = []
+
+    async def generate(self, request: LLMRequest) -> str:
         self.calls.append(
             {
                 "prompt": request.prompt,

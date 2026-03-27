@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class NarrativeBuilder:
     # ---------------------------------------------------------
     # SYSTEM PROMPT
@@ -17,43 +20,45 @@ class NarrativeBuilder:
         return base + self._get_style(scene_type)
 
     # ---------------------------------------------------------
-    # USER PROMPT (🔥 CTX DIRETO - V2)
+    # USER PROMPT
     # ---------------------------------------------------------
 
     def build_user_prompt(
         self,
         *,
-        ctx: dict,
+        ctx: dict[str, Any],
         action: str,
     ) -> str:
         action = self.normalize_action(action)
 
-        summary = ctx.get("summary") or ""
+        summary = str(ctx.get("summary") or "")
         events = ctx.get("recent_events") or []
-        retrieved = ctx.get("retrieved") or ""
+        retrieved = str(ctx.get("retrieved") or "")
         entities = ctx.get("related_entities") or []
-        scene_type = self._normalize_scene(ctx.get("scene_type"))
+
+        scene_type_raw = ctx.get("scene_type")
+        scene_type = self._normalize_scene(str(scene_type_raw or "DEFAULT"))
 
         instruction = self._get_instruction(scene_type)
 
-        parts = []
+        parts: list[str] = []
 
-        # 🔥 memória longa
+        # memória longa
         if summary:
             parts.append(f"Resumo da sessão:\n{summary.strip()}")
 
-        # 🔥 eventos recentes
-        if events:
-            ev = "\n".join(f"- {e}" for e in events[-5:] if e)
+        # eventos recentes
+        if isinstance(events, list) and events:
+            ev = "\n".join(f"- {str(e)}" for e in events[-5:] if e)
             if ev:
                 parts.append(f"Eventos recentes:\n{ev}")
 
-        # 🔥 entidades
-        if entities:
-            unique = list(dict.fromkeys(entities))
+        # entidades
+        if isinstance(entities, list) and entities:
+            unique = list(dict.fromkeys(str(e) for e in entities))
             parts.append("Elementos importantes:\n" + ", ".join(unique))
 
-        # 🔥 retrieval
+        # retrieval
         if retrieved:
             parts.append(f"Memória relevante:\n{retrieved.strip()}")
 
@@ -99,7 +104,7 @@ class NarrativeBuilder:
     # CONFIG
     # ---------------------------------------------------------
 
-    def get_generation_config(self, scene_type: str) -> dict:
+    def get_generation_config(self, scene_type: str) -> dict[str, float | int]:
         scene_type = self._normalize_scene(scene_type)
 
         if scene_type in ("ACTION", "COMBAT"):

@@ -11,7 +11,7 @@ class LLMError(Exception):
 
 
 class LLMClientError(LLMError):
-    def __init__(self, message: str, *, code: str = None):
+    def __init__(self, message: str, *, code: str | None = None):
         super().__init__(message)
         self.code = code  # ex: "insufficient_quota"
 

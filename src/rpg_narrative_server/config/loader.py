@@ -1,7 +1,9 @@
-from functools import lru_cache
 import os
 import logging
+from functools import lru_cache
+from typing import cast
 
+from rpg_narrative_server.config.types import EmbeddingDefaults, LLMProvider
 from rpg_narrative_server.config.env_loader import load_environment
 from rpg_narrative_server.config.profile import load_profile
 
@@ -20,18 +22,18 @@ from rpg_narrative_server.config.settings import (
 
 ENVIRONMENT, ENV_FILES, CLI_OVERRIDES = load_environment()
 
-
 device = os.getenv("DEVICE", "").lower()
 
 if device == "cpu":
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 
 # ---------------------------------------------------------
 # helpers
 # ---------------------------------------------------------
 
 
-def _get(name: str, default=None):
+def _get(name: str, default: str | None = None) -> str | None:
     return os.getenv(name, default)
 
 
@@ -42,19 +44,19 @@ def _get_int(name: str, default: int) -> int:
         return default
 
 
-def _require(name: str):
+def _require(name: str) -> str:
     value = _get(name)
     if not value:
         raise RuntimeError(f"Missing env variable: {name}")
     return value
 
 
-def _get_log_level():
+def _get_log_level() -> int:
     level = os.getenv("LOG_LEVEL", "INFO").upper()
     return getattr(logging, level, logging.INFO)
 
 
-def _get_embedding_defaults(profile_embedding: str):
+def _get_embedding_defaults(profile_embedding: str) -> EmbeddingDefaults:
     if profile_embedding == "local":
         return {
             "provider": "sentence",
@@ -67,6 +69,12 @@ def _get_embedding_defaults(profile_embedding: str):
         "model": "text-embedding-3-small",
         "dimension": 1536,
     }
+
+
+def _validate_llm_provider(value: str) -> LLMProvider:
+    if value not in {"openai", "lmstudio", "ollama", "groq", "anthropic"}:
+        raise ValueError(f"Invalid LLM provider: {value}")
+    return cast(LLMProvider, value)
 
 
 # ---------------------------------------------------------
@@ -83,51 +91,37 @@ def load_settings() -> Settings:
     provider = _get("EMBEDDING_PROVIDER", embedding_defaults["provider"])
 
     settings = Settings(
-        # -------------------------------------------------
-        # runtime
-        # -------------------------------------------------
         runtime=RuntimeSettings(
             environment=ENVIRONMENT,
             device=_get("DEVICE"),
             log_level=_get_log_level(),
             execution_timeout=_get_int("LLM_TIMEOUT", 180),
         ),
-        # -------------------------------------------------
-        # LLM
-        # -------------------------------------------------
         llm=LLMSettings(
-            provider=_get("LLM_PROVIDER", "openai"),
-            model=_get("LLM_MODEL", "gpt-4o-mini"),
+            provider=_validate_llm_provider(_get("LLM_PROVIDER", "openai") or "openai"),
+            model=_get("LLM_MODEL", "gpt-4o-mini") or "gpt-4o-mini",
             api_key=_get("LLM_API_KEY"),
             base_url=_get("LLM_BASE_URL"),
         ),
-        # -------------------------------------------------
-        # embeddings
-        # -------------------------------------------------
         embeddings=EmbeddingSettings(
             profile=profile.embedding,
-            provider=provider,
-            model=_get("EMBEDDING_MODEL", embedding_defaults["model"]),
+            provider=provider or "openai",
+            model=_get("EMBEDDING_MODEL", embedding_defaults["model"])
+            or embedding_defaults["model"],
             api_key=_get("EMBEDDING_API_KEY"),
             base_url=_get("EMBEDDING_BASE_URL"),
             batch_size=_get_int("EMBEDDING_BATCH_SIZE", 32),
-            # 🔥 FIX estrutural
             dimension=_get_int("EMBEDDING_DIMENSION", embedding_defaults["dimension"]),
         ),
-        # -------------------------------------------------
-        # app
-        # -------------------------------------------------
         app=AppSettings(
             discord_token=_require("DISCORD_TOKEN"),
             max_cache_size=_get_int("MAX_CACHE_SIZE", 10000),
-            campaign_file=_get("CAMPAIGN_PATH", "./data"),
+            campaign_file=_get("CAMPAIGN_PATH", "./data") or "./data",
             storage=profile.storage,
         ),
     )
 
-    # -------------------------------------------------
-    # validação mínima (fail fast)
-    # -------------------------------------------------
+    # validação leve
     if settings.embeddings.provider not in {
         "openai",
         "sentence",

@@ -1,16 +1,9 @@
 from typing import Optional
+import discord
 
 
 class MessageContext:
-    """
-    Adapter para compatibilizar discord.Message com o padrão de ctx usado nos commands.
-
-    Objetivo:
-    - Permitir reutilizar executor + responder
-    - Evitar acoplamento do application layer com discord.Message
-    """
-
-    def __init__(self, message):
+    def __init__(self, message: discord.Message) -> None:
         self.message = message
 
         # compatibilidade com ctx padrão
@@ -18,8 +11,7 @@ class MessageContext:
         self.author = message.author
         self.guild = getattr(message, "guild", None)
 
-        # usado pelo responder (mantém compatibilidade)
-        self.interaction: Optional[None] = None
+        self.interaction: Optional[object] = None
 
     # -------------------------------------------------
     # API compatível com ctx.send()

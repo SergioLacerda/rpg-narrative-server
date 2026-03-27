@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class DummyFollowup:
     def __init__(self, ctx):
         self.ctx = ctx
@@ -82,11 +85,11 @@ class DummyUsecase:
     - captura de chamadas
     """
 
-    def __init__(self, result=None, error: Exception = None):
+    def __init__(self, result=None, error: Exception | None = None):
         self._result = result
         self._error = error
 
-        self.calls = []  # histórico de chamadas
+        self.calls: list[Any] = []
 
     async def execute(self, *args, **kwargs):
         self.calls.append(

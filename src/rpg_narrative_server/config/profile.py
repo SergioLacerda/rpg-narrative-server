@@ -1,11 +1,16 @@
 from dataclasses import dataclass
+from typing import Literal
 import os
 
 
-@dataclass
+StorageType = Literal["json", "chroma", "memory"]
+EmbeddingProfile = Literal["local", "hybrid", "cloud"]
+
+
+@dataclass(frozen=True)
 class ProfileConfig:
-    storage: str
-    embedding: str
+    storage: StorageType
+    embedding: EmbeddingProfile
 
 
 def load_profile() -> ProfileConfig:
@@ -26,7 +31,7 @@ def load_profile() -> ProfileConfig:
     if profile == "cloud":
         return ProfileConfig(
             storage="chroma",
-            embedding="openai",
+            embedding="cloud",
         )
 
     raise ValueError(f"Invalid APP_PROFILE: {profile}")

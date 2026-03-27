@@ -10,10 +10,14 @@ class FakeLLMService:
     ✔ fácil de controlar em testes
     """
 
-    def __init__(self, result=None, fail=False):
+    def __init__(
+        self,
+        result: str | None = None,
+        fail: bool = False,
+    ) -> None:
         self.result = result
         self.fail = fail
-        self.calls = []
+        self.calls: list[LLMRequest] = []
 
     async def generate(self, request: LLMRequest) -> str:
         if not isinstance(request, LLMRequest):

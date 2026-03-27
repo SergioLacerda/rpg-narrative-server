@@ -2,7 +2,7 @@ import pytest
 
 from pathlib import Path
 
-from tests.config.helpers.golden_assert import assert_golden
+from tests.config.helpers.golden_assert import assert_golden, normalize
 
 from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
 from rpg_narrative_server.domain.narrative.narrative_builder import NarrativeBuilder
@@ -14,10 +14,6 @@ GOLDEN_DIR = Path(__file__).parent / "prompts"
 UPDATE_GOLDEN = False
 
 
-def normalize(text: str) -> str:
-    return "\n".join(line.rstrip() for line in text.strip().splitlines())
-
-
 def assert_prompt_structure(prompt: str):
     assert "Você é um mestre de RPG" in prompt
     assert "Ação do jogador:" in prompt
@@ -27,7 +23,8 @@ def assert_prompt_structure(prompt: str):
 def build_prompt(ctx: dict, action: str) -> str:
     builder = NarrativeBuilder()
 
-    system = builder.build_system_prompt(ctx.get("scene_type"))
+    system = builder.build_system_prompt(str(ctx.get("scene_type") or "DEFAULT"))
+
     user = builder.build_user_prompt(
         ctx=ctx,
         action=action,

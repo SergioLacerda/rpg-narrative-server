@@ -10,7 +10,7 @@ from tests.config.fakes.narrative import (
     DummyDocumentResolver,
 )
 
-from tests.config.helpers.golden_assert import assert_golden
+from tests.config.helpers.golden_assert import assert_golden, normalize
 from rpg_narrative_server.usecases.narrative_event import NarrativeUseCase
 from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
 
@@ -55,7 +55,7 @@ async def test_narrative_pipeline_prompt_golden():
 
     await usecase.execute(campaign_id="c", action="enter room", user_id="u")
 
-    prompt = next(p for p in llm.calls if "Ação do jogador" in p)
+    prompt = normalize(next(p for p in llm.calls if "Ação do jogador" in p))
 
     # ---------------------------------------------------------
     # ASSERTS FUNCIONAIS
@@ -71,4 +71,4 @@ async def test_narrative_pipeline_prompt_golden():
 
     path = Path(__file__).parent / "prompts" / "pipeline.txt"
 
-    assert_golden(path, prompt, update=False)
+    assert_golden(path, normalize(prompt), update=False)

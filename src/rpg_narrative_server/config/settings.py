@@ -3,6 +3,10 @@ from typing import Optional, Literal
 import logging
 
 
+StorageType = Literal["json", "chroma", "memory"]
+EmbeddingProfile = Literal["local", "hybrid", "cloud"]
+
+
 # ==========================================================
 # LLM
 # ==========================================================
@@ -23,7 +27,7 @@ class LLMSettings:
 
 @dataclass(frozen=True)
 class EmbeddingSettings:
-    profile: Literal["local", "hybrid", "cloud"]
+    profile: EmbeddingProfile
 
     provider: str
     model: str
@@ -32,8 +36,6 @@ class EmbeddingSettings:
     base_url: Optional[str] = None
 
     batch_size: int = 32
-
-    # melhor deixar opcional (evita mismatch)
     dimension: Optional[int] = None
 
 
@@ -46,9 +48,7 @@ class EmbeddingSettings:
 class RuntimeSettings:
     environment: str
     device: Optional[str] = None
-
     log_level: int = logging.INFO
-
     execution_timeout: int = 180
 
 
@@ -63,7 +63,7 @@ class AppSettings:
     max_cache_size: int
     campaign_file: str
 
-    storage: Literal["json", "chroma", "memory"] = "json"
+    storage: StorageType = "json"
 
     max_file_size_kb: int = 1024
     max_entries_per_file: int = 5000
@@ -80,12 +80,3 @@ class Settings:
     llm: LLMSettings
     embeddings: EmbeddingSettings
     app: AppSettings
-
-
-__all__ = [
-    "Settings",
-    "RuntimeSettings",
-    "LLMSettings",
-    "EmbeddingSettings",
-    "AppSettings",
-]

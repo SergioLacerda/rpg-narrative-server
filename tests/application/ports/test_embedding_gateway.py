@@ -14,10 +14,10 @@ class DummyEmbeddingGateway(EmbeddingGateway):
 
 
 class SpyEmbeddingGateway(EmbeddingGateway):
-    def __init__(self):
-        self.calls = []
+    def __init__(self) -> None:
+        self.calls: list[str] = []
 
-    async def embed(self, text: str):
+    async def embed(self, text: str) -> list[float]:
         self.calls.append(text)
         return [float(len(text))]
 

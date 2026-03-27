@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class DummyLLM:
     def __init__(
         self,
@@ -10,7 +13,7 @@ class DummyLLM:
         self.response = response
         self.error = error or RuntimeError("LLM failure")
 
-        self.calls = []
+        self.calls: list[Any] = []
 
     # ---------------------------------------------------------
 

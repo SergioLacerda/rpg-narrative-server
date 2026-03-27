@@ -9,7 +9,9 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 def register_campaign_commands(bot):
     @bot.hybrid_command(name="campaign", description="Gerenciar campanha")
-    async def campaign(ctx: commands.Context, action: str = None, name: str = None):
+    async def campaign(
+        ctx: commands.Context, action: str | None = None, name: str | None = None
+    ):
         action = (action or "").lower().strip()
         name = (name or "").strip()
 

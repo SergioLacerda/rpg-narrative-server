@@ -1,13 +1,16 @@
+from typing import Any, Iterable
+
+
 class ContextBuilder:
     def __init__(
         self,
-        memory_service,
-        graph_service=None,
-        retrieval_service=None,
-        entity_extractor=None,
+        memory_service: Any,
+        graph_service: Any = None,
+        retrieval_service: Any = None,
+        entity_extractor: Any = None,
         *,
         max_recent_events: int = 10,
-    ):
+    ) -> None:
         self.memory = memory_service
         self.graph = graph_service
         self.retrieval = retrieval_service
@@ -21,11 +24,12 @@ class ContextBuilder:
         *,
         campaign_id: str,
         action: str,
-        memory=None,  # 🔥 novo (evita reload)
-        history=None,
-        retrieved=None,
-        scene_type="DEFAULT",
-    ) -> dict:
+        memory: Any | None = None,
+        history: Iterable[str] | None = None,
+        retrieved: str | Iterable[str] | None = None,
+        scene_type: str = "DEFAULT",
+    ) -> dict[str, Any]:
+
         # ----------------------------------
         # 1. MEMORY (com reuse)
         # ----------------------------------
@@ -35,37 +39,38 @@ class ContextBuilder:
             except Exception:
                 memory = None
 
-        summary = ""
-        recent_events = []
+        summary: str = ""
+        recent_events: list[str] = []
 
         if memory:
-            summary = (memory.summary or "").strip()
-            recent_events = (memory.recent_events or [])[-self.max_recent_events :]
+            summary = str(getattr(memory, "summary", "") or "").strip()
+            events = getattr(memory, "recent_events", []) or []
+            recent_events = list(events)[-self.max_recent_events :]
 
         # ----------------------------------
         # 2. ENTIDADES
         # ----------------------------------
-        entities = []
+        entities: list[str] = []
 
         if self.entity_extractor:
             try:
                 extracted = self.entity_extractor.extract(action)
                 if isinstance(extracted, list):
-                    entities = [e for e in extracted if isinstance(e, str)]
+                    entities = [str(e) for e in extracted if isinstance(e, str)]
             except Exception:
                 entities = []
 
         # ----------------------------------
         # 3. GRAPH
         # ----------------------------------
-        related_entities = []
+        related_entities: list[str] = []
 
         if self.graph and entities:
             try:
                 rel = self.graph.related(entities)
 
-                # 🔥 dedup + limpeza
-                seen = set()
+                seen: set[str] = set()
+
                 for e in rel:
                     if not isinstance(e, str):
                         continue
@@ -81,7 +86,7 @@ class ContextBuilder:
         # ----------------------------------
         # 4. RETRIEVAL
         # ----------------------------------
-        retrieved_context = ""
+        retrieved_context: str = ""
 
         if self.retrieval:
             try:
@@ -99,13 +104,13 @@ class ContextBuilder:
         elif retrieved:
             if isinstance(retrieved, str):
                 retrieved_context = retrieved.strip()
-            elif isinstance(retrieved, list):
+            elif isinstance(retrieved, Iterable):
                 retrieved_context = "\n".join(str(x).strip() for x in retrieved if x)
 
         # ----------------------------------
         # 5. HISTORY (compat)
         # ----------------------------------
-        history_context = history or []
+        history_context: list[str] = list(history) if history else []
 
         # ----------------------------------
         # 6. NORMALIZE SCENE

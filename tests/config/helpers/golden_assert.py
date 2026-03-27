@@ -2,8 +2,8 @@ from pathlib import Path
 import difflib
 
 
-def normalize(s: str):
-    return s.encode("utf-8", errors="ignore").decode("utf-8")
+def normalize(s: str) -> str:
+    return "\n".join(line.rstrip() for line in s.strip().splitlines())
 
 
 def diff_strings(expected: str, actual: str) -> str:

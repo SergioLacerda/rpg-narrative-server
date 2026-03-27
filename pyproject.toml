@@ -64,12 +64,14 @@ dev = [
     "black>=24.0,<25.0",
     "ruff>=0.6,<1.0",
     "mypy>=1.10,<2.0",
+    "types-cachetools",
     "pre-commit>=3.8,<4.0"
 ]
 
 # 🔹 CI (leve)
 ci = [
     "rpg_narrative_server[test]",
+    "types-cachetools",
     "black>=24.0,<25.0",
     "ruff>=0.6,<1.0",
     "mypy>=1.10,<2.0",
@@ -86,3 +88,17 @@ dev-cpu = [
 # ---------------------------------------------------------
 [project.scripts]
 rpg_narrative_server = "rpg_narrative_server.app:run"
+
+[tool.mypy]
+mypy_path = "src"
+python_version = "3.11"
+explicit_package_bases = true
+ignore_missing_imports = true
+check_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = [
+    "rpg_narrative_server.infrastructure.*",
+    "rpg_narrative_server.vector_index.*",
+]
+ignore_errors = true

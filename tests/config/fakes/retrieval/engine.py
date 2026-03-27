@@ -1,8 +1,16 @@
-class DummyIndex:
-    def __init__(self):
-        self.calls = []
+from typing import Sequence
 
-    async def search(self, query, q_vec, k):
+
+class DummyIndex:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, Sequence[float], int]] = []
+
+    async def search(
+        self,
+        query: str,
+        q_vec: Sequence[float],
+        k: int,
+    ) -> list[str]:
         self.calls.append((query, q_vec, k))
         return [f"result:{query}:{k}"]
 

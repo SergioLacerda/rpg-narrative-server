@@ -13,7 +13,7 @@ class KeywordQueryClassifier:
                 if token in vocab:
                     scores[category] += 1
 
-        best = max(scores, key=scores.get)
+        best = max(scores, key=lambda k: scores[k])
 
         if scores[best] == 0:
             return "exploration"
