@@ -8,11 +8,9 @@ class ClusterManager:
         self.clusters = []
 
     def update(self, doc_ids, vector_store):
-
         self.clusters = self.builder.build(doc_ids, vector_store)
 
     def get_cluster(self, doc_id):
-
         for cluster in self.clusters:
             if doc_id in cluster:
                 return cluster

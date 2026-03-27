@@ -36,7 +36,6 @@ class RetrievalEngine:
     # ---------------------------------------------------------
 
     def _get_index(self, campaign_id):
-
         if campaign_id is None:
             return self.default_index
 
@@ -63,7 +62,6 @@ class RetrievalEngine:
     # ---------------------------------------------------------
 
     async def _execute_index(self, index, query, q_vec, k):
-
         if asyncio.iscoroutinefunction(index.search):
             return await index.search(query, q_vec, k)
 
@@ -82,7 +80,6 @@ class RetrievalEngine:
     # ---------------------------------------------------------
 
     async def _hedged_search(self, index, query, q_vec, k):
-
         async def primary():
             return await self._execute_index(index, query, q_vec, k)
 
@@ -115,7 +112,6 @@ class RetrievalEngine:
     # ---------------------------------------------------------
 
     async def search(self, query, k=4, campaign_id=None):
-
         index = self._get_index(campaign_id)
 
         q_vec = await self._get_embedding(query)
@@ -130,7 +126,6 @@ class RetrievalEngine:
             return await self._inflight[inflight_key]
 
         async def _execute():
-
             try:
                 # -----------------------------------------
                 # search

@@ -20,7 +20,6 @@ class TimelineIndex:
     # ---------------------------------------------------------
 
     def add(self, doc_id: str, timestamp: float = None):
-
         ts = timestamp or time.time()
 
         self.events[doc_id] = ts
@@ -31,7 +30,6 @@ class TimelineIndex:
     # ---------------------------------------------------------
 
     def recency_score(self, doc_id: str) -> float:
-
         ts = self.events.get(doc_id)
 
         if not ts:
@@ -49,7 +47,6 @@ class TimelineIndex:
     # ---------------------------------------------------------
 
     def causal_chain(self, doc_id: str, depth: int = 2):
-
         if doc_id not in self.events:
             return []
 
@@ -63,7 +60,6 @@ class TimelineIndex:
 
         # pegar vizinhos no tempo
         for i in range(1, depth + 1):
-
             if idx - i >= 0:
                 results.extend(self.timeline[sorted_ts[idx - i]])
 

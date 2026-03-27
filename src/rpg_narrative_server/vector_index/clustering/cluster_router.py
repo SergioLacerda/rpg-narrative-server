@@ -7,7 +7,6 @@ class ClusterRouter:
         self.manager = cluster_manager
 
     def route(self, candidates):
-
         # estratégia simples:
         # retorna 1 item por cluster
 
@@ -15,7 +14,6 @@ class ClusterRouter:
         result = []
 
         for doc_id in candidates:
-
             cluster = self.manager.get_cluster(doc_id)
             cluster_id = tuple(sorted(cluster))
 

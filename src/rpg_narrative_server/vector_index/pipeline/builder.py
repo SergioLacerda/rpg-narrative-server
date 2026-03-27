@@ -30,12 +30,10 @@ from rpg_narrative_server.vector_index.pipeline.stages import (
 
 
 class PipelineBuilder:
-
     def __init__(self, deps):
         self.deps = deps
 
     def build(self) -> RetrievalPipeline:
-
         stages = [
             # =================================================
             # 🔍 QUERY PREPARATION

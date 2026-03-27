@@ -4,7 +4,6 @@ from rpg_narrative_server.infrastructure.storage.kv.json_kv_store import (
 
 
 def test_set_and_get(tmp_path):
-
     path = tmp_path / "kv.json"
 
     store = JSONKeyValueStore(path)
@@ -15,7 +14,6 @@ def test_set_and_get(tmp_path):
 
 
 def test_get_missing(tmp_path):
-
     path = tmp_path / "kv.json"
 
     store = JSONKeyValueStore(path)
@@ -24,7 +22,6 @@ def test_get_missing(tmp_path):
 
 
 def test_clear(tmp_path):
-
     path = tmp_path / "kv.json"
 
     store = JSONKeyValueStore(path)

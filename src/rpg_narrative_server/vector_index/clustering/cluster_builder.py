@@ -2,12 +2,10 @@ from rpg_narrative_server.vector_index.utils.similarity import batch_cosine_simi
 
 
 class ClusterBuilder:
-
     def __init__(self, threshold: float = 0.75):
         self.threshold = threshold
 
     def build(self, doc_ids, vector_store):
-
         clusters = []
         visited = set()
 
@@ -15,7 +13,6 @@ class ClusterBuilder:
         vectors = {doc_id: vector_store.get(doc_id) for doc_id in doc_ids}
 
         for i, base_id in enumerate(doc_ids):
-
             if base_id in visited:
                 continue
 

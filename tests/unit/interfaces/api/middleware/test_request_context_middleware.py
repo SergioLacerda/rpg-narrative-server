@@ -100,7 +100,6 @@ async def test_get_health_service(fake_container):
 
 
 def test_get_health_service_fallback(monkeypatch):
-
     class NoHealthContainer:
         pass
 

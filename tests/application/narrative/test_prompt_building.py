@@ -15,7 +15,6 @@ from tests.config.fakes.narrative import (
 
 @pytest.mark.asyncio
 async def test_narrative_calls_llm():
-
     llm = DummyLLM()
 
     memory_service = DummyMemoryService(history=["look around"])

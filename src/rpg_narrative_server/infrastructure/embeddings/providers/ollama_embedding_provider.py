@@ -11,7 +11,6 @@ logger = logging.getLogger("rpg_narrative_server.embedding.ollama")
 
 
 class OllamaEmbeddingProvider(EmbeddingGateway):
-
     supports_batch = False
 
     def __init__(
@@ -46,12 +45,10 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     async def embed(self, text: str) -> List[float]:
-
         if not text or not text.strip():
             return self._zero_vector()
 
         async def call():
-
             resp = await self.client.post(
                 "/api/embeddings",
                 json={
@@ -87,7 +84,6 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     async def embed_batch(self, texts: List[str]):
-
         if not texts:
             return []
 
@@ -115,7 +111,6 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     def _zero_vector(self):
-
         if self._dimension:
             return [0.0] * self._dimension
 

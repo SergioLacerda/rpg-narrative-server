@@ -15,7 +15,6 @@ def build_prompt(builder, ctx, action):
 
 
 def test_prompt_structure():
-
     builder = NarrativeBuilder()
 
     ctx = {
@@ -37,7 +36,6 @@ def test_prompt_structure():
 
 
 def test_prompt_without_context():
-
     builder = NarrativeBuilder()
 
     ctx = {
@@ -55,7 +53,6 @@ def test_prompt_without_context():
 
 
 def test_system_prompt():
-
     builder = NarrativeBuilder()
 
     system = builder.build_system_prompt()
@@ -65,7 +62,6 @@ def test_system_prompt():
 
 
 def test_user_prompt():
-
     builder = NarrativeBuilder()
 
     ctx = {
@@ -93,7 +89,6 @@ def test_user_prompt():
 
 
 def test_normalize_action():
-
     builder = NarrativeBuilder()
 
     result = builder.normalize_action(" atacar\ninimigo ")
@@ -102,7 +97,6 @@ def test_normalize_action():
 
 
 def test_enforce_length():
-
     builder = NarrativeBuilder()
 
     text = "a" * 5000
@@ -113,7 +107,6 @@ def test_enforce_length():
 
 
 def test_sanitize_output():
-
     builder = NarrativeBuilder()
 
     text = "\n linha1 \n\n linha2 \n"
@@ -124,7 +117,6 @@ def test_sanitize_output():
 
 
 def test_sanitize_output_none():
-
     builder = NarrativeBuilder()
 
     with pytest.raises(ValueError):

@@ -25,7 +25,6 @@ def executor():
 
 @pytest.mark.asyncio
 async def test_roll_success(bot, executor):
-
     register_roll_command(
         bot, DummyUsecases(roll_dice=DummyRollDice("resultado")), executor
     )
@@ -39,7 +38,6 @@ async def test_roll_success(bot, executor):
 
 @pytest.mark.asyncio
 async def test_roll_empty_expression(bot, executor):
-
     register_roll_command(bot, DummyUsecases(roll_dice=DummyRollDice()), executor)
 
     ctx = make_ctx()
@@ -51,7 +49,6 @@ async def test_roll_empty_expression(bot, executor):
 
 @pytest.mark.asyncio
 async def test_roll_no_result(bot, executor):
-
     register_roll_command(bot, DummyUsecases(roll_dice=DummyRollDice(None)), executor)
 
     ctx = make_ctx()

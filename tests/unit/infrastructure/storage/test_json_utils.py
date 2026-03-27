@@ -2,7 +2,6 @@ from rpg_narrative_server.infrastructure.storage.json_utils import read_json, wr
 
 
 def test_read_json_file_not_exists(tmp_path):
-
     path = tmp_path / "file.json"
 
     result = read_json(path, default={})
@@ -11,7 +10,6 @@ def test_read_json_file_not_exists(tmp_path):
 
 
 def test_read_json_valid(tmp_path):
-
     path = tmp_path / "file.json"
     path.write_text('{"a": 1}')
 
@@ -21,7 +19,6 @@ def test_read_json_valid(tmp_path):
 
 
 def test_read_json_invalid(tmp_path):
-
     path = tmp_path / "file.json"
     path.write_text("invalid json")
 
@@ -31,7 +28,6 @@ def test_read_json_invalid(tmp_path):
 
 
 def test_write_json(tmp_path):
-
     path = tmp_path / "dir" / "file.json"
 
     write_json(path, {"x": 1})

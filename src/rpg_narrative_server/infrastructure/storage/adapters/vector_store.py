@@ -2,7 +2,6 @@ from rpg_narrative_server.vector_index.components import VectorStore
 
 
 class VectorStoreAdapter(VectorStore):
-
     def __init__(self, backend):
         self.backend = backend  # ex: JSONVectorStore
 

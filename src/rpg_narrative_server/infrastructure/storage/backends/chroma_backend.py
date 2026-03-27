@@ -11,9 +11,7 @@ from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
 
 
 class ChromaStorageBackend(StorageBackend):
-
     def __init__(self, base_path: Path | None = None):
-
         self.base = base_path or Path("./data")
         self.base.mkdir(parents=True, exist_ok=True)
 

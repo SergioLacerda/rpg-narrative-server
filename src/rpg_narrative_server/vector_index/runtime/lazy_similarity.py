@@ -19,7 +19,6 @@ class LazyVectorSimilarity:
     # ---------------------------------------------------------
 
     def similarity(self, query_vector, doc_id: str) -> float:
-
         if doc_id in self._cache:
             return self._cache[doc_id]
 

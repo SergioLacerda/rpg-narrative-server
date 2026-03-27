@@ -1,5 +1,4 @@
 class IntentClassifier:
-
     def __init__(
         self,
         profiles,
@@ -59,7 +58,6 @@ class IntentClassifier:
         return score
 
     async def classify(self, text: str) -> str:
-
         score = await self.score(text)
 
         if score >= 4:
@@ -101,7 +99,6 @@ class IntentClassifier:
         return len(text.split()) < 2
 
     def _weak_penalty(self, text: str) -> float:
-
         words = set(text.split())
 
         for profile in self.profiles:
@@ -123,7 +120,6 @@ class IntentClassifier:
         return score
 
     def _length_score(self, text: str) -> float:
-
         words = len(text.split())
 
         if words >= 8:
@@ -138,7 +134,6 @@ class IntentClassifier:
         return 0.0
 
     def _llm_score(self, result: str) -> float:
-
         if not result:
             return 0.0
 

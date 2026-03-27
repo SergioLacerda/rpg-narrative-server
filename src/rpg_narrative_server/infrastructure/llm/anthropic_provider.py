@@ -7,7 +7,6 @@ from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
 
 
 class AnthropicProvider(BaseProvider):
-
     def __init__(self, api_key: str, model: str):
         super().__init__("anthropic", model)
         self.client = anthropic.AsyncAnthropic(api_key=api_key)

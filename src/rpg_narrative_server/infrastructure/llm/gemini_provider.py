@@ -7,7 +7,6 @@ from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
 
 
 class GeminiProvider(BaseProvider):
-
     def __init__(self, api_key: str, model: str):
         genai.configure(api_key=api_key)
         super().__init__("gemini", model)

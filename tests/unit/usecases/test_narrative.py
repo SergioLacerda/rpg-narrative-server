@@ -4,7 +4,6 @@ import pytest
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_basic_flow(container):
-
     result = await container.narrative.execute(
         user_id="user1", campaign_id="test_campaign", action="look around"
     )
@@ -16,7 +15,6 @@ async def test_narrative_basic_flow(container):
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_llm_failure(container_factory):
-
     class FailingLLM:
         async def generate(self, prompt):
             raise Exception("LLM failed")
@@ -34,7 +32,6 @@ async def test_narrative_llm_failure(container_factory):
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_event_bus_failure(container, monkeypatch):
-
     def fail(*args, **kwargs):
         raise Exception("event bus failed")
 

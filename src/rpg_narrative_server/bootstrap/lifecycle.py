@@ -15,7 +15,6 @@ logger = logging.getLogger("rpg_narrative_server")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
     logger.info("🚀 Starting RPG Narrative Server")
 
     # ----------------------------------------
@@ -103,7 +102,6 @@ async def lifespan(app: FastAPI):
     logger.info("🛑 Shutting down...")
 
     if discord_task:
-
         discord_task.cancel()
 
         try:

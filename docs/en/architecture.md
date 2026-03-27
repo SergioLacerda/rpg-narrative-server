@@ -60,10 +60,10 @@ UseCase-->>API: Response
 
 ## 🧠 Architectural Decisions
 
-- ❌ No frameworks inside the domain layer  
-- ✅ Ports isolate external dependencies  
-- ✅ Infrastructure is fully replaceable (LLM, DB, providers)  
-- ✅ UseCases define the application behavior  
+- ❌ No frameworks inside the domain layer
+- ✅ Ports isolate external dependencies
+- ✅ Infrastructure is fully replaceable (LLM, DB, providers)
+- ✅ UseCases define the application behavior
 
 ---
 

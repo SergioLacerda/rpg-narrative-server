@@ -7,7 +7,6 @@ from tests.config.fakes.fake_llm import FakeLLMService
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_basic_flow(container):
-
     result = await container.narrative.execute(
         user_id="user1", campaign_id="test_campaign", action="look around"
     )
@@ -19,7 +18,6 @@ async def test_narrative_basic_flow(container):
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_uses_memory(container):
-
     usecase = container.narrative
 
     first = await usecase.execute(
@@ -36,7 +34,6 @@ async def test_narrative_uses_memory(container):
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_llm_failure(container_factory):
-
     fake = FakeLLMService(fail=True)
 
     container = container_factory(llm=fake)
@@ -51,7 +48,6 @@ async def test_narrative_llm_failure(container_factory):
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_event_bus_failure(container, monkeypatch):
-
     def fail(*args, **kwargs):
         raise Exception("event bus failed")
 
@@ -67,7 +63,6 @@ async def test_narrative_event_bus_failure(container, monkeypatch):
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_same_input_generates_valid_output(container):
-
     result1 = await container.narrative.execute(
         user_id="user", campaign_id="test", action="wait"
     )
@@ -82,7 +77,6 @@ async def test_narrative_same_input_generates_valid_output(container):
 
 @pytest.mark.asyncio
 async def test_narrative_snapshot(container_factory):
-
     fake_llm = FakeLLMService()
 
     container = container_factory(llm=fake_llm)
@@ -98,7 +92,6 @@ async def test_narrative_snapshot(container_factory):
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_narrative_multi_step_flow(container):
-
     usecase = container.narrative
 
     await usecase.execute(user_id="u", campaign_id="c", action="look")

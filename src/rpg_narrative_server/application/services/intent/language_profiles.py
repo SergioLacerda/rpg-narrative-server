@@ -1,5 +1,4 @@
 class LanguageProfile:
-
     def __init__(self, weak_words, triggers):
         self.weak_words = weak_words
         self.triggers = triggers

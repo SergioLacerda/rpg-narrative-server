@@ -86,7 +86,6 @@ def create_bot(*, settings, usecases, container=None):
 
     @bot.event
     async def on_command_error(ctx, error):
-
         if isinstance(error, commands.CommandOnCooldown):
             await send(ctx, f"⏳ Aguarde {error.retry_after:.1f}s.")
             return
@@ -103,7 +102,6 @@ def create_bot(*, settings, usecases, container=None):
     # -------------------------------------------------
     @bot.event
     async def on_message(message):
-
         # ignora bots
         if message.author.bot:
             return

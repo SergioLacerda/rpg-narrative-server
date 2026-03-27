@@ -1,5 +1,4 @@
 class QueryPlanner:
-
     ROLL_KEYWORDS = {"roll", "dado", "d20", "d6", "rolar"}
 
     def classify_intent(self, q: str) -> str:

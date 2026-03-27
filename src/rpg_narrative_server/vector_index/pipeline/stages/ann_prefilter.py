@@ -1,5 +1,4 @@
 class ANNPrefilter:
-
     priority = 40
 
     def __init__(self, ann=None):
@@ -9,7 +8,6 @@ class ANNPrefilter:
         self.ann = ann
 
     async def run(self, ctx):
-
         if not ctx.q_vec or not self.ann:
             return ctx
 

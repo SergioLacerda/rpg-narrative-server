@@ -1,5 +1,4 @@
 async def send(ctx, content: str):
-
     interaction = getattr(ctx, "interaction", None)
 
     # slash command

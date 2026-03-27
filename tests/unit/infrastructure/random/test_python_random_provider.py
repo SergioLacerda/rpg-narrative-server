@@ -7,7 +7,6 @@ from rpg_narrative_server.infrastructure.random.default_random import (
 
 
 def test_roll_range():
-
     rng = PythonRandomProvider()
 
     for _ in range(20):
@@ -16,7 +15,6 @@ def test_roll_range():
 
 
 def test_default_random():
-
     rng = DefaultRandomProvider()
 
     for _ in range(20):

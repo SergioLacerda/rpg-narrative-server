@@ -9,7 +9,6 @@ class ProfileConfig:
 
 
 def load_profile() -> ProfileConfig:
-
     profile = os.getenv("APP_PROFILE", "local")
 
     if profile == "local":

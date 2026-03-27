@@ -8,7 +8,6 @@ logger = logging.getLogger("rpg_narrative_server.llm")
 
 
 class LLMService:
-
     def __init__(
         self,
         provider,
@@ -29,7 +28,6 @@ class LLMService:
     # ---------------------------------------------------------
 
     async def generate(self, request):
-
         if not request.prompt:
             return ""
 
@@ -90,14 +88,12 @@ class LLMService:
     # ---------------------------------------------------------
 
     async def stream(self, request):
-
         async for chunk in self.provider.stream(request):
             yield chunk
 
     # ---------------------------------------------------------
 
     def _cache_key(self, request):
-
         payload = {
             "prompt": request.prompt,
             "system": request.system_prompt,
@@ -111,7 +107,6 @@ class LLMService:
     # ---------------------------------------------------------
 
     def _compute_timeout(self, request):
-
         if not request.max_tokens:
             return self.timeout
 

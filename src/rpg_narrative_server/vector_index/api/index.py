@@ -2,7 +2,6 @@
 
 
 class VectorIndexAPI:
-
     def __init__(self, engine):
         self._engine = engine
 

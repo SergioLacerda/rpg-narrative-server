@@ -1,9 +1,7 @@
 class TemporalPriorityStage:
-
     priority = 70
 
     async def run(self, ctx):
-
         if not ctx.candidates or not ctx.temporal_index:
             return ctx
 

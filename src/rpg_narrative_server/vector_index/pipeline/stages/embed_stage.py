@@ -17,7 +17,6 @@ class EmbedStage:
         self.embedding_fn = embedding_fn
 
     async def run(self, ctx):
-
         if ctx.q_vec is not None:
             return ctx
 

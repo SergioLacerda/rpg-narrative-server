@@ -15,7 +15,6 @@ class DummyRequest:
 
 @pytest.mark.asyncio
 async def test_request_context_success(monkeypatch):
-
     async def call_next(request):
         return Response(status_code=200)
 

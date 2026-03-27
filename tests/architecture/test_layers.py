@@ -10,7 +10,6 @@ SRC = Path("src/rpg_narrative_server")
 
 
 def get_layer(file: Path) -> str:
-
     path = str(file)
 
     if "/domain/" in path:
@@ -31,11 +30,9 @@ SRC = Path("src/rpg_narrative_server")
 
 
 def test_layer_dependencies():
-
     errors = []
 
     for file in SRC.rglob("*.py"):
-
         layer = get_layer(file)
 
         if layer == "unknown":
@@ -44,11 +41,8 @@ def test_layer_dependencies():
         imports = extract_imports(file)
 
         for imp in imports:
-
             for forbidden in RULES[layer]["forbidden"]:
-
                 if f"rpg_narrative_server.{forbidden}" in imp:
-
                     allowed = RULES[layer].get("allowed", [])
 
                     if any(imp.startswith(a) for a in allowed):
@@ -62,11 +56,9 @@ def test_layer_dependencies():
 
 
 def test_no_cross_layer_leak():
-
     errors = []
 
     for file in SRC.rglob("*.py"):
-
         content = file.read_text(encoding="utf-8")
 
         if "infrastructure" in content and "domain" in str(file):

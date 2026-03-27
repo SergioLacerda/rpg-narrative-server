@@ -10,9 +10,7 @@ from rpg_narrative_server.domain.dice.ast.nodes import (
 
 
 class DiceParser:
-
     def parse(self, expression: str):
-
         match = DiceRegex.match(expression)
 
         if not match:
@@ -49,9 +47,7 @@ class DiceParser:
     # --------------------------------------------------
 
     def _build_condition(self, cond: str):
-
         def condition(v: int):
-
             if "<=" in cond:
                 return v <= int(cond.split("<=")[1])
 

@@ -2,7 +2,6 @@ from rpg_narrative_server.domain.dice.parser import DiceParser
 
 
 class DiceParserAdapter:
-
     def __init__(self):
         self._parser = DiceParser()
 

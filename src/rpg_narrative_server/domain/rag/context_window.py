@@ -8,7 +8,6 @@ class DynamicContextWindow:
     """
 
     def __init__(self):
-
         # ---------------------------------------------------------
         # políticas por tipo de cena
         # ---------------------------------------------------------
@@ -67,7 +66,6 @@ class DynamicContextWindow:
         return re.findall(r"\w+", text.lower())
 
     def classify(self, query: str) -> str:
-
         tokens = self.tokenize(query)
 
         scores = {k: 0 for k in self.vocabulary}
@@ -89,7 +87,6 @@ class DynamicContextWindow:
     # ---------------------------------------------------------
 
     def get_policy(self, action: str) -> dict:
-
         scene_type = self.classify(action)
 
         base = self.policies.get(scene_type, self.policies["exploration"])
@@ -106,7 +103,6 @@ class DynamicContextWindow:
     # ---------------------------------------------------------
 
     def apply(self, docs, policy):
-
         if not docs:
             return []
 

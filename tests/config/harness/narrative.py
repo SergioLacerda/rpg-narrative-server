@@ -2,9 +2,7 @@
 
 
 class NarrativeHarness:
-
     def __init__(self, *, llm_result="ok"):
-
         from tests.config.fakes.fake_llm import FakeLLMService
         from tests.config.fakes.fake_vector_index import FakeVectorIndex
 

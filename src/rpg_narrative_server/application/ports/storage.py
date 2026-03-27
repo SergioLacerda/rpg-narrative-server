@@ -8,7 +8,6 @@ class KeyValueStorePort(Protocol):
 
 
 class VectorStorePort(Protocol):
-
     def add(self, doc_id: str, vector: list[float]) -> None: ...
 
     def get(self, doc_id: str) -> list[float] | None: ...

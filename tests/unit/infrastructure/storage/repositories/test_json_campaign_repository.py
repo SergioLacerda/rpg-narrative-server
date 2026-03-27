@@ -7,7 +7,6 @@ from rpg_narrative_server.infrastructure.storage.repositories.json_campaign_repo
 
 @pytest.mark.asyncio
 async def test_get_events_empty(tmp_path):
-
     repo = JSONCampaignRepository(tmp_path)
 
     result = await repo.get_events("test")
@@ -17,7 +16,6 @@ async def test_get_events_empty(tmp_path):
 
 @pytest.mark.asyncio
 async def test_save_and_get_events(tmp_path):
-
     repo = JSONCampaignRepository(tmp_path)
 
     await repo.save_events("test", [{"a": 1}])
@@ -29,7 +27,6 @@ async def test_save_and_get_events(tmp_path):
 
 @pytest.mark.asyncio
 async def test_invalid_json(tmp_path):
-
     repo = JSONCampaignRepository(tmp_path)
 
     path = tmp_path / "campaigns" / "test" / "events.json"

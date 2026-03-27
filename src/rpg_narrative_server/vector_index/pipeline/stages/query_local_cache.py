@@ -1,12 +1,10 @@
 class QueryLocalCache:
-
     priority = 30
 
     def __init__(self):
         self.cache = {}
 
     async def run(self, ctx):
-
         key = ctx.query
 
         if key in self.cache:

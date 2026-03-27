@@ -2,7 +2,6 @@ from rpg_narrative_server.vector_index.ranking.hybrid_ranker import HybridRanker
 
 
 class HybridFusionStage:
-
     priority = 100
     min_candidates = 1
 
@@ -10,7 +9,6 @@ class HybridFusionStage:
         self.ranker = ranker or HybridRanker()
 
     async def run(self, ctx):
-
         candidates = ctx.candidates
 
         if not candidates:

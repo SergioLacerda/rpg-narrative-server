@@ -1,7 +1,5 @@
 class ContextAssembler:
-
     def assemble(self, documents: list[str], max_chars: int | None = None) -> str:
-
         if not documents:
             return ""
 

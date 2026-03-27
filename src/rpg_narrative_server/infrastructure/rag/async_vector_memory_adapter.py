@@ -4,7 +4,6 @@ import time
 
 
 class AsyncVectorMemoryAdapter:
-
     def __init__(
         self,
         vector_index,
@@ -52,12 +51,10 @@ class AsyncVectorMemoryAdapter:
     # ---------------------------------------------------------
 
     async def _worker_loop(self):
-
         buffer = []
         last_flush = time.time()
 
         while self._running:
-
             try:
                 item = await asyncio.wait_for(
                     self._queue.get(),
@@ -82,7 +79,6 @@ class AsyncVectorMemoryAdapter:
     # ---------------------------------------------------------
 
     async def _flush(self, batch):
-
         if not batch:
             return
 
@@ -104,7 +100,6 @@ class AsyncVectorMemoryAdapter:
         # 🔥 INSERT LOOP (multi-store correto)
         # -----------------------------------------------------
         for i in range(len(texts)):
-
             doc_id = self._generate_id(campaign_ids[i])
 
             # vector
@@ -133,7 +128,6 @@ class AsyncVectorMemoryAdapter:
     # ---------------------------------------------------------
 
     async def _embed_batch(self, texts):
-
         # se tiver suporte batch → usa
         if hasattr(self.embedding_service, "embed_batch"):
             result = self.embedding_service.embed_batch(texts)

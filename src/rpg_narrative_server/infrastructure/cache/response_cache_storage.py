@@ -3,9 +3,7 @@ from pathlib import Path
 
 
 def build_file_storage(path: Path):
-
     def load():
-
         if not path.exists():
             return {}
 

@@ -7,7 +7,6 @@ from rpg_narrative_server.infrastructure.storage.backends.chroma_backend import 
 
 
 def build_campaign_storage(settings, campaign_context):
-
     base_path = campaign_context.base_path
 
     if settings.app.storage == "json":

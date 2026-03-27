@@ -7,7 +7,6 @@ from rpg_narrative_server.domain.dice.ast.nodes import RollNode
 
 
 class RollDiceUseCase:
-
     def __init__(
         self,
         rng,
@@ -19,7 +18,6 @@ class RollDiceUseCase:
         self.enable_analysis = enable_analysis
 
     async def execute(self, expression):
-
         try:
             if isinstance(expression, DiceExpression):
                 ast = RollNode(expression.quantity, expression.sides)

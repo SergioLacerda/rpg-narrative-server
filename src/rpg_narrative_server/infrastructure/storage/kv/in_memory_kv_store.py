@@ -2,7 +2,6 @@ import threading
 
 
 class InMemoryKVStore:
-
     def __init__(self):
         self._data = {}
         self._lock = threading.Lock()

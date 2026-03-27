@@ -14,7 +14,6 @@ from rpg_narrative_server.application.services.intent.language_profiles import (
 
 
 def match_intent(result: str, expected: str) -> bool:
-
     if expected == "ACTION":
         return result in ("ACTION", "EXPLORATION")
 
@@ -33,13 +32,10 @@ def match_intent(result: str, expected: str) -> bool:
 
 
 class IntentDatasetExpander:
-
     def expand(self, text: str, n: int = 3):
-
         variants = set()
 
         for _ in range(n):
-
             variants.add(text)
             variants.add(f"{text} agora")
             variants.add(f"{text} rapidamente")
@@ -67,7 +63,6 @@ DATASET_INTENT = [
 
 @pytest.mark.asyncio
 async def test_intent_dataset_with_expansion():
-
     clf = IntentClassifier(SUPPORTED_LANGUAGES)
     expander = IntentDatasetExpander()
 
@@ -79,7 +74,6 @@ async def test_intent_dataset_with_expansion():
     # ---------------------------------------------------------
 
     for text, expected in DATASET_INTENT:
-
         result = await clf.classify(text)
 
         variations = expander.expand(text, n=3)
@@ -102,7 +96,6 @@ async def test_intent_dataset_with_expansion():
     expansion_errors = []
 
     for text, expected in expanded_tests:
-
         result = await clf.classify(text)
 
         if not match_intent(result, expected):

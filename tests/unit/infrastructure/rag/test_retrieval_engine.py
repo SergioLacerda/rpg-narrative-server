@@ -42,7 +42,6 @@ async def test_search_basic(engine):
 
 @pytest.mark.asyncio
 async def test_search_uses_semantic_cache(engine):
-
     r1 = await engine.search("hello")
     r2 = await engine.search("hello")
 
@@ -57,7 +56,6 @@ async def test_search_uses_semantic_cache(engine):
 
 @pytest.mark.asyncio
 async def test_inflight_deduplication(engine):
-
     async def call():
         return await engine.search("same")
 
@@ -74,7 +72,6 @@ async def test_inflight_deduplication(engine):
 
 @pytest.mark.asyncio
 async def test_index_factory_usage():
-
     indexes = {}
 
     def factory(campaign_id):
@@ -103,7 +100,6 @@ async def test_index_factory_usage():
 
 @pytest.mark.asyncio
 async def test_default_index_when_no_factory(engine):
-
     await engine.search("hello")
 
     assert len(engine.default_index.calls) == 1
@@ -116,7 +112,6 @@ async def test_default_index_when_no_factory(engine):
 
 @pytest.mark.asyncio
 async def test_multiple_campaign_indexes():
-
     calls = {}
 
     def factory(cid):
@@ -144,7 +139,6 @@ async def test_multiple_campaign_indexes():
 
 @pytest.mark.asyncio
 async def test_semantic_cache_skips_search(engine):
-
     engine.semantic_cache.set("q", [1, 2], ["cached"])
 
     result = await engine.search("q")

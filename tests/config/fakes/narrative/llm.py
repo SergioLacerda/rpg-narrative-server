@@ -1,5 +1,4 @@
 class DummyLLM:
-
     def __init__(
         self,
         *,
@@ -16,7 +15,6 @@ class DummyLLM:
     # ---------------------------------------------------------
 
     async def generate(self, request):
-
         # 🔥 registra chamada
         self.calls.append(request.prompt)
 

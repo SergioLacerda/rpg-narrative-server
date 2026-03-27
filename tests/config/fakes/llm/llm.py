@@ -1,5 +1,4 @@
 class DummyLLM:
-
     def __init__(self, result="ACTION"):
         self.result = result
         self.calls = []

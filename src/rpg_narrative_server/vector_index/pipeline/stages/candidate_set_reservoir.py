@@ -2,14 +2,12 @@ import random
 
 
 class CandidateSetReservoir:
-
     priority = 50
 
     def __init__(self, max_size=100):
         self.max_size = max_size
 
     async def run(self, ctx):
-
         if not ctx.candidates:
             return ctx
 

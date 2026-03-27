@@ -15,7 +15,6 @@ logger = logging.getLogger("rpg_narrative_server.embedding.gemini")
 
 
 class GeminiEmbeddingProvider(EmbeddingGateway):
-
     supports_batch = False
 
     def __init__(
@@ -58,7 +57,6 @@ class GeminiEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     async def embed(self, text: str) -> List[float]:
-
         if not text or not text.strip():
             return self._zero_vector()
 
@@ -93,7 +91,6 @@ class GeminiEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     async def embed_batch(self, texts: List[str]):
-
         if not texts:
             return []
 

@@ -2,7 +2,6 @@ from rpg_narrative_server.domain.dice.dice_engine import roll
 
 
 def test_roll_returns_expected_rolls_and_total(monkeypatch):
-
     def fake_evaluate(ast, rng):
         assert ast == "fake"
         return [3, 4]

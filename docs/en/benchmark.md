@@ -121,11 +121,11 @@ Simulates production-like conditions.
 
 ## 📊 Metrics
 
-- **Total time** → total execution time  
-- **Avg latency** → average latency  
-- **P95 / P99** → latency tail  
-- **Index calls** → actual executions (dedup effect)  
-- **Speedup** → concurrency gain  
+- **Total time** → total execution time
+- **Avg latency** → average latency
+- **P95 / P99** → latency tail
+- **Index calls** → actual executions (dedup effect)
+- **Speedup** → concurrency gain
 
 ---
 
@@ -146,9 +146,9 @@ Simulates production-like conditions.
 
 ## 💡 Recommendations
 
-- Use `--mode jitter` to simulate production  
-- Combine `--batch` + `--memory` for realistic scenarios  
-- Use `--mode cpu` to validate parallelism  
+- Use `--mode jitter` to simulate production
+- Combine `--batch` + `--memory` for realistic scenarios
+- Use `--mode cpu` to validate parallelism
 
 ---
 

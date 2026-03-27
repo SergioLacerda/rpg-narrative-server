@@ -3,7 +3,6 @@ from pathlib import Path
 
 
 class CampaignStateStore:
-
     def __init__(self, path: Path):
         self.path = path
         self._data = self._load()

@@ -8,7 +8,6 @@ def usecase():
 
 
 def test_generate_npc_structure(usecase):
-
     result = usecase.execute("mercador")
 
     assert isinstance(result, dict)
@@ -16,7 +15,6 @@ def test_generate_npc_structure(usecase):
 
 
 def test_generate_npc_description(usecase):
-
     desc = "mercador sombrio"
 
     result = usecase.execute(desc)
@@ -25,21 +23,18 @@ def test_generate_npc_description(usecase):
 
 
 def test_generate_npc_name_valid(usecase):
-
     result = usecase.execute("npc")
 
     assert result["name"] in ["Arkan", "Velra", "Doran", "Selith"]
 
 
 def test_generate_npc_trait_valid(usecase):
-
     result = usecase.execute("npc")
 
     assert result["trait"] in ["frio", "calculista", "irônico"]
 
 
 def test_generate_npc_deterministic(usecase, monkeypatch):
-
     def fake_choice(seq):
         return seq[0]
 

@@ -3,7 +3,6 @@ from collections import Counter
 
 
 class QueryExpansion:
-
     priority = 10
 
     def __init__(
@@ -17,7 +16,6 @@ class QueryExpansion:
         self.min_token_length = min_token_length
 
     async def run(self, ctx):
-
         query = ctx.query
 
         if not query or not self.memory:

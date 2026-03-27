@@ -7,13 +7,11 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 
 class CommandExecutor:
-
     def __init__(self, settings, debug: bool = False):
         self.settings = settings
         self.debug = debug
 
     async def run(self, ctx, fn):
-
         logger.info("[EXECUTOR] START")
 
         try:
@@ -46,7 +44,6 @@ class CommandExecutor:
                 await send(ctx, "⚠️ Algo deu errado")
 
     async def _run_with_trace(self, fn):
-
         logger.debug("➡️ [EXECUTOR] entering handler")
 
         try:

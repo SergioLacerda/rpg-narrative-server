@@ -14,7 +14,6 @@ from rpg_narrative_server.vector_index.storage.json_utils import load_json, save
 
 
 class JSONVectorStore:
-
     def __init__(self, path: Path, config: VectorStoreConfig = None):
         self.path = path
         self._cache = None
@@ -36,7 +35,6 @@ class JSONVectorStore:
         return self._cache
 
     def _persist(self):
-
         if self._cache is None:
             return
 
@@ -94,7 +92,6 @@ class JSONVectorStore:
     # ---------------------------------------------------------
 
     def search(self, query_vector, k: int):
-
         data = self._load()
 
         if not data:
@@ -106,7 +103,6 @@ class JSONVectorStore:
         results = []
 
         for doc_id, vec in data.items():
-
             v = np.array(vec)
             v_norm = np.linalg.norm(v) + 1e-8
 

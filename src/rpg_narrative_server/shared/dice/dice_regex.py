@@ -2,7 +2,6 @@ import re
 
 
 class DiceRegex:
-
     _pattern = re.compile(
         r"^(?P<num>\d+)d(?P<sides>\d+)"
         r"(?P<explode>!)?"

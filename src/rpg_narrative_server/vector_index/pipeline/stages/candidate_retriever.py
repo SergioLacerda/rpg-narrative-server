@@ -6,14 +6,12 @@ logger = logging.getLogger("rpg_narrative_server.retrieval.candidate")
 
 
 class CandidateRetriever:
-
     priority = 10
 
     def __init__(self, embedding_fn):
         self.embed = embedding_fn
 
     async def run(self, ctx: SearchContext):
-
         if not ctx.query:
             ctx.candidates = []
             return ctx

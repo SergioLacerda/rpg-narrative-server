@@ -12,11 +12,9 @@ FORBIDDEN = [
 
 
 def test_no_test_dependencies_in_src():
-
     errors = []
 
     for file in SRC_PATH.rglob("*.py"):
-
         content = file.read_text(encoding="utf-8")
 
         for bad in FORBIDDEN:
@@ -27,7 +25,6 @@ def test_no_test_dependencies_in_src():
 
 
 def test_no_monkeypatch_in_src():
-
     errors = []
 
     for file in SRC_PATH.rglob("*.py"):
@@ -40,7 +37,6 @@ def test_no_monkeypatch_in_src():
 
 
 def test_domain_is_pure():
-
     from pathlib import Path
 
     domain_path = Path("src/rpg_narrative_server/domain")
@@ -48,7 +44,6 @@ def test_domain_is_pure():
     errors = []
 
     for file in domain_path.rglob("*.py"):
-
         content = file.read_text(encoding="utf-8")
 
         if "infrastructure" in content:

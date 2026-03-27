@@ -5,13 +5,11 @@ from rpg_narrative_server.vector_index.utils.similarity import cosine_similarity
 
 
 class IVFBuilder:
-
     def __init__(self, n_clusters=128, iterations=8):
         self.n_clusters = n_clusters
         self.iterations = iterations
 
     def build(self, doc_ids, vector_store):
-
         vectors = []
         valid_ids = []
 
@@ -29,11 +27,9 @@ class IVFBuilder:
         centroids = random.sample(vectors, k)
 
         for _ in range(self.iterations):
-
             clusters = [[] for _ in centroids]
 
             for v in vectors:
-
                 best = max(
                     range(len(centroids)),
                     key=lambda i: cosine_similarity(v, centroids[i]),
@@ -64,7 +60,6 @@ class IVFBuilder:
         doc_map = {}
 
         for doc_id, vec in zip(valid_ids, vectors):
-
             best = max(
                 range(len(centroids)),
                 key=lambda i: cosine_similarity(vec, centroids[i]),

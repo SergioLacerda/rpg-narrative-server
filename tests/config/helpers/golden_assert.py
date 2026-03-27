@@ -19,7 +19,6 @@ def diff_strings(expected: str, actual: str) -> str:
 
 
 def assert_golden(path: Path, actual: str, update: bool = False):
-
     if update:
         path.write_text(actual)
         return

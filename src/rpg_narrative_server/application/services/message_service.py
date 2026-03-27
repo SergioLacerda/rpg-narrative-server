@@ -4,7 +4,6 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 
 class MessageService:
-
     def __init__(
         self,
         usecases,
@@ -22,7 +21,6 @@ class MessageService:
         self.settings = settings
 
     async def handle(self, message, ctx):
-
         # ----------------------------------
         # IGNORAR BOT
         # ----------------------------------
@@ -44,7 +42,7 @@ class MessageService:
         if not campaign_id:
             if self.runtime.should_warn(channel_id, 30):
                 await ctx.send(
-                    "🎲 Nenhuma campanha ativa.\n" "Use `/campaign switch <nome>`"
+                    "🎲 Nenhuma campanha ativa.\nUse `/campaign switch <nome>`"
                 )
             return
 
@@ -122,7 +120,6 @@ class MessageService:
         user_id,
         intent,
     ):
-
         try:
             response = await self.usecases.narrative.execute(
                 campaign_id=campaign_id,
@@ -150,7 +147,6 @@ class MessageService:
     # ---------------------------------------------------------
 
     def _adapt_response_by_intent(self, response: str, intent: str) -> str:
-
         if not response:
             return response
 
@@ -173,7 +169,6 @@ class MessageService:
     # ---------------------------------------------------------
 
     async def _send_response(self, ctx, response: str):
-
         if len(response) <= 1900:
             await ctx.send(response)
             return

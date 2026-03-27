@@ -29,7 +29,6 @@ def _load_backend():
 
 
 def _detect_device(device: str | None, torch):
-
     if device:
         device = device.lower()
         valid = {"cpu", "cuda", "mps"}
@@ -49,7 +48,6 @@ def _detect_device(device: str | None, torch):
 
 
 def _auto_batch_size(device: str):
-
     if device == "cuda":
         return 128
     if device == "mps":
@@ -63,7 +61,6 @@ def _auto_batch_size(device: str):
 
 
 class SentenceEmbeddingProvider(EmbeddingGateway):
-
     supports_batch = True
 
     def __init__(
@@ -73,7 +70,6 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
         batch_size: int | None = None,
         timeout: float = 20.0,
     ):
-
         SentenceTransformer, torch = _load_backend()
 
         self._torch = torch
@@ -104,7 +100,6 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     def _prepare_doc(self, text: str):
-
         if self.is_e5:
             return "passage: " + text
 
@@ -115,7 +110,6 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     def _encode_single(self, text: str):
-
         if self._torch:
             with self._torch.no_grad():
                 return self.model.encode(text, normalize_embeddings=True)
@@ -123,7 +117,6 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
         return self.model.encode(text)
 
     def _encode_batch(self, texts: list[str]):
-
         if self._torch:
             with self._torch.no_grad():
                 return self.model.encode(
@@ -148,7 +141,6 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     async def embed(self, text: str) -> List[float]:
-
         if not text or not text.strip():
             return [0.0] * self._dimension
 
@@ -167,7 +159,6 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
             raise
 
     async def embed_batch(self, texts: List[str]):
-
         texts = [t for t in texts if t and t.strip()]
         if not texts:
             return []

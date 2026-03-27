@@ -42,7 +42,6 @@ def test_parse_combined_rules(parser):
 
 
 def test_reroll_condition_logic(parser):
-
     node = parser.parse("1d6r<3")
 
     assert isinstance(node, RerollNode)

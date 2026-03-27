@@ -1,11 +1,9 @@
 class KeywordQueryClassifier:
-
     def __init__(self, tokenizer, vocabulary):
         self.tokenizer = tokenizer
         self.vocabulary = vocabulary
 
     def classify(self, query: str) -> str:
-
         tokens = self.tokenizer.tokenize(query)
 
         scores = {k: 0 for k in self.vocabulary}

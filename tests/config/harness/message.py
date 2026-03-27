@@ -10,7 +10,6 @@ from tests.config.fakes.state import DummyCampaignState
 
 
 class MessageHarness:
-
     def __init__(
         self,
         *,

@@ -24,7 +24,6 @@ class EntityBoost:
     # ---------------------------------------------------------
 
     def score(self, query_tokens: Iterable[str], doc_tokens: Iterable[str]) -> float:
-
         entities = self.entity_provider.get_entities()
 
         if not entities:
@@ -48,7 +47,6 @@ class EntityBoost:
     def batch_score(
         self, query_tokens: Iterable[str], docs_tokens: list[Iterable[str]]
     ) -> list[float]:
-
         entities = self.entity_provider.get_entities()
 
         if not entities:
@@ -59,7 +57,6 @@ class EntityBoost:
         scores = []
 
         for tokens in docs_tokens:
-
             d = set(tokens)
 
             overlap = q & d & entities

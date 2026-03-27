@@ -1,5 +1,4 @@
 class VectorStoreConfig:
-
     def __init__(
         self,
         max_file_size_kb: int = 1024,

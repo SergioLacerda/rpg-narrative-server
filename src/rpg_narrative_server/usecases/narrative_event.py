@@ -23,7 +23,6 @@ logger = logging.getLogger("rpg_narrative_server")
 
 
 class NarrativeUseCase:
-
     def __init__(
         self,
         repo,
@@ -67,7 +66,6 @@ class NarrativeUseCase:
     # ---------------------------------------------------------
 
     async def _generate_with_retry(self, request, action):
-
         for attempt in range(2):
             try:
                 response = await self.llm.generate(request)
@@ -85,7 +83,7 @@ class NarrativeUseCase:
                 or len(cleaned) < 10
                 or cleaned.lower() in {"ok", "sim", "não"}
             ):
-                logger.warning(f"Bad LLM response (attempt {attempt+1})")
+                logger.warning(f"Bad LLM response (attempt {attempt + 1})")
 
                 if attempt == 0:
                     request.prompt += (
@@ -105,7 +103,6 @@ class NarrativeUseCase:
     # ---------------------------------------------------------
 
     async def _build_context(self, campaign_id, action, intent):
-
         memory_task = asyncio.create_task(self.memory.load_memory(campaign_id))
 
         k = 4 if intent == "ACTION" else 8 if intent == "EXPLORATION" else 6
@@ -141,7 +138,6 @@ class NarrativeUseCase:
     # ---------------------------------------------------------
 
     def _build_request(self, ctx, action, intent):
-
         system_prompt = self.narrative_builder.build_system_prompt(intent)
 
         user_prompt = self.narrative_builder.build_user_prompt(
@@ -184,7 +180,6 @@ class NarrativeUseCase:
     # ---------------------------------------------------------
 
     async def execute(self, campaign_id: str, action: str, user_id: str):
-
         action = self.narrative_builder.normalize_action(action)
 
         intent = await self.intent_classifier.classify(action)

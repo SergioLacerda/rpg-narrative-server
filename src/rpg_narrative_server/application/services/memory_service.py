@@ -3,7 +3,6 @@ from rpg_narrative_server.application.dto.llm_request import LLMRequest
 
 
 class MemoryService:
-
     def __init__(
         self,
         repository,
@@ -22,7 +21,6 @@ class MemoryService:
     # ---------------------------------------------------------
 
     async def load_memory(self, campaign_id: str) -> NarrativeMemory:
-
         data = await self.repo.get_events(campaign_id)
 
         if not data:
@@ -36,7 +34,6 @@ class MemoryService:
     # ---------------------------------------------------------
 
     async def save_memory(self, campaign_id: str, memory: NarrativeMemory):
-
         events = [{"text": e} for e in memory.recent_events]
 
         await self.repo.save_events(campaign_id, events)
@@ -44,7 +41,6 @@ class MemoryService:
     # ---------------------------------------------------------
 
     async def append(self, campaign_id: str, text: str):
-
         text = self.compressor(text)
 
         if not text:
@@ -55,16 +51,13 @@ class MemoryService:
         memory.add_event(text)
 
         if len(memory.recent_events) > self.max_events:
-
             overflow = memory.recent_events[: -self.max_events]
             recent = memory.recent_events[-self.max_events :]
 
             if self.summarizer and len(overflow) >= 3:
-
                 raw_text = self.summarizer.extract([{"text": e} for e in overflow])
 
                 if self.llm:
-
                     prompt = self.summarizer.build_prompt(raw_text)
 
                     request = LLMRequest(

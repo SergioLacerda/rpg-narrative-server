@@ -1,7 +1,5 @@
 class ContextFormatter:
-
     def format(self, ctx: dict, scene_type: str = "DEFAULT") -> str:
-
         parts = []
 
         summary = ctx.get("summary")

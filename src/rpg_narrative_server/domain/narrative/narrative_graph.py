@@ -8,7 +8,6 @@ class NarrativeGraph:
     """
 
     def __init__(self):
-
         self._graph = defaultdict(set)
 
     # ---------------------------------------------------------
@@ -16,11 +15,8 @@ class NarrativeGraph:
     # ---------------------------------------------------------
 
     def update(self, entities: list[str]):
-
         for e in entities:
-
             for other in entities:
-
                 if e == other:
                     continue
 
@@ -31,7 +27,6 @@ class NarrativeGraph:
     # ---------------------------------------------------------
 
     def related(self, entities: list[str]) -> set[str]:
-
         result = set()
 
         for e in entities:
@@ -44,12 +39,10 @@ class NarrativeGraph:
     # ---------------------------------------------------------
 
     def to_dict(self) -> dict:
-
         return {k: list(v) for k, v in self._graph.items()}
 
     @classmethod
     def from_dict(cls, data: dict):
-
         instance = cls()
 
         for k, values in data.items():

@@ -7,7 +7,6 @@ router = APIRouter()
 
 @router.get("/system/config")
 def get_config():
-
     settings = load_settings()
 
     return {

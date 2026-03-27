@@ -2,13 +2,11 @@ from cachetools import TTLCache
 
 
 class EmbeddingCache:
-
     def __init__(self, client):
         self.client = client
         self.cache = TTLCache(ttl=3600, max_items=512)
 
     async def embed(self, text: str):
-
         key = self._key(text)
 
         cached = self.cache.get(key)

@@ -42,7 +42,6 @@ load_settings.cache_clear()
 # ---------------------------------------------------------
 @pytest.fixture(autouse=True)
 def reset_global_state():
-
     # reset container singleton
 
     c = importlib.import_module("rpg_narrative_server.bootstrap.container")
@@ -81,7 +80,6 @@ def container_factory():
 # ---------------------------------------------------------
 @pytest.fixture
 def app(container):
-
     app = create_app()
 
     # container override
@@ -104,7 +102,6 @@ def client(app):
 
 @pytest.fixture(autouse=True)
 def reset_campaign_context():
-
     ctx = CampaignContext()
     ctx.reset()
 

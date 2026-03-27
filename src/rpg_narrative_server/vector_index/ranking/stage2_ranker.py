@@ -13,7 +13,6 @@ class Stage2Ranker:
         self.top_k = top_k
 
     def rank(self, ctx, candidates):
-
         if not candidates:
             return candidates
 
@@ -26,7 +25,6 @@ class Stage2Ranker:
         heap = []
 
         for doc_id in candidates:
-
             score = 0.0
 
             # -----------------------------------------------------

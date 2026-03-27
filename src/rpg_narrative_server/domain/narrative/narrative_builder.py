@@ -1,11 +1,9 @@
 class NarrativeBuilder:
-
     # ---------------------------------------------------------
     # SYSTEM PROMPT
     # ---------------------------------------------------------
 
     def build_system_prompt(self, scene_type: str = "DEFAULT") -> str:
-
         scene_type = self._normalize_scene(scene_type)
 
         base = (
@@ -28,7 +26,6 @@ class NarrativeBuilder:
         ctx: dict,
         action: str,
     ) -> str:
-
         action = self.normalize_action(action)
 
         summary = ctx.get("summary") or ""
@@ -62,36 +59,31 @@ class NarrativeBuilder:
 
         context_block = "\n\n".join(parts).strip()
 
-        return f"{context_block}\n\n" f"Ação do jogador:\n{action}\n\n" f"{instruction}"
+        return f"{context_block}\n\nAção do jogador:\n{action}\n\n{instruction}"
 
     # ---------------------------------------------------------
     # STYLE
     # ---------------------------------------------------------
 
     def _get_style(self, scene_type: str) -> str:
-
         if scene_type in ("ACTION", "COMBAT"):
             return (
-                "ESTILO:\n"
-                "- Frases curtas\n"
-                "- Ritmo rápido\n"
-                "- Foco em ação imediata\n\n"
+                "ESTILO:\n- Frases curtas\n- Ritmo rápido\n- Foco em ação imediata\n\n"
             )
 
         if scene_type in ("CHAT", "DIALOGUE"):
-            return "ESTILO:\n" "- Diálogo natural\n" "- Emoções e expressões\n\n"
+            return "ESTILO:\n- Diálogo natural\n- Emoções e expressões\n\n"
 
         if scene_type == "INVESTIGATION":
-            return "ESTILO:\n" "- Observação detalhada\n" "- Ênfase em pistas\n\n"
+            return "ESTILO:\n- Observação detalhada\n- Ênfase em pistas\n\n"
 
-        return "ESTILO:\n" "- Narrativa imersiva\n" "- Descrições sensoriais\n\n"
+        return "ESTILO:\n- Narrativa imersiva\n- Descrições sensoriais\n\n"
 
     # ---------------------------------------------------------
     # INSTRUCTION
     # ---------------------------------------------------------
 
     def _get_instruction(self, scene_type: str) -> str:
-
         if scene_type in ("ACTION", "COMBAT"):
             return "Descreva a consequência imediata da ação."
 
@@ -108,7 +100,6 @@ class NarrativeBuilder:
     # ---------------------------------------------------------
 
     def get_generation_config(self, scene_type: str) -> dict:
-
         scene_type = self._normalize_scene(scene_type)
 
         if scene_type in ("ACTION", "COMBAT"):

@@ -23,7 +23,6 @@ class LLMSettings:
 
 @dataclass(frozen=True)
 class EmbeddingSettings:
-
     profile: Literal["local", "hybrid", "cloud"]
 
     provider: str
@@ -45,7 +44,6 @@ class EmbeddingSettings:
 
 @dataclass(frozen=True)
 class RuntimeSettings:
-
     environment: str
     device: Optional[str] = None
 
@@ -61,7 +59,6 @@ class RuntimeSettings:
 
 @dataclass(frozen=True)
 class AppSettings:
-
     discord_token: str
     max_cache_size: int
     campaign_file: str
@@ -79,7 +76,6 @@ class AppSettings:
 
 @dataclass(frozen=True)
 class Settings:
-
     runtime: RuntimeSettings
     llm: LLMSettings
     embeddings: EmbeddingSettings

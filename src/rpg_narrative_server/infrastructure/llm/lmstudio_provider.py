@@ -11,9 +11,7 @@ from rpg_narrative_server.application.services.llm.llm_errors import (
 
 
 class LMStudioProvider(BaseProvider):
-
     def __init__(self, base_url: str, model: str, timeout: float = 60.0):
-
         if not base_url.endswith("/v1"):
             base_url = base_url.rstrip("/") + "/v1"
 
@@ -30,7 +28,6 @@ class LMStudioProvider(BaseProvider):
     # ---------------------------------------------------------
 
     async def _call_api(self, request):
-
         messages = self._build_messages(request)
 
         try:
@@ -53,7 +50,6 @@ class LMStudioProvider(BaseProvider):
     # ---------------------------------------------------------
 
     def _extract_content(self, resp):
-
         if not resp or not resp.choices:
             return ""
 
@@ -64,7 +60,6 @@ class LMStudioProvider(BaseProvider):
     # ---------------------------------------------------------
 
     async def stream(self, request):
-
         messages = self._build_messages(request)
 
         stream = await self.client.chat.completions.create(
@@ -83,7 +78,6 @@ class LMStudioProvider(BaseProvider):
     # ---------------------------------------------------------
 
     def _build_messages(self, request):
-
         messages = []
 
         if request.system_prompt:

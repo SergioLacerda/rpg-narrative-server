@@ -4,7 +4,6 @@ from tests.config.fakes.fake_vector_index import FakeVectorIndex
 
 
 def create_test_container(llm=None):
-
     from rpg_narrative_server.bootstrap.container import Container
 
     container = Container()

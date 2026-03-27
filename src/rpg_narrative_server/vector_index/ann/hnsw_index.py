@@ -5,9 +5,7 @@ from rpg_narrative_server.vector_index.utils.similarity import cosine_similarity
 
 
 class HNSWIndex:
-
     def __init__(self, docs, M=6, ef=20):
-
         self.M = M  # número de vizinhos
         self.ef = ef  # largura da busca
 
@@ -24,16 +22,13 @@ class HNSWIndex:
     # ---------------------------------------------------------
 
     def _random_level(self):
-
         level = 0
         while random.random() < 0.5:
             level += 1
         return level
 
     def _build(self):
-
         for doc in self.docs:
-
             level = self._random_level()
 
             while len(self.layers) <= level:
@@ -49,7 +44,6 @@ class HNSWIndex:
             neighbors = self._search_layer(doc["vector"], self.entry_point)
 
             for n in neighbors[: self.M]:
-
                 self.graph[doc["id"]].append(n)
                 self.graph[id(n)].append(doc)
 
@@ -58,17 +52,14 @@ class HNSWIndex:
     # ---------------------------------------------------------
 
     def _search_layer(self, q_vec, entry):
-
         visited = set()
         candidates = [entry]
         best = [entry]
 
         while candidates:
-
             current = candidates.pop()
 
             for neighbor in self.graph[id(current)]:
-
                 if id(neighbor) in visited:
                     continue
 
@@ -97,14 +88,12 @@ class HNSWIndex:
     # ---------------------------------------------------------
 
     def search(self, q_vec, k=20):
-
         if not self.entry_point:
             return []
 
         entry = self.entry_point
 
         for layer in reversed(self.layers):
-
             best = self._search_layer(q_vec, entry)
 
             if best:

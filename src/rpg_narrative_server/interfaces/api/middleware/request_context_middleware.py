@@ -11,7 +11,6 @@ logger = logging.getLogger("rpg_narrative_server.api")
 
 
 async def request_context_middleware(request: Request, call_next):
-
     request_id = str(uuid.uuid4())
 
     # 🔥 injeta contexto global (contextvars)

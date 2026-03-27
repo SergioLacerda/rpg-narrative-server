@@ -1,5 +1,4 @@
 class DummyIntent:
-
     def __init__(self, value="ACTION"):
         self.value = value
 

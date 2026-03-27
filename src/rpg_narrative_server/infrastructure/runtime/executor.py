@@ -12,9 +12,7 @@ class ExecutorType(str, Enum):
 
 
 class Executor:
-
     def __init__(self, max_workers=4, mode=ExecutorType.THREAD):
-
         if mode == ExecutorType.PROCESS:
             self._executor = ProcessPoolExecutor(max_workers=max_workers)
         else:

@@ -105,7 +105,6 @@ class FakeSemanticCache:
 
 
 def create_engine(mode="io", batch=False, cpu_work=2_000_000):
-
     if mode == "cpu":
         index = CpuBoundIndex(work=cpu_work)
 
@@ -159,7 +158,6 @@ def percentile(data, p):
 
 
 async def perf_cold(engine):
-
     start = time.perf_counter()
 
     for i in range(10):
@@ -171,7 +169,6 @@ async def perf_cold(engine):
 
 
 async def perf_warm(engine):
-
     await engine.search("same")
 
     start = time.perf_counter()
@@ -185,7 +182,6 @@ async def perf_warm(engine):
 
 
 async def perf_concurrent(engine, n=50, same_query=True):
-
     latencies = []
 
     workers = engine.executor._executor._max_workers
@@ -224,7 +220,6 @@ async def perf_concurrent(engine, n=50, same_query=True):
 
 
 async def perf_scaling(engine):
-
     async def run(n):
         start = time.perf_counter()
 
@@ -250,7 +245,6 @@ async def perf_scaling(engine):
 
 
 async def perf_memory(engine, n=1000):
-
     for i in range(n):
         await engine.search(f"q{i}")
 
@@ -262,7 +256,6 @@ async def perf_memory(engine, n=1000):
 
 
 async def perf_batch(engine, n=50):
-
     if not hasattr(engine.embedding_cache, "embed_batch"):
         print("\nBatch not supported in this mode")
         return
@@ -289,7 +282,6 @@ async def perf_batch(engine, n=50):
 
 
 async def main(args):
-
     print("\n🚀 Retrieval Engine Benchmark\n")
 
     engine = create_engine(args.mode, args.batch, args.cpu_work)
@@ -318,7 +310,6 @@ async def main(args):
 # ==================================================
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--n", type=int, default=50)

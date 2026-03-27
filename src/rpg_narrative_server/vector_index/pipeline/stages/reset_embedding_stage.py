@@ -1,10 +1,8 @@
 class ResetEmbeddingStage:
-
     priority = 11
     min_candidates = 0
 
     def run(self, ctx):
-
         current_query = ctx.query
 
         last_query = getattr(ctx, "_last_query", None)

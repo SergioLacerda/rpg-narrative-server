@@ -7,7 +7,6 @@ class MemoryProvider:
         self.repo = campaign_repository
 
     def get_recent(self, limit: int = 10) -> list[str]:
-
         # sync wrapper simples
         events = self.repo.get_events_sync(limit=limit)
 

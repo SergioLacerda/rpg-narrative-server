@@ -9,13 +9,11 @@ class ResponseCache:
     """
 
     def __init__(self, loader, saver):
-
         self._cache = None
         self._loader = loader
         self._saver = saver
 
     async def _load(self):
-
         if self._cache is None:
             self._cache = await asyncio.to_thread(self._loader)
 

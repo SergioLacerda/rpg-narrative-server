@@ -6,12 +6,10 @@ SRC_PATH = Path("src")
 
 
 def get_imports(file_path):
-
     tree = ast.parse(file_path.read_text(encoding="utf-8"))
     imports = set()
 
     for node in ast.walk(tree):
-
         # import x
         if isinstance(node, ast.Import):
             for n in node.names:
@@ -28,7 +26,6 @@ def get_imports(file_path):
 
 
 def get_used_names(file_path):
-
     tree = ast.parse(file_path.read_text(encoding="utf-8"))
     names = set()
 
@@ -40,11 +37,9 @@ def get_used_names(file_path):
 
 
 def test_no_unused_imports():
-
     errors = []
 
     for file in SRC_PATH.rglob("*.py"):
-
         if "__init__" in file.name:
             continue
 

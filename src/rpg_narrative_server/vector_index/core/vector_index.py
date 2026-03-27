@@ -35,7 +35,6 @@ class PipelineDeps:
 
 
 class VectorIndex:
-
     def __init__(
         self,
         components,
@@ -81,7 +80,6 @@ class VectorIndex:
     # ==========================================================
 
     def _get_ann(self):
-
         ann = getattr(self.components, "ann", None)
         if ann:
             return ann
@@ -119,7 +117,6 @@ class VectorIndex:
     # ==========================================================
 
     def _build_context(self, query: str, k: int):
-
         tokens = self.tokenizer.tokenize(query)
 
         if not isinstance(tokens, list):
@@ -143,12 +140,10 @@ class VectorIndex:
     # ==========================================================
 
     async def _ensure_pipeline(self):
-
         if self._pipeline is not None:
             return self._pipeline
 
         async with self._pipeline_lock:
-
             if self._pipeline is not None:
                 return self._pipeline
 
@@ -178,7 +173,6 @@ class VectorIndex:
     # ==========================================================
 
     async def search_debug(self, query: str, k: int = 4):
-
         if not query:
             return {
                 "results": [],
@@ -209,7 +203,6 @@ class VectorIndex:
     # ==========================================================
 
     async def search_async(self, query: str, k: int = 4):
-
         if not query:
             return []
 

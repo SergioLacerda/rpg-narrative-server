@@ -4,13 +4,11 @@ logger = logging.getLogger("rpg_narrative_server.ann.qdrant")
 
 
 class QdrantANN:
-
     def __init__(self, client, collection_name: str):
         self.client = client
         self.collection = collection_name
 
     def search(self, query_vector: list[float], k: int = 10) -> list[str]:
-
         try:
             hits = self.client.search(
                 collection_name=self.collection,

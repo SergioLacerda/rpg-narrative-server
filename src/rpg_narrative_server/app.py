@@ -12,7 +12,6 @@ setup_logging()
 
 
 def create_app() -> FastAPI:
-
     app = FastAPI(
         title="RPG Narrative Server",
         lifespan=lifespan,

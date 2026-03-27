@@ -7,7 +7,6 @@ class FakeSolver:
 
 
 def test_analyze_distribution(monkeypatch):
-
     monkeypatch.setattr(
         "rpg_narrative_server.domain.dice.probability.FFTDiceSolver",
         lambda: FakeSolver(),

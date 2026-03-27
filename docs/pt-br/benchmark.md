@@ -121,11 +121,11 @@ Simula produção.
 
 ## 📊 Métricas
 
-- **Total time** → tempo total  
-- **Avg latency** → latência média  
-- **P95 / P99** → cauda de latência  
-- **Index calls** → chamadas reais (dedup)  
-- **Speedup** → ganho por concorrência  
+- **Total time** → tempo total
+- **Avg latency** → latência média
+- **P95 / P99** → cauda de latência
+- **Index calls** → chamadas reais (dedup)
+- **Speedup** → ganho por concorrência
 
 ---
 

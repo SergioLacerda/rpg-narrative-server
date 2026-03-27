@@ -10,7 +10,6 @@ class KeywordIndex:
     """
 
     def __init__(self):
-
         self.index = defaultdict(set)
 
     # ---------------------------------------------------------
@@ -25,7 +24,6 @@ class KeywordIndex:
     # ---------------------------------------------------------
 
     def add(self, text: str, key: str):
-
         for token in self._tokens(text):
             self.index[token].add(key)
 
@@ -39,13 +37,11 @@ class KeywordIndex:
         limit: int = 5,
         min_score: int = 1,
     ) -> List[Tuple[str, int]]:
-
         tokens = self._tokens(text)
 
         scores = Counter()
 
         for token in tokens:
-
             for key in self.index.get(token, []):
                 scores[key] += 1
 

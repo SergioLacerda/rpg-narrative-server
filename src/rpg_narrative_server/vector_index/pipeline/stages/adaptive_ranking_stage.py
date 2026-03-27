@@ -27,7 +27,6 @@ class AdaptiveRankingStage:
     # ---------------------------------------------------------
 
     async def run(self, ctx):
-
         candidates = ctx.candidates
 
         if not candidates:
@@ -50,7 +49,6 @@ class AdaptiveRankingStage:
         scored = []
 
         for doc_id in candidates:
-
             # -----------------------------------------------------
             # vector score (robusto)
             # -----------------------------------------------------

@@ -17,7 +17,6 @@ class Stage1Ranker:
     # ---------------------------------------------------------
 
     def rank(self, ctx, candidates):
-
         if not candidates:
             return candidates
 
@@ -27,7 +26,6 @@ class Stage1Ranker:
         heap = []
 
         for doc_id in candidates:
-
             tokens = get_tokens(doc_id) if get_tokens else []
             tokens = set(tokens or [])
 

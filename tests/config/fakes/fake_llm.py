@@ -16,7 +16,6 @@ class FakeLLMService:
         self.calls = []
 
     async def generate(self, request: LLMRequest) -> str:
-
         if not isinstance(request, LLMRequest):
             raise TypeError("FakeLLMService espera LLMRequest")
 

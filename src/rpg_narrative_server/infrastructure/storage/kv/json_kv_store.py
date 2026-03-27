@@ -4,7 +4,6 @@ from rpg_narrative_server.config.settings import Settings
 
 
 class JSONKeyValueStore:
-
     def __init__(self, path: Path):
         self.path = path
 

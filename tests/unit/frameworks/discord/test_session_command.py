@@ -30,7 +30,6 @@ def executor():
 
 @pytest.mark.asyncio
 async def test_endsession_success(executor):
-
     bot = DummyBot()
 
     register_session_commands(
@@ -46,7 +45,6 @@ async def test_endsession_success(executor):
 
 @pytest.mark.asyncio
 async def test_endsession_no_summary(executor):
-
     bot = DummyBot()
 
     register_session_commands(

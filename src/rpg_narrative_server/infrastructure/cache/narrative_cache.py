@@ -16,7 +16,6 @@ class NarrativeLRUCache:
     """
 
     def __init__(self, max_size=512, ttl=600):
-
         self.max_size = max_size
         self.ttl = ttl
 
@@ -27,7 +26,6 @@ class NarrativeLRUCache:
     # ---------------------------------------------------------
 
     async def get(self, key):
-
         item = self.store.get(key)
 
         if not item:
@@ -37,7 +35,6 @@ class NarrativeLRUCache:
 
         # TTL expired
         if expires and time.time() > expires:
-
             self.store.pop(key, None)
 
             return None
@@ -52,7 +49,6 @@ class NarrativeLRUCache:
     # ---------------------------------------------------------
 
     async def set(self, key, value):
-
         expires = time.time() + self.ttl if self.ttl else None
 
         self.store[key] = (value, expires)
@@ -61,7 +57,6 @@ class NarrativeLRUCache:
 
         # LRU eviction
         if len(self.store) > self.max_size:
-
             self.store.popitem(last=False)
 
     # ---------------------------------------------------------
@@ -69,7 +64,6 @@ class NarrativeLRUCache:
     # ---------------------------------------------------------
 
     def cleanup(self):
-
         now = time.time()
 
         expired = [k for k, (_, exp) in self.store.items() if exp and now > exp]

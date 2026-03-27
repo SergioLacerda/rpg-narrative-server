@@ -18,12 +18,10 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 
 def register_gm_command(bot, usecases, executor):
-
     @bot.hybrid_command(name="gm", description="Ação narrativa")
     @app_commands.describe(action="Descreva sua ação")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def gm(ctx, *, action: str):
-
         action = (action or "").strip()
 
         if not action:

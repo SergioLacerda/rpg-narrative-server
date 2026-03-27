@@ -12,7 +12,6 @@ from tests.config.fakes.narrative.memory_service import DummyMemoryService
 
 @pytest.mark.asyncio
 async def test_context_includes_history_and_retrieved():
-
     memory = DummyMemoryService(history=["open door"])
 
     builder = ContextBuilder(memory_service=memory)
@@ -36,7 +35,6 @@ async def test_context_includes_history_and_retrieved():
 
 @pytest.mark.asyncio
 async def test_context_empty():
-
     memory = DummyMemoryService(history=[])
 
     builder = ContextBuilder(memory_service=memory)
@@ -61,7 +59,6 @@ async def test_context_empty():
 
 @pytest.mark.asyncio
 async def test_history_truncation():
-
     history = [f"h{i}" for i in range(30)]
 
     memory = DummyMemoryService(history=history)
@@ -89,7 +86,6 @@ async def test_history_truncation():
 
 @pytest.mark.asyncio
 async def test_retrieved_deduplication():
-
     memory = DummyMemoryService()
 
     builder = ContextBuilder(memory_service=memory)
@@ -115,7 +111,6 @@ async def test_retrieved_deduplication():
 
 @pytest.mark.asyncio
 async def test_block_order():
-
     memory = DummyMemoryService(history=["h1"])
 
     builder = ContextBuilder(memory_service=memory)

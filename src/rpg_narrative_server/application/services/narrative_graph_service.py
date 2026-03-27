@@ -4,7 +4,6 @@ class NarrativeGraphService:
     """
 
     def __init__(self, repo, extractor):
-
         self.repo = repo
         self.extractor = extractor
 
@@ -13,7 +12,6 @@ class NarrativeGraphService:
     # ---------------------------------------------------------
 
     def update_from_text(self, text: str):
-
         graph = self.repo.load()
 
         entities = self.extractor.extract(text)
@@ -30,7 +28,6 @@ class NarrativeGraphService:
     # ---------------------------------------------------------
 
     def related(self, query: str) -> set[str]:
-
         graph = self.repo.load()
 
         entities = self.extractor.extract(query)

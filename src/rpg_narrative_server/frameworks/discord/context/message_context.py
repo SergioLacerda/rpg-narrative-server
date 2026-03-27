@@ -45,4 +45,4 @@ class MessageContext:
         return None
 
     def __repr__(self) -> str:
-        return f"<MessageContext channel={self.channel_id} " f"user={self.user_id}>"
+        return f"<MessageContext channel={self.channel_id} user={self.user_id}>"

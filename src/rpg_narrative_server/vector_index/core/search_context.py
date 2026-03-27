@@ -1,5 +1,4 @@
 class SearchContext:
-
     def __init__(
         self,
         query,
@@ -43,7 +42,6 @@ class SearchContext:
         return self.vector_store.get(doc_id)
 
     def get_tokens(self, doc_id):
-
         if doc_id in self._token_cache:
             return self._token_cache[doc_id]
 
@@ -52,7 +50,6 @@ class SearchContext:
         return tokens
 
     def get_metadata(self, doc_id):
-
         if doc_id in self._meta_cache:
             return self._meta_cache[doc_id]
 

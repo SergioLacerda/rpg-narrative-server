@@ -25,7 +25,6 @@ def assert_prompt_structure(prompt: str):
 
 
 def build_prompt(ctx: dict, action: str) -> str:
-
     builder = NarrativeBuilder()
 
     system = builder.build_system_prompt(ctx.get("scene_type"))
@@ -44,7 +43,6 @@ def build_prompt(ctx: dict, action: str) -> str:
 
 @pytest.mark.asyncio
 async def test_prompt_with_history_golden():
-
     memory_service = DummyMemoryService(history=["open door"])
 
     context_builder = ContextBuilder(memory_service=memory_service)
@@ -74,7 +72,6 @@ async def test_prompt_with_history_golden():
 
 @pytest.mark.asyncio
 async def test_prompt_with_memory_golden():
-
     memory_service = DummyMemoryService(history=["abriu a porta"])
 
     context_builder = ContextBuilder(memory_service=memory_service)

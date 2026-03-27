@@ -13,7 +13,6 @@ class HNSWAdapter:
         self.index = index
 
     def search(self, q_vec, k=20):
-
         if not self.index:
             return []
 

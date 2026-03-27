@@ -9,7 +9,6 @@ from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store impo
 
 
 class DummyCollection:
-
     def __init__(self):
         self.data = {}
         self.last_query = None

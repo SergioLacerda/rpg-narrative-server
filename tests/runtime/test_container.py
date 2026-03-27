@@ -7,14 +7,12 @@ from tests.config.fakes.fake_llm import FakeLLMService
 
 
 def test_container_builds_core(container):
-
     assert container.embedding is not None
     assert container.vector_index is not None
     assert container.llm is not None
 
 
 def test_container_lazy_loading():
-
     c = Container()
 
     assert c._llm_service is None
@@ -27,7 +25,6 @@ def test_container_lazy_loading():
 
 
 def test_narrative_usecase_wiring(container):
-
     usecase = container.narrative
 
     assert usecase is not None
@@ -37,7 +34,6 @@ def test_narrative_usecase_wiring(container):
 
 @pytest.mark.asyncio
 async def test_llm_integration(container):
-
     response = await container.llm.generate(LLMRequest(prompt="teste"))
 
     assert response is not None

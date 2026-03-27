@@ -1,12 +1,10 @@
 class NarrativeImportanceStage:
-
     priority = 105
 
     def __init__(self, importance_model=None):
         self.importance = importance_model
 
     async def run(self, ctx):
-
         if not ctx.candidates:
             ctx.results = []
             return ctx

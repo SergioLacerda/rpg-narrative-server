@@ -17,7 +17,6 @@ class CausalityGraph:
     # ---------------------------------------------------------
 
     def add_edge(self, source: str, target: str):
-
         self.forward[source].append(target)
         self.backward[target].append(source)
 
@@ -26,16 +25,13 @@ class CausalityGraph:
     # ---------------------------------------------------------
 
     def expand(self, doc_ids, depth=2):
-
         visited = set(doc_ids)
         frontier = set(doc_ids)
 
         for _ in range(depth):
-
             new_nodes = set()
 
             for doc_id in frontier:
-
                 # forward
                 for nxt in self.forward.get(doc_id, []):
                     if nxt not in visited:

@@ -27,7 +27,6 @@ async def test_bot_creation():
 
 @pytest.mark.asyncio
 async def test_on_command_error_cooldown():
-
     bot = create_bot(
         settings=DummySettings(),
         usecases=DummyUsecases(),
@@ -52,7 +51,6 @@ async def test_on_command_error_cooldown():
 
 @pytest.mark.asyncio
 async def test_on_ready_sync_called(monkeypatch):
-
     called = {}
 
     async def fake_sync():
@@ -73,7 +71,6 @@ async def test_on_ready_sync_called(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_on_ready_sync_failure(monkeypatch):
-
     async def fake_sync():
         raise RuntimeError("fail")
 
@@ -89,7 +86,6 @@ async def test_on_ready_sync_failure(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_on_command_error_generic(container):
-
     bot = create_bot(
         settings=DummySettings(),
         usecases=DummyUsecases(),

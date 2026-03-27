@@ -30,7 +30,6 @@ class NarrativeMemoryService:
         return str(uuid.uuid4())
 
     def get_last_event_id(self):
-
         memory = self.repo.load()
 
         if not memory.events:
@@ -43,7 +42,6 @@ class NarrativeMemoryService:
     # ---------------------------------------------------------
 
     def add_event(self, text: str):
-
         memory = self.repo.load()
 
         event = {
@@ -59,7 +57,6 @@ class NarrativeMemoryService:
         return event
 
     def update_summary(self, summary: str):
-
         memory = self.repo.load()
 
         memory.update_summary(summary)
@@ -71,5 +68,4 @@ class NarrativeMemoryService:
     # ---------------------------------------------------------
 
     def extract_tokens(self, text: str):
-
         return [token.lower() for token in text.split() if len(token) > 2]

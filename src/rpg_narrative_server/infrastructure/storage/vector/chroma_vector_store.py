@@ -4,7 +4,6 @@ from rpg_narrative_server.application.ports.storage import VectorStorePort
 
 
 class ChromaVectorStore(VectorStorePort):
-
     def __init__(self, collection):
         self.collection = collection
 

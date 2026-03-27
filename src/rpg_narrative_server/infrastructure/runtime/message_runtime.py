@@ -3,7 +3,6 @@ import asyncio
 
 
 class MessageRuntime:
-
     def __init__(self):
         self.last_user_message = {}
         self.last_channel_warning = {}

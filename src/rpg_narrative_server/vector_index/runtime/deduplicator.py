@@ -12,7 +12,6 @@ class InflightDeduplicator:
     """
 
     def __init__(self, ttl: float = 2.0):
-
         self._inflight: dict[str, asyncio.Task] = {}
         self._recent: dict[str, tuple[float, Any]] = {}
 
@@ -23,7 +22,6 @@ class InflightDeduplicator:
     # ---------------------------------------------------------
 
     async def run(self, key: str, coro_factory: Callable[[], Awaitable[Any]]) -> Any:
-
         now = time.monotonic()
 
         # ---------------------------------------------------------

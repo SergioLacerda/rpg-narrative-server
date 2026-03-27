@@ -5,7 +5,6 @@ from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend impor
 
 
 def test_inmemory_backend_builds():
-
     backend = InMemoryStorageBackend()
 
     vector = backend.build_vector_store()
@@ -21,7 +20,6 @@ def test_inmemory_backend_builds():
 
 
 def test_vector_store_basic():
-
     store = InMemoryVectorStore()
 
     store.add("a", [1, 0])
@@ -32,14 +30,12 @@ def test_vector_store_basic():
 
 
 def test_vector_store_get_missing():
-
     store = InMemoryVectorStore()
 
     assert store.get("missing") is None
 
 
 def test_vector_store_search():
-
     store = InMemoryVectorStore()
 
     store.add("a", [1, 0])
@@ -51,7 +47,6 @@ def test_vector_store_search():
 
 
 def test_vector_store_clear():
-
     store = InMemoryVectorStore()
 
     store.add("a", [1, 0])

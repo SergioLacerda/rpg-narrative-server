@@ -5,7 +5,6 @@ logger = logging.getLogger("rpg_narrative_server.ann.faiss")
 
 
 class FaissANN:
-
     def __init__(self, index, id_map: list[str]):
         """
         index: faiss.Index
@@ -15,7 +14,6 @@ class FaissANN:
         self.id_map = id_map
 
     def search(self, query_vector: list[float], k: int = 10) -> list[str]:
-
         if not self.index:
             return []
 

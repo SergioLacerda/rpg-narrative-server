@@ -15,7 +15,6 @@ class CampaignContext:
     # ---------------------------------------------------------
 
     def set_campaign(self, campaign_id: str):
-
         return _current_campaign.set(str(campaign_id))
 
     # ---------------------------------------------------------
@@ -23,7 +22,6 @@ class CampaignContext:
     # ---------------------------------------------------------
 
     def get_campaign(self) -> str:
-
         campaign = _current_campaign.get()
 
         if campaign is None:
@@ -36,7 +34,6 @@ class CampaignContext:
     # ---------------------------------------------------------
 
     def reset(self, token=None):
-
         if token:
             _current_campaign.reset(token)
         else:
@@ -48,7 +45,6 @@ class CampaignContext:
 
     @contextmanager
     def scope(self, campaign_id: str):
-
         token = _current_campaign.set(str(campaign_id))
 
         try:

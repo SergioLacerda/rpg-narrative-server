@@ -1,5 +1,4 @@
 async def start_processing(ctx):
-
     interaction = getattr(ctx, "interaction", None)
 
     if interaction:

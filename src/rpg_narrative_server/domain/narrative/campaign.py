@@ -1,5 +1,4 @@
 class Campaign:
-
     def __init__(self, campaign_id: str):
         self.id = campaign_id
 

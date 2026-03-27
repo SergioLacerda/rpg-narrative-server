@@ -5,7 +5,6 @@ from rpg_narrative_server.shared.resilience import resilient_call
 
 @pytest.mark.asyncio
 async def test_resilient_success():
-
     async def provider(x):
         return x + 1
 
@@ -16,7 +15,6 @@ async def test_resilient_success():
 
 @pytest.mark.asyncio
 async def test_resilient_retry():
-
     calls = {"n": 0}
 
     async def flaky(x):
@@ -33,7 +31,6 @@ async def test_resilient_retry():
 
 @pytest.mark.asyncio
 async def test_resilient_fail_all():
-
     async def bad(x):
         raise RuntimeError("boom")
 
@@ -43,7 +40,6 @@ async def test_resilient_fail_all():
 
 @pytest.mark.asyncio
 async def test_resilient_timeout():
-
     async def slow(x):
         await asyncio.sleep(0.2)
         return x
@@ -54,7 +50,6 @@ async def test_resilient_timeout():
 
 @pytest.mark.asyncio
 async def test_resilient_sync_function():
-
     def sync_fn(x):
         return x + 5
 
@@ -65,7 +60,6 @@ async def test_resilient_sync_function():
 
 @pytest.mark.asyncio
 async def test_resilient_retry_exhausted():
-
     calls = {"n": 0}
 
     async def always_fail(x):

@@ -1,5 +1,4 @@
 class ContextBuilder:
-
     def __init__(
         self,
         memory_service,
@@ -27,7 +26,6 @@ class ContextBuilder:
         retrieved=None,
         scene_type="DEFAULT",
     ) -> dict:
-
         # ----------------------------------
         # 1. MEMORY (com reuse)
         # ----------------------------------

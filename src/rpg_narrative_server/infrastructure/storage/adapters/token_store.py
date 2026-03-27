@@ -2,7 +2,6 @@ from rpg_narrative_server.vector_index.components import TokenStore
 
 
 class TokenStoreAdapter(TokenStore):
-
     def __init__(self, kv_store):
         self.store = kv_store
 

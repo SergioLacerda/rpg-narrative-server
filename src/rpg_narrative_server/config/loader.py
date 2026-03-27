@@ -76,7 +76,6 @@ def _get_embedding_defaults(profile_embedding: str):
 
 @lru_cache
 def load_settings() -> Settings:
-
     profile = load_profile()
 
     embedding_defaults = _get_embedding_defaults(profile.embedding)

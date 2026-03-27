@@ -19,7 +19,6 @@ class TopK:
     # ---------------------------------------------------------
 
     def push(self, score: float, item: Any):
-
         if len(self._heap) < self.k:
             heapq.heappush(self._heap, (score, item))
         else:
@@ -30,7 +29,6 @@ class TopK:
     # ---------------------------------------------------------
 
     def results(self) -> List[Any]:
-
         return [item for _, item in sorted(self._heap, reverse=True)]
 
     # ---------------------------------------------------------
@@ -38,7 +36,6 @@ class TopK:
     # ---------------------------------------------------------
 
     def results_with_scores(self) -> List[Tuple[float, Any]]:
-
         return sorted(self._heap, reverse=True)
 
     # ---------------------------------------------------------

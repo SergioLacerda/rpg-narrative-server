@@ -24,7 +24,6 @@ class ContextualScore:
     # ---------------------------------------------------------
 
     def score(self, doc_tokens: Iterable[str]) -> float:
-
         ctx = self.context_provider.get_context()
 
         if not ctx:
@@ -47,7 +46,6 @@ class ContextualScore:
     # ---------------------------------------------------------
 
     def batch_score(self, docs_tokens: list[Iterable[str]]) -> list[float]:
-
         ctx = self.context_provider.get_context()
 
         if not ctx:
@@ -56,7 +54,6 @@ class ContextualScore:
         scores = []
 
         for tokens in docs_tokens:
-
             total = 0
             count = 0
 

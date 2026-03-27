@@ -21,7 +21,6 @@ def get_module_name(file: Path) -> str:
 
 
 def get_layer(module: str):
-
     if ".domain." in module:
         return "domain"
     if ".application." in module:
@@ -35,17 +34,14 @@ def get_layer(module: str):
 
 
 def get_import_graph():
-
     graph = defaultdict(set)
 
     for file in SRC.rglob("*.py"):
-
         module = get_module_name(file)
 
         tree = ast.parse(file.read_text(encoding="utf-8"))
 
         for node in ast.walk(tree):
-
             if isinstance(node, ast.Import):
                 for n in node.names:
                     name = normalize(n.name)
@@ -62,14 +58,12 @@ def get_import_graph():
 
 
 def find_cycles(graph):
-
     visited = set()
     stack = []
 
     cycles = []
 
     def visit(node):
-
         if node in stack:
             idx = stack.index(node)
             cycles.append(stack[idx:] + [node])
@@ -93,7 +87,6 @@ def find_cycles(graph):
 
 
 def test_no_cycles():
-
     graph = get_import_graph()
 
     cycles = find_cycles(graph)
@@ -102,14 +95,12 @@ def test_no_cycles():
 
 
 def test_no_cross_layer_cycles():
-
     graph = get_import_graph()
     cycles = find_cycles(graph)
 
     errors = []
 
     for cycle in cycles:
-
         layers = {get_layer(m) for m in cycle}
 
         if len(layers) > 1:

@@ -15,11 +15,9 @@ async def resilient_call(
     timeout: float | None = None,
     **kwargs,
 ):
-
     delay = base_delay
 
     for attempt in range(1, retries + 1):
-
         try:
             result = fn(*args, **kwargs)
 
@@ -32,7 +30,6 @@ async def resilient_call(
             return result
 
         except Exception as e:
-
             logger.warning(
                 "Attempt %s/%s failed: %s",
                 attempt,

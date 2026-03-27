@@ -3,7 +3,6 @@ from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
 
 
 class DeepSeekProvider(BaseProvider):
-
     def __init__(self, api_key: str, model: str):
         super().__init__("deepseek", model)
 

@@ -4,9 +4,7 @@ import random
 
 
 class GenerateNPCUseCase:
-
     def execute(self, desc: str) -> dict:
-
         names = ["Arkan", "Velra", "Doran", "Selith"]
         traits = ["frio", "calculista", "irônico"]
 

@@ -1,12 +1,10 @@
 class TemporalExpansion:
-
     priority = 15
 
     def __init__(self, temporal_index=None):
         self.temporal = temporal_index
 
     async def run(self, ctx):
-
         if not self.temporal or not ctx.candidates:
             return ctx
 

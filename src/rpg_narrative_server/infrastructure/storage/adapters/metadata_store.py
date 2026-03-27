@@ -2,7 +2,6 @@ from rpg_narrative_server.vector_index.components import MetadataStore
 
 
 class MetadataStoreAdapter(MetadataStore):
-
     def __init__(self, kv_store):
         self.store = kv_store
 

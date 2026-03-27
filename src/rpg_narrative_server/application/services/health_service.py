@@ -2,7 +2,6 @@ import asyncio
 
 
 class HealthService:
-
     def __init__(self, container):
         self.container = container
 
@@ -18,7 +17,6 @@ class HealthService:
     # ---------------------------------------------------------
 
     async def is_ready(self) -> bool:
-
         try:
             vector_index = self.container.vector_index
 
@@ -38,7 +36,6 @@ class HealthService:
     # ---------------------------------------------------------
 
     async def status(self) -> dict:
-
         ready = await self.is_ready()
 
         return {

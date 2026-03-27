@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class StorageBackend(ABC):
-
     @abstractmethod
     def build_vector_store(self):
         raise NotImplementedError

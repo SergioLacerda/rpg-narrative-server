@@ -1,5 +1,4 @@
 class DummyMemory:
-
     def __init__(self, history=None):
         self.recent_events = list(history or [])
         self.summary = None

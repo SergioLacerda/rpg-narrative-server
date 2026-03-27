@@ -7,6 +7,5 @@ class Dummy(RandomProvider):
 
 
 def test_random_provider_abstract():
-
     with pytest.raises(TypeError):
         Dummy()

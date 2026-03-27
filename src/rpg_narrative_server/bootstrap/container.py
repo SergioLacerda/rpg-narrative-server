@@ -94,7 +94,6 @@ logger = logging.getLogger("rpg_narrative_server.container")
 
 
 class SimpleCache:
-
     def __init__(self):
         self._data = {}
 
@@ -111,9 +110,7 @@ class SimpleCache:
 
 
 class Container:
-
     def __init__(self):
-
         logger.info("🚀 Initializing container")
 
         self.settings = load_settings()
@@ -175,7 +172,6 @@ class Container:
         base_path=None,
         vector_store_config=None,
     ):
-
         storage_type = self.settings.app.storage
         base_path = Path(self.settings.app.campaign_file)
         vector_store_config = VectorStoreConfig(
@@ -211,7 +207,6 @@ class Container:
     # ==========================================================
 
     def _build_embedding(self):
-
         s = self.settings.embeddings
 
         logger.info(
@@ -233,7 +228,6 @@ class Container:
     # ==========================================================
 
     def _build_llm_provider(self):
-
         s = self.settings.llm
         provider = s.provider.lower()
 
@@ -294,7 +288,6 @@ class Container:
     # ==========================================================
 
     def _build_llm_service(self):
-
         provider = self._build_llm_provider()
 
         return LLMService(
@@ -450,7 +443,6 @@ class Container:
     @property
     def intent_classifier(self):
         if self._intent_classifier is None:
-
             llm_intent = LLMIntentClassifier(lambda: self.llm)
 
             self._intent_classifier = IntentClassifier(
@@ -469,7 +461,6 @@ class Container:
     @property
     def response_cache(self):
         if not hasattr(self, "_response_cache"):
-
             path = Path("data/memory/response_cache.json")
 
             loader, saver = build_file_storage(path)

@@ -3,7 +3,6 @@ import uuid
 
 
 class VectorMemoryAdapter:
-
     def __init__(self, vector_index):
         self.vector_store = vector_index.vector_store
         self.embedding_service = vector_index.embedding_service
@@ -23,7 +22,6 @@ class VectorMemoryAdapter:
         metadata: dict,
     ):
         for text in texts:
-
             # -------------------------------------------------
             # 1. embedding (com await seguro)
             # -------------------------------------------------

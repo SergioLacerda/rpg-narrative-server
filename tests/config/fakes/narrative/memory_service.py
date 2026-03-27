@@ -2,7 +2,6 @@ from .memory import DummyMemory
 
 
 class DummyMemoryService:
-
     def __init__(self, history=None):
         self.memory = DummyMemory(history)
         self.saved_memory = None

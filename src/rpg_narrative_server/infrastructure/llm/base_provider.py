@@ -37,7 +37,6 @@ class BaseProvider(ABC):
     # ---------------------------------------------------------
 
     async def generate_from_request(self, request: LLMRequest) -> LLMResponse:
-
         start = time.perf_counter()
 
         try:
@@ -66,7 +65,6 @@ class BaseProvider(ABC):
             raise LLMClientError(str(e)) from e
 
         except Exception as e:
-
             status = getattr(e, "status_code", None)
             if status:
                 map_http_error(status, str(e))

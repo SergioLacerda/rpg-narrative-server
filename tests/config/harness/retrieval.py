@@ -2,7 +2,6 @@
 
 
 class RetrievalHarness:
-
     def __init__(self, docs=None):
         from tests.config.fakes.fake_vector_index import FakeVectorIndex
 
@@ -10,7 +9,6 @@ class RetrievalHarness:
         self.vector_index.docs = docs or ["doc1", "doc2", "doc3"]
 
     def build(self):
-
         from rpg_narrative_server.application.services.retrieval_pipeline import (
             RetrievalService,
         )

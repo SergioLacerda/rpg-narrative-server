@@ -9,11 +9,9 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 
 def register_roll_command(bot, usecases, executor):
-
     @bot.hybrid_command(name="roll", description="Rolagem de dados")
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def roll(ctx: commands.Context, *, expression: str):
-
         expression = (expression or "").strip()
 
         if not expression:
@@ -24,7 +22,6 @@ def register_roll_command(bot, usecases, executor):
         await start_processing(ctx)
 
         async def handler():
-
             try:
                 result = await usecases.roll_dice.execute(expression=expression)
             except Exception:

@@ -17,7 +17,6 @@ from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
 
 @pytest.mark.asyncio
 async def test_narrative_pipeline_prompt_golden():
-
     llm = DummyLLM()
 
     memory_service = DummyMemoryService(history=["open door"])

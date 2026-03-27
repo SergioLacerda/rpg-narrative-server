@@ -2,7 +2,6 @@ from rpg_narrative_server.application.dto.llm_request import LLMRequest
 
 
 class LLMIntentClassifier:
-
     def __init__(self, llm_factory):
         self._llm_factory = llm_factory
         self._llm = None
@@ -36,7 +35,6 @@ class LLMIntentClassifier:
     # ---------------------------------------------------------
 
     async def classify(self, text: str) -> str:
-
         rule = self._rule_based(text)
         if rule:
             return rule

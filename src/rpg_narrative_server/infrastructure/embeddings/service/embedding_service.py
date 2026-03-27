@@ -12,7 +12,6 @@ logger = logging.getLogger("rpg_narrative_server.embedding")
 
 
 class EmbeddingService:
-
     def __init__(
         self,
         providers: Sequence[EmbeddingGateway],
@@ -41,7 +40,6 @@ class EmbeddingService:
             return await provider.embed(text)
 
     def _validate_vector(self, vec: List[float], provider_name: str) -> List[float]:
-
         if not isinstance(vec, list):
             raise RuntimeError(f"{provider_name} returned invalid vector type")
 
@@ -63,7 +61,6 @@ class EmbeddingService:
     # -----------------------------------------
 
     async def embed(self, text: str) -> List[float]:
-
         text = (text or "").strip()
 
         if not text:
@@ -113,7 +110,6 @@ class EmbeddingService:
     # -----------------------------------------
 
     async def embed_batch(self, texts: Iterable[str]) -> List[List[float]]:
-
         texts = [(t or "").strip() for t in texts]
 
         if not texts:

@@ -9,7 +9,6 @@ logger = logging.getLogger("rpg_narrative_server.embedding.strategy")
 
 
 class EmbeddingStrategy:
-
     def __init__(
         self,
         primary: EmbeddingGateway,
@@ -19,7 +18,6 @@ class EmbeddingStrategy:
         self.fallback = list(fallback)
 
     async def embed(self, text: str):
-
         try:
             logger.debug("Embedding primary → %s", self.primary.__class__.__name__)
             return await self.primary.embed(text)

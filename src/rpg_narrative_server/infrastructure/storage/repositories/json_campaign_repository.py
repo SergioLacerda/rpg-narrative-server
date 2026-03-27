@@ -8,7 +8,6 @@ from rpg_narrative_server.application.ports.campaign_repository import (
 
 
 class JSONCampaignRepository(CampaignRepositoryPort):
-
     def __init__(self, base_path: Path):
         self.base_dir = base_path / "campaigns"
 
@@ -30,7 +29,6 @@ class JSONCampaignRepository(CampaignRepositoryPort):
     # ---------------------------------------------------------
 
     async def load(self, path: Path):
-
         if not path.exists():
             return []
 
@@ -43,7 +41,6 @@ class JSONCampaignRepository(CampaignRepositoryPort):
         return await asyncio.to_thread(_read)
 
     async def save(self, path: Path, data):
-
         self._ensure_dir(path)
 
         def _write():

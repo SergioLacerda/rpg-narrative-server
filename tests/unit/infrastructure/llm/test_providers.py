@@ -22,7 +22,6 @@ from rpg_narrative_server.application.services.llm.llm_errors import (
 
 @pytest.mark.asyncio
 async def test_provider_success(monkeypatch):
-
     provider = OpenAIProvider(api_key="x", model="test")
 
     async def fake_call(*args, **kwargs):
@@ -39,7 +38,6 @@ async def test_provider_success(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_provider_empty_response(monkeypatch):
-
     provider = OpenAIProvider(api_key="x", model="test")
 
     async def fake_call(*args, **kwargs):
@@ -55,7 +53,6 @@ async def test_provider_empty_response(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_provider_timeout(monkeypatch):
-
     provider = LMStudioProvider(base_url="http://x", model="m", timeout=0.01)
 
     async def slow(*args, **kwargs):
@@ -71,7 +68,6 @@ async def test_provider_timeout(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_provider_generic_error(monkeypatch):
-
     provider = OpenAIProvider(api_key="x", model="test")
 
     async def fake_call(*args, **kwargs):
@@ -87,7 +83,6 @@ async def test_provider_generic_error(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_provider_client_error(monkeypatch):
-
     provider = OpenAIProvider(api_key="x", model="test")
 
     async def fake_call(*args, **kwargs):
@@ -103,7 +98,6 @@ async def test_provider_client_error(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_ollama_response(monkeypatch):
-
     provider = OllamaProvider(model="x", base_url="http://localhost")
 
     async def fake_call(*args, **kwargs):
@@ -128,7 +122,6 @@ async def test_ollama_response(monkeypatch):
     ],
 )
 async def test_all_providers_success(monkeypatch, provider_cls, kwargs):
-
     cls = getattr(providers_mod, provider_cls)
     provider = cls(**kwargs)
 
@@ -144,7 +137,6 @@ async def test_all_providers_success(monkeypatch, provider_cls, kwargs):
 
 @pytest.mark.asyncio
 async def test_lmstudio_success(monkeypatch):
-
     provider = LMStudioProvider(base_url="http://x", model="m")
 
     class FakeResp:

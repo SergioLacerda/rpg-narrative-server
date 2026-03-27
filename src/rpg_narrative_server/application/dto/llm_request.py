@@ -24,7 +24,6 @@ class LLMRequest:
     # ---------------------------------------------------------
 
     def __post_init__(self):
-
         # prompt
         if not self.prompt or not self.prompt.strip():
             raise ValueError("LLMRequest.prompt cannot be empty")

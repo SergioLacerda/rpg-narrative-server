@@ -25,7 +25,6 @@ def executor():
 
 @pytest.mark.asyncio
 async def test_gm_command_success(bot, executor):
-
     register_gm_command(bot, DummyUsecases(narrative=DummyNarrative()), executor)
 
     ctx = make_ctx()
@@ -37,7 +36,6 @@ async def test_gm_command_success(bot, executor):
 
 @pytest.mark.asyncio
 async def test_gm_empty_action(bot, executor):
-
     register_gm_command(bot, DummyUsecases(narrative=DummyNarrative()), executor)
 
     ctx = make_ctx()
@@ -49,7 +47,6 @@ async def test_gm_empty_action(bot, executor):
 
 @pytest.mark.asyncio
 async def test_gm_no_response(bot, executor):
-
     register_gm_command(
         bot, DummyUsecases(narrative=DummyNarrative(result=None)), executor
     )
@@ -63,7 +60,6 @@ async def test_gm_no_response(bot, executor):
 
 @pytest.mark.asyncio
 async def test_gm_exception(bot, executor):
-
     register_gm_command(
         bot,
         DummyUsecases(narrative=DummyNarrative(error=RuntimeError("boom"))),

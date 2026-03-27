@@ -3,7 +3,6 @@ from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
 
 
 class OllamaProvider(BaseProvider):
-
     def __init__(self, model: str, base_url: str):
         super().__init__("ollama", model)
         self.client = httpx.AsyncClient(base_url=base_url)

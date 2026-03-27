@@ -5,7 +5,6 @@ class RetrievalSelector:
     """
 
     def select(self, docs: list[dict], limit: int = 10) -> list[dict]:
-
         if not docs:
             return []
 

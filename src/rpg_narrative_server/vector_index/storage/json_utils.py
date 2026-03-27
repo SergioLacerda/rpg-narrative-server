@@ -17,7 +17,6 @@ def _backup_corrupted_file(path: Path):
 
 
 def load_json(path: Path, default: Any):
-
     # ---------------------------------------------------------
     # 1. arquivo não existe → cria
     # ---------------------------------------------------------
@@ -46,7 +45,6 @@ def load_json(path: Path, default: Any):
 
 
 def save_json(path: Path, data: Any):
-
     def _default(obj):
         if isinstance(obj, set):
             return list(obj)
@@ -66,7 +64,6 @@ def save_json(path: Path, data: Any):
 
 
 def update_json(path: Path, updater):
-
     data = load_json(path, default={})
 
     new_data = updater(data)

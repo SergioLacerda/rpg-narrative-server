@@ -1,5 +1,4 @@
 def test_narrative_event_success(client):
-
     payload = {"action": "look around", "user_id": "user1"}
 
     response = client.post("/campaign/test/event", json=payload)
@@ -13,7 +12,6 @@ def test_narrative_event_success(client):
 
 
 def test_narrative_event_validation_error(client):
-
     payload = {"action": "", "user_id": "user1"}  # inválido
 
     response = client.post("/campaign/test/event", json=payload)

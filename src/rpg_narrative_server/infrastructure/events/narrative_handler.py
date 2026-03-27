@@ -8,9 +8,7 @@ logger = logging.getLogger("rpg_narrative_server.events.narrative")
 
 
 def register_narrative_handler(event_bus):
-
     def handler(event: PlayerActionEvent):
-
         logger.info(
             "[NARRATIVE] campaign=%s user=%s action=%s",
             event.campaign_id,

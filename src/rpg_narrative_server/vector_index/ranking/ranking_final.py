@@ -4,7 +4,6 @@ from rpg_narrative_server.vector_index.runtime.lazy_similarity import (
 
 
 class RankingFinal:
-
     def __init__(
         self,
         contextual_score=None,
@@ -24,7 +23,6 @@ class RankingFinal:
         self.top_k = top_k
 
     def rank(self, ctx, candidates):
-
         if not candidates:
             return []
 
@@ -57,7 +55,6 @@ class RankingFinal:
         results = []
 
         for i, doc_id in enumerate(candidates):
-
             final_score = (
                 self.weight_base * base_scores.get(doc_id, 0.0)
                 + self.weight_context * context_scores[i]

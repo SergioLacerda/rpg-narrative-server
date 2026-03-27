@@ -61,7 +61,6 @@ class SemanticCache:
             return 0.0
 
     def _iter_semantic_entries(self):
-
         for _, value in self.semantic_cache.items():
             if value:
                 yield value
@@ -71,7 +70,6 @@ class SemanticCache:
     # ---------------------------------------------------------
 
     def get(self, query: str, vector) -> Optional[Any]:
-
         if not query:
             return None
 
@@ -98,7 +96,6 @@ class SemanticCache:
         best_score = 0.0
 
         for entry in self._iter_semantic_entries():
-
             vec = entry.get("vector")
             res = entry.get("result")
 
@@ -129,7 +126,6 @@ class SemanticCache:
     # ---------------------------------------------------------
 
     def set(self, query: str, vector, result) -> None:
-
         if not query or result is None:
             return
 

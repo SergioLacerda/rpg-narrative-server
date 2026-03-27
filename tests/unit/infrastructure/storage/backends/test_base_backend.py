@@ -4,7 +4,6 @@ from rpg_narrative_server.infrastructure.storage.backends.base import StorageBac
 
 
 class DummyBackend(StorageBackend):
-
     def build_vector_store(self):
         return super().build_vector_store()
 
@@ -19,7 +18,6 @@ class DummyBackend(StorageBackend):
 
 
 def test_abstract_methods():
-
     backend = DummyBackend()
 
     with pytest.raises(NotImplementedError):
@@ -36,7 +34,6 @@ def test_abstract_methods():
 
 
 def test_base_backend_not_implemented():
-
     backend = DummyBackend()
 
     with pytest.raises(NotImplementedError):

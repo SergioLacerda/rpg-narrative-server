@@ -21,7 +21,6 @@ def parser():
 
 
 def test_parse_basic(parser):
-
     node = parser.parse("2d6")
 
     assert isinstance(node, RollNode)
@@ -35,7 +34,6 @@ def test_parse_basic(parser):
 
 
 def test_parse_explode(parser):
-
     node = parser.parse("2d6!")
 
     assert isinstance(node, ExplodeNode)
@@ -48,7 +46,6 @@ def test_parse_explode(parser):
 
 
 def test_parse_keep_highest(parser):
-
     node = parser.parse("4d6kh3")
 
     assert isinstance(node, KeepHighestNode)
@@ -62,7 +59,6 @@ def test_parse_keep_highest(parser):
 
 
 def test_parse_drop_lowest(parser):
-
     node = parser.parse("4d6dl1")
 
     assert isinstance(node, DropLowestNode)
@@ -76,7 +72,6 @@ def test_parse_drop_lowest(parser):
 
 
 def test_parse_reroll(parser):
-
     node = parser.parse("2d6r<3")
 
     assert isinstance(node, RerollNode)
@@ -86,7 +81,6 @@ def test_parse_reroll(parser):
 
 
 def test_parse_reroll_greater_equal(parser):
-
     node = parser.parse("2d6r>=5")
 
     assert isinstance(node, RerollNode)
@@ -101,13 +95,11 @@ def test_parse_reroll_greater_equal(parser):
 
 
 def test_parse_invalid_expression(parser):
-
     with pytest.raises(ValueError):
         parser.parse("invalid")
 
 
 def test_reroll_invalid_operator(parser):
-
     # regex não aceita "=" → deve falhar no parse
     with pytest.raises(ValueError):
         parser.parse("1d6r=3")
@@ -119,7 +111,6 @@ def test_reroll_invalid_operator(parser):
 
 
 def test_parse_combined(parser):
-
     node = parser.parse("4d6!kh3r<2")
 
     # ordem: Roll -> Explode -> Keep -> Reroll
@@ -142,7 +133,6 @@ def test_parse_combined(parser):
 
 
 def test_parse_minimum(parser):
-
     node = parser.parse("1d1")
 
     assert isinstance(node, RollNode)
@@ -151,7 +141,6 @@ def test_parse_minimum(parser):
 
 
 def test_parse_large_values(parser):
-
     node = parser.parse("100d100")
 
     assert isinstance(node, RollNode)
@@ -165,7 +154,6 @@ def test_parse_large_values(parser):
 
 
 def test_ast_shape(parser):
-
     node = parser.parse("2d6!")
 
     rep = repr(node)

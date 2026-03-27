@@ -6,7 +6,6 @@ from rpg_narrative_server.domain.narrative.session_summarizer import SessionSumm
 
 
 class EndSessionUseCase:
-
     def __init__(self, memory_service, llm, vector_memory):
         self.memory = memory_service
         self.llm = llm
@@ -18,7 +17,6 @@ class EndSessionUseCase:
         return text[:500].strip()
 
     async def execute(self, campaign_id: str) -> str:
-
         memory = await self.memory.load_memory(campaign_id)
         events = memory.recent_events
 

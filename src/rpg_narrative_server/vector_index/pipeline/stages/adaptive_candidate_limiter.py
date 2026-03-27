@@ -1,9 +1,7 @@
 class AdaptiveCandidateLimiter:
-
     priority = 60
 
     async def run(self, ctx):
-
         k = getattr(ctx, "k", 10)
 
         if ctx.candidates:

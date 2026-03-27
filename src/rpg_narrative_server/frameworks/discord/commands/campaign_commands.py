@@ -8,10 +8,8 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 
 def register_campaign_commands(bot):
-
     @bot.hybrid_command(name="campaign", description="Gerenciar campanha")
     async def campaign(ctx: commands.Context, action: str = None, name: str = None):
-
         action = (action or "").lower().strip()
         name = (name or "").strip()
 
@@ -33,7 +31,6 @@ def register_campaign_commands(bot):
         # SWITCH
         # ---------------------------------------------------------
         if action == "switch":
-
             if not name:
                 await send(ctx, "⚠️ Use: !campaign switch <nome>")
                 return
@@ -53,7 +50,6 @@ def register_campaign_commands(bot):
         # SHOW
         # ---------------------------------------------------------
         if action == "show":
-
             current = container.campaign_state.get(channel_id)
 
             if not current:

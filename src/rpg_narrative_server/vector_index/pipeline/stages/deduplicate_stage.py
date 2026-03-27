@@ -1,9 +1,7 @@
 class DeduplicateStage:
-
     priority = 75
 
     async def run(self, ctx):
-
         if not ctx.candidates:
             return ctx
 

@@ -49,7 +49,6 @@ class NarrativeMemory:
 
     @classmethod
     def from_dict(cls, data: dict):
-
         return cls(
             world_facts=data.get("world_facts", []),
             scene_state=data.get("scene_state", []),

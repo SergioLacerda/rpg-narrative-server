@@ -12,7 +12,6 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 
 def get_campaign_id(ctx: commands.Context) -> str:
-
     guild = getattr(ctx, "guild", None)
     if guild and getattr(guild, "id", None):
         return str(guild.id)

@@ -3,7 +3,6 @@ from typing import Union
 
 
 def sha256_hash(data: Union[str, bytes]) -> str:
-
     if isinstance(data, bytes):
         payload = data
 

@@ -4,7 +4,6 @@ from rpg_narrative_server.infrastructure.runtime.campaign_context import Campaig
 
 
 def test_set_and_get():
-
     ctx = CampaignContext()
 
     ctx.set_campaign("abc")
@@ -13,7 +12,6 @@ def test_set_and_get():
 
 
 def test_get_without_set():
-
     ctx = CampaignContext()
 
     ctx.reset()
@@ -23,7 +21,6 @@ def test_get_without_set():
 
 
 def test_reset_with_token():
-
     ctx = CampaignContext()
 
     ctx.reset()
@@ -37,7 +34,6 @@ def test_reset_with_token():
 
 
 def test_reset_without_token():
-
     ctx = CampaignContext()
 
     ctx.set_campaign("abc")
@@ -48,7 +44,6 @@ def test_reset_without_token():
 
 
 def test_scope():
-
     ctx = CampaignContext()
 
     with ctx.scope("xyz") as cid:
@@ -61,7 +56,6 @@ def test_scope():
 
 
 def test_context_is_isolated():
-
     ctx = CampaignContext()
 
     with ctx.scope("a"):

@@ -1,5 +1,4 @@
 class RetrievalService:
-
     def __init__(self, vector_index, planner, context_window, selector):
         self.vector_index = vector_index
         self.planner = planner
@@ -7,7 +6,6 @@ class RetrievalService:
         self.selector = selector
 
     async def search(self, query, k=4):
-
         docs = await self.vector_index.search(query, k=k)
 
         docs = self.selector.select(docs)

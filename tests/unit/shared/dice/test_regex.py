@@ -14,7 +14,6 @@ def match():
 
 
 def test_match_basic(match):
-
     m = match("2d6")
 
     assert m is not None
@@ -28,7 +27,6 @@ def test_match_basic(match):
 
 
 def test_match_explode(match):
-
     m = match("2d6!")
 
     assert m is not None
@@ -41,7 +39,6 @@ def test_match_explode(match):
 
 
 def test_match_keep(match):
-
     m = match("4d6kh3")
 
     assert m is not None
@@ -54,7 +51,6 @@ def test_match_keep(match):
 
 
 def test_match_drop(match):
-
     m = match("4d6dl1")
 
     assert m is not None
@@ -67,7 +63,6 @@ def test_match_drop(match):
 
 
 def test_match_reroll(match):
-
     m = match("2d6r<3")
 
     assert m is not None
@@ -75,7 +70,6 @@ def test_match_reroll(match):
 
 
 def test_match_reroll_greater_equal(match):
-
     m = match("2d6r>=5")
 
     assert m is not None
@@ -88,7 +82,6 @@ def test_match_reroll_greater_equal(match):
 
 
 def test_match_combined(match):
-
     m = match("4d6!kh3r<2")
 
     assert m is not None
@@ -118,7 +111,6 @@ def test_match_combined(match):
     ],
 )
 def test_invalid_expressions(match, expr):
-
     assert match(expr) is None
 
 
@@ -128,7 +120,6 @@ def test_invalid_expressions(match, expr):
 
 
 def test_min_values(match):
-
     m = match("1d1")
 
     assert m is not None
@@ -137,7 +128,6 @@ def test_min_values(match):
 
 
 def test_large_values(match):
-
     m = match("100d100")
 
     assert m is not None

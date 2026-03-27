@@ -20,7 +20,6 @@ class IVFRouter:
 
     # 🔥 agora segue contrato ANN
     def search(self, query_vector: list[float], k: int = 10) -> list[str]:
-
         if not self._index:
             return []
 

@@ -14,14 +14,12 @@ logger = logging.getLogger("rpg_narrative_server.embedding.lmstudio")
 
 
 class LMStudioEmbeddingProvider:
-
     def __init__(
         self,
         model: str,
         base_url: str = "http://localhost:1234/v1",
         timeout: float = 30.0,
     ):
-
         self.model = model
         self.timeout = timeout
 
@@ -44,7 +42,6 @@ class LMStudioEmbeddingProvider:
     # ---------------------------------------------------------
 
     async def embed(self, text: str) -> List[float]:
-
         if not text or not text.strip():
             return self._zero_vector()
 
@@ -74,7 +71,6 @@ class LMStudioEmbeddingProvider:
     # ---------------------------------------------------------
 
     async def embed_batch(self, texts: List[str]):
-
         if not texts:
             return []
 
@@ -108,7 +104,6 @@ class LMStudioEmbeddingProvider:
     # ---------------------------------------------------------
 
     def _zero_vector(self):
-
         if self._dimension:
             return [0.0] * self._dimension
 

@@ -3,7 +3,6 @@ from rpg_narrative_server.vector_index.utils.similarity import cosine_similarity
 
 
 class IVFIndex:
-
     def __init__(
         self,
         centroids: list[list[float]],
@@ -24,7 +23,6 @@ class IVFIndex:
     # ---------------------------------------------------------
 
     def search(self, query_vector: list[float], k: int = 10) -> list[str]:
-
         if not self.centroids:
             return []
 
@@ -67,7 +65,6 @@ class IVFIndex:
         heap = []
 
         for doc_id in candidates:
-
             vec = self.vector_store.get(doc_id)
 
             if not vec:

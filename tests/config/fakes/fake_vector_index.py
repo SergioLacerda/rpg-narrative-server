@@ -4,7 +4,6 @@ class FakeEmbeddingService:
 
 
 class FakeDocumentStore:
-
     def __init__(self):
         self.store = {}
 
@@ -13,7 +12,6 @@ class FakeDocumentStore:
             self.store[doc_id] = {"content": content or "fake content"}
 
     def get(self, doc_id):
-
         if isinstance(doc_id, dict):
             return doc_id
 
@@ -21,7 +19,6 @@ class FakeDocumentStore:
 
 
 class FakeMetadataStore:
-
     def __init__(self):
         self.store = {}
 
@@ -30,7 +27,6 @@ class FakeMetadataStore:
             self.store[doc_id] = metadata or {}
 
     def get(self, doc_id):
-
         if isinstance(doc_id, dict):
             return {}
 
@@ -44,7 +40,6 @@ class FakeComponents:
 
 
 class FakeVectorIndex:
-
     def __init__(self):
         self.docs = []
         self.embedding_service = FakeEmbeddingService()

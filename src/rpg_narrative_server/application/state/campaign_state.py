@@ -1,5 +1,4 @@
 class CampaignState:
-
     def __init__(self):
         self._active_campaign_by_channel = {}
 

@@ -24,7 +24,6 @@ from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
 
 
 class InMemoryVectorStore:
-
     def __init__(self):
         self.data = {}
 
@@ -50,7 +49,6 @@ class InMemoryVectorStore:
 
 
 class InMemoryStorageBackend(StorageBackend):
-
     def build_vector_store(self):
         return VectorStoreAdapter(InMemoryVectorStore())
 

@@ -4,7 +4,6 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def no_network(monkeypatch):
-
     real_socket = socket.socket
 
     def guard(*args, **kwargs):

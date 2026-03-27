@@ -95,7 +95,7 @@ http://localhost:8000/docs
 ## 🧪 Testing
 
 ```bash
-pytest --cov=src/rpgbot --cov-report=term-missing 
+pytest --cov=src/rpgbot --cov-report=term-missing
 ```
 
 ---
@@ -105,6 +105,13 @@ pytest --cov=src/rpgbot --cov-report=term-missing
 ```bash
 python scripts/benchmark_retrieval.py --n 200 --mode jitter --batch --memory
 ```
+
+## Desenvolvimento Local
+
+O projeto usa **pre-commit hooks** com Black e Ruff para manter o código padronizado.
+
+```bash
+pre-commit install
 
 ---
 

@@ -14,7 +14,6 @@ logger = logging.getLogger("rpg_narrative_server.embedding.openai")
 
 
 class OpenAIEmbeddingProvider(EmbeddingGateway):
-
     supports_batch = True
 
     def __init__(
@@ -60,7 +59,6 @@ class OpenAIEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     async def embed(self, text: str) -> List[float]:
-
         if not text or not text.strip():
             return self._zero_vector()
 
@@ -90,7 +88,6 @@ class OpenAIEmbeddingProvider(EmbeddingGateway):
     # ---------------------------------------------------------
 
     async def embed_batch(self, texts: List[str]):
-
         if not texts:
             return []
 

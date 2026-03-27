@@ -121,7 +121,6 @@ class DummyExecutor:
 
 class DummyCtx:
     def __init__(self, *, interaction=False):
-
         self.channel = DummyChannel()
         self.author = DummyAuthor()
         self.guild = DummyGuild()

@@ -32,7 +32,6 @@ logger = logging.getLogger("rpg_narrative_server.vector_index.builder")
 
 
 class VectorIndexBuilder:
-
     def __init__(
         self,
         embedding_service,
@@ -43,7 +42,6 @@ class VectorIndexBuilder:
         context_provider=None,
         query_classifier=None,
     ):
-
         self.embedding = embedding_service
         self.storage = storage_backend
         self.tokenizer = tokenizer
@@ -58,7 +56,6 @@ class VectorIndexBuilder:
     # ---------------------------------------------------------
 
     def _build_ann_index(self, components):
-
         vector_store = components.vector_store
 
         if not hasattr(vector_store, "keys"):
@@ -83,7 +80,6 @@ class VectorIndexBuilder:
     # ---------------------------------------------------------
 
     def _build_clusters(self, components):
-
         vector_store = components.vector_store
 
         if not hasattr(vector_store, "keys"):
@@ -101,7 +97,6 @@ class VectorIndexBuilder:
     # ---------------------------------------------------------
 
     def build(self):
-
         # -----------------------------------------
         # stores
         # -----------------------------------------
