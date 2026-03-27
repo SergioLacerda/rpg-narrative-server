@@ -76,6 +76,8 @@ jobs:
       # 🐳 Setup buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: image=moby/buildkit:latest
 
       # 🐳 Build com cache (sem push ainda)
       - name: Build Docker image
