@@ -17,15 +17,15 @@ class ChromaStorageBackend(StorageBackend):
         self.base = base_path or Path("./data")
         self.base.mkdir(parents=True, exist_ok=True)
 
-        self.client = self._load_chroma_lib(self.base)
+        self.client = self._load_chroma_lib()
 
-    def _load_chroma_lib(self, base: Path):
+    def _load_chroma_lib(self):
         try:
             import chromadb
 
             return chromadb.Client(
                 chromadb.config.Settings(
-                    persist_directory=str(base / "chroma"),
+                    persist_directory=str(self.base / "chroma"),
                     anonymized_telemetry=False,
                 )
             )
