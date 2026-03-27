@@ -11,7 +11,7 @@ class NarrativeGraphRepository:
 
     def _safe_read(self):
         try:
-            return json.loads(self.path.read_text())
+            return json.loads(self.path.file.read_text(encoding="utf-8"))
         except Exception:
             return {}
 
@@ -25,7 +25,7 @@ class NarrativeGraphRepository:
             return NarrativeGraph()
 
         try:
-            data = json.loads(self.path.read_text())
+            data = json.loads(self.path.file.read_text(encoding="utf-8"))
             return NarrativeGraph.from_dict(data)
 
         except Exception:

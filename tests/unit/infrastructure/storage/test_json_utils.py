@@ -37,4 +37,4 @@ def test_write_json(tmp_path):
     write_json(path, {"x": 1})
 
     assert path.exists()
-    assert "x" in path.read_text()
+    assert "x" in path.file.read_text(encoding="utf-8")

@@ -43,18 +43,20 @@ def test_layer_dependencies():
 
         imports = extract_imports(file)
 
-    for imp in imports:
+        for imp in imports:
 
-        for forbidden in RULES[layer]["forbidden"]:
+            for forbidden in RULES[layer]["forbidden"]:
 
-            if f"rpg_narrative_server.{forbidden}" in imp:
+                if f"rpg_narrative_server.{forbidden}" in imp:
 
-                allowed = RULES[layer].get("allowed", [])
+                    allowed = RULES[layer].get("allowed", [])
 
-                if any(imp.startswith(a) for a in allowed):
-                    continue
+                    if any(imp.startswith(a) for a in allowed):
+                        continue
 
-                errors.append(f"{file} → {layer} cannot depend on {forbidden} ({imp})")
+                    errors.append(
+                        f"{file} → {layer} cannot depend on {forbidden} ({imp})"
+                    )
 
     assert not errors, "\n".join(errors)
 
@@ -65,7 +67,7 @@ def test_no_cross_layer_leak():
 
     for file in SRC.rglob("*.py"):
 
-        content = file.read_text()
+        content = file.read_text(encoding="utf-8")
 
         if "infrastructure" in content and "domain" in str(file):
             errors.append(f"{file} leaking infra")

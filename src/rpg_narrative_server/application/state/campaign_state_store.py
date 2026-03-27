@@ -13,7 +13,7 @@ class CampaignStateStore:
             return {}
 
         try:
-            return json.loads(self.path.read_text())
+            return json.loads(self.path.file.read_text(encoding="utf-8"))
         except Exception:
             return {}
 

@@ -17,7 +17,7 @@ def test_no_test_dependencies_in_src():
 
     for file in SRC_PATH.rglob("*.py"):
 
-        content = file.read_text()
+        content = file.read_text(encoding="utf-8")
 
         for bad in FORBIDDEN:
             if f"import {bad}" in content or f"from {bad}" in content:
@@ -31,7 +31,7 @@ def test_no_monkeypatch_in_src():
     errors = []
 
     for file in SRC_PATH.rglob("*.py"):
-        content = file.read_text()
+        content = file.read_text(encoding="utf-8")
 
         if "monkeypatch" in content:
             errors.append(f"{file}: monkeypatch found")
@@ -49,7 +49,7 @@ def test_domain_is_pure():
 
     for file in domain_path.rglob("*.py"):
 
-        content = file.read_text()
+        content = file.read_text(encoding="utf-8")
 
         if "infrastructure" in content:
             errors.append(f"{file}: domain depends on infrastructure")

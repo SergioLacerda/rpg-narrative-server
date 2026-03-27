@@ -2,8 +2,8 @@ from pathlib import Path
 import difflib
 
 
-def normalize(text: str) -> list[str]:
-    return [line.rstrip() for line in text.strip().splitlines()]
+def normalize(s: str):
+    return s.encode("utf-8", errors="ignore").decode("utf-8")
 
 
 def diff_strings(expected: str, actual: str) -> str:
@@ -24,7 +24,7 @@ def assert_golden(path: Path, actual: str, update: bool = False):
         path.write_text(actual)
         return
 
-    expected = path.read_text()
+    expected = path.read_text(encoding="utf-8")
 
     if normalize(expected) != normalize(actual):
         diff = diff_strings(expected, actual)

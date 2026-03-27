@@ -19,7 +19,7 @@ class NarrativeMemoryRepository:
             return NarrativeMemory()
 
         try:
-            data = json.loads(self.path.read_text())
+            data = json.loads(self.path.file.read_text(encoding="utf-8"))
             return NarrativeMemory.from_dict(data)
 
         except Exception:

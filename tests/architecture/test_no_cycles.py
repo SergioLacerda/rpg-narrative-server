@@ -42,7 +42,7 @@ def get_import_graph():
 
         module = get_module_name(file)
 
-        tree = ast.parse(file.read_text())
+        tree = ast.parse(file.read_text(encoding="utf-8"))
 
         for node in ast.walk(tree):
 

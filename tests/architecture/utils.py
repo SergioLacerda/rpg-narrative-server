@@ -5,7 +5,7 @@ import ast
 
 def extract_imports(file_path):
 
-    tree = ast.parse(file_path.read_text())
+    tree = ast.parse(file_path.file.read_text(encoding="utf-8"))
     imports = []
 
     for node in ast.walk(tree):
