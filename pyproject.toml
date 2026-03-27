@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=72", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "rpg_narrative_server"
@@ -80,13 +80,6 @@ ci = [
 [project.scripts]
 rpg_narrative_server = "rpg_narrative_server.app:run"
 
-# ---------------------------------------------------------
-# PYTEST
-# FIX: -n auto removido do addopts global — testes paralelos
-# devem ser opt-in via CI (RPG_PARALLEL=1) para evitar
-# falhas não-determinísticas com estado compartilhado.
-# Use: pytest -n auto   (manual) ou via env no CI.
-# ---------------------------------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
@@ -113,13 +106,6 @@ exclude_lines = [
     "@(abc\\.)?abstractmethod",
 ]
 
-# ---------------------------------------------------------
-# MYPY
-# FIX: explicit_package_bases restaurado (necessário para src/
-# layout). Overrides da infra restaurados para não bloquear
-# o CI enquanto o projeto está em estabilização.
-# FIX: warn_unused_configs ajuda a detectar config morta.
-# ---------------------------------------------------------
 [tool.mypy]
 mypy_path = "src"
 python_version = "3.11"
