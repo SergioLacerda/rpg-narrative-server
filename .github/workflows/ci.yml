@@ -67,12 +67,7 @@ jobs:
           ENVIRONMENT: test
           LLM_PROVIDER: mock
           EMBEDDING_PROVIDER: mock
-        run: |
-          pytest -n auto \
-            --dist=worksteal \
-            --cov=src/rpg_narrative_server \
-            --cov-report=xml \
-            --cov-report=term
+        run: pytest -n auto --dist=worksteal --cov=src/rpg_narrative_server --cov-report=xml --cov-report=term
 
 # ---------------------------------------------------------
 # 📊 COVERAGE (Linux apenas)
