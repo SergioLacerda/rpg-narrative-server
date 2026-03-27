@@ -1,4 +1,6 @@
-from rpg_narrative_server.vector_index.runtime.lazy_similarity import LazyVectorSimilarity
+from rpg_narrative_server.vector_index.runtime.lazy_similarity import (
+    LazyVectorSimilarity,
+)
 
 
 class AdaptiveRankingStage:
@@ -33,10 +35,7 @@ class AdaptiveRankingStage:
 
         query_type = getattr(ctx, "query_type", "semantic")
 
-        w_vec, w_lex, w_temp = self.profiles.get(
-            query_type,
-            self.profiles["semantic"]
-        )
+        w_vec, w_lex, w_temp = self.profiles.get(query_type, self.profiles["semantic"])
 
         # 🔥 cache por contexto
         if not hasattr(ctx, "_lazy_similarity"):
@@ -81,11 +80,7 @@ class AdaptiveRankingStage:
             # -----------------------------------------------------
             # final score
             # -----------------------------------------------------
-            final = (
-                w_vec * vec_score +
-                w_lex * lex_score +
-                w_temp * temp_score
-            )
+            final = w_vec * vec_score + w_lex * lex_score + w_temp * temp_score
 
             scored.append((final, doc_id))
 

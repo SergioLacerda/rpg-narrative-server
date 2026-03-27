@@ -1,6 +1,7 @@
 import httpx
 from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
 
+
 class OllamaProvider(BaseProvider):
 
     def __init__(self, model: str, base_url: str):

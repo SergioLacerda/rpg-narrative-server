@@ -1,4 +1,3 @@
-
 class ContextService:
 
     def __init__(self, retrieval_service):

@@ -1,5 +1,6 @@
 # tests/config/harness/narrative.py
 
+
 class NarrativeHarness:
 
     def __init__(self, *, llm_result="ok"):
@@ -13,10 +14,7 @@ class NarrativeHarness:
         self.calls = []
 
     def build(self, container_factory):
-        self.container = container_factory(
-            llm=self.llm,
-            vector_index=self.vector_index
-        )
+        self.container = container_factory(llm=self.llm, vector_index=self.vector_index)
         return self.container.narrative
 
     async def run(self, action="look", campaign_id="test", user_id="u1"):
@@ -28,9 +26,6 @@ class NarrativeHarness:
             user_id=user_id,
         )
 
-        self.calls.append({
-            "action": action,
-            "result": result
-        })
+        self.calls.append({"action": action, "result": result})
 
         return result

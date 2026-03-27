@@ -1,5 +1,6 @@
 from .graph import DummyGraph
 
+
 class DummyGraphRepo:
     def __init__(self, graph=None):
         self.graph = graph or DummyGraph()

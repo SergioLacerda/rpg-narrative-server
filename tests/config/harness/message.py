@@ -29,9 +29,9 @@ class MessageHarness:
         self.message_content = "attack"
 
         # dependencies
-        self.usecases = type("Usecases", (), {
-            "narrative": DummyUsecase(result=response)
-        })()
+        self.usecases = type(
+            "Usecases", (), {"narrative": DummyUsecase(result=response)}
+        )()
 
         self.executor = DummyExecutor()
         self.campaign_state = DummyCampaignState(campaign_id)
@@ -45,7 +45,9 @@ class MessageHarness:
         return self
 
     def build(self):
-        from rpg_narrative_server.application.services.message_service import MessageService
+        from rpg_narrative_server.application.services.message_service import (
+            MessageService,
+        )
 
         return MessageService(
             usecases=self.usecases,
@@ -57,10 +59,14 @@ class MessageHarness:
         )
 
     async def run(self):
-        msg = type("Msg", (), {
-            "content": self.message_content,
-            "author": type("Author", (), {"bot": False})
-        })()
+        msg = type(
+            "Msg",
+            (),
+            {
+                "content": self.message_content,
+                "author": type("Author", (), {"bot": False}),
+            },
+        )()
 
         service = self.build()
         await service.handle(msg, self.ctx)

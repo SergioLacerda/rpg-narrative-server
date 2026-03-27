@@ -3,7 +3,9 @@ import logging
 from typing import Sequence, Iterable, List
 
 from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGateway
-from rpg_narrative_server.infrastructure.embeddings.core.fallback import deterministic_vector
+from rpg_narrative_server.infrastructure.embeddings.core.fallback import (
+    deterministic_vector,
+)
 
 
 logger = logging.getLogger("rpg_narrative_server.embedding")
@@ -107,7 +109,7 @@ class EmbeddingService:
         return vec
 
     # -----------------------------------------
-    # batch 
+    # batch
     # -----------------------------------------
 
     async def embed_batch(self, texts: Iterable[str]) -> List[List[float]]:
@@ -126,9 +128,7 @@ class EmbeddingService:
 
                     vectors = await provider.embed_batch(texts)
 
-                    validated = [
-                        self._validate_vector(v, name) for v in vectors
-                    ]
+                    validated = [self._validate_vector(v, name) for v in vectors]
 
                     logger.info("Batch embedding success → %s", name)
 
@@ -139,6 +139,4 @@ class EmbeddingService:
 
         logger.debug("Batch fallback → parallel single calls")
 
-        return await asyncio.gather(*[
-            self.embed(t) for t in texts
-        ])
+        return await asyncio.gather(*[self.embed(t) for t in texts])

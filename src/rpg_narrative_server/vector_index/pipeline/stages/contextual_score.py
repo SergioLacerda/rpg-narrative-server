@@ -6,6 +6,7 @@ class ContextProvider:
     Interface esperada:
     - get_context() -> dict[token, frequency]
     """
+
     def get_context(self) -> dict[str, int]:
         raise NotImplementedError
 

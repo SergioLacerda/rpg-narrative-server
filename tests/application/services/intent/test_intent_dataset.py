@@ -1,12 +1,17 @@
 import pytest
 
-from rpg_narrative_server.application.services.intent.intent_classifier import IntentClassifier
-from rpg_narrative_server.application.services.intent.language_profiles import SUPPORTED_LANGUAGES
+from rpg_narrative_server.application.services.intent.intent_classifier import (
+    IntentClassifier,
+)
+from rpg_narrative_server.application.services.intent.language_profiles import (
+    SUPPORTED_LANGUAGES,
+)
 
 
 # ---------------------------------------------------------
 # MATCH INTELIGENTE
 # ---------------------------------------------------------
+
 
 def match_intent(result: str, expected: str) -> bool:
 
@@ -26,6 +31,7 @@ def match_intent(result: str, expected: str) -> bool:
 # EXPANDER
 # ---------------------------------------------------------
 
+
 class IntentDatasetExpander:
 
     def expand(self, text: str, n: int = 3):
@@ -39,6 +45,7 @@ class IntentDatasetExpander:
             variants.add(f"{text} rapidamente")
 
         return list(variants)
+
 
 # ---------------------------------------------------------
 # DATASET BASE
@@ -56,6 +63,7 @@ DATASET_INTENT = [
 # ---------------------------------------------------------
 # TESTE PRINCIPAL
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_intent_dataset_with_expansion():

@@ -145,7 +145,7 @@ class SemanticCache:
                 {
                     "vector": vector,
                     "result": result,
-                }
+                },
             )
 
     # ---------------------------------------------------------

@@ -1,6 +1,7 @@
 import asyncio
 from typing import Optional
 
+
 class ResponseCache:
     """
     Cache simples de respostas baseado em prompt.
@@ -13,7 +14,6 @@ class ResponseCache:
         self._loader = loader
         self._saver = saver
 
-
     async def _load(self):
 
         if self._cache is None:
@@ -21,11 +21,9 @@ class ResponseCache:
 
         return self._cache
 
-
     async def get(self, key: str) -> Optional[str]:
         cache = await self._load()
         return cache.get(key)
-
 
     async def set(self, key: str, response: str):
         cache = await self._load()

@@ -53,8 +53,7 @@ class QueryExpansion:
         freq = Counter(tokens)
 
         candidates = [
-            t for t, _ in freq.most_common()
-            if len(t) >= self.min_token_length
+            t for t, _ in freq.most_common() if len(t) >= self.min_token_length
         ]
 
         if not candidates:
@@ -66,10 +65,7 @@ class QueryExpansion:
 
         query_tokens = set(ctx.query_tokens or [])
 
-        extra_terms = [
-            t for t in candidates[: self.max_terms]
-            if t not in query_tokens
-        ]
+        extra_terms = [t for t in candidates[: self.max_terms] if t not in query_tokens]
 
         if not extra_terms:
             return ctx

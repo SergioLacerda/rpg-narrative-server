@@ -1,5 +1,3 @@
-import pytest
-
 from rpg_narrative_server.interfaces.api.middleware.logging_middleware import (
     log_request_start,
     log_request_end,
@@ -9,6 +7,7 @@ from rpg_narrative_server.interfaces.api.middleware.logging_middleware import (
 # ---------------------------------------------------------
 # DUMMIES
 # ---------------------------------------------------------
+
 
 class DummyLogger:
     def __init__(self):
@@ -32,6 +31,7 @@ class DummyResponse:
 # ---------------------------------------------------------
 # TESTES
 # ---------------------------------------------------------
+
 
 def test_log_request_start():
     logger = DummyLogger()

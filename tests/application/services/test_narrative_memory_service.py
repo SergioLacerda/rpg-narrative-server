@@ -3,7 +3,9 @@ import uuid
 
 from tests.config.fakes.narrative import DummyMemory, DummyMemoryRepo
 
-from rpg_narrative_server.application.services.narrative_memory_service import NarrativeMemoryService
+from rpg_narrative_server.application.services.narrative_memory_service import (
+    NarrativeMemoryService,
+)
 
 
 @pytest.fixture

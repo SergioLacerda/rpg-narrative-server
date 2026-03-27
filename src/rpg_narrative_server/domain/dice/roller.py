@@ -2,6 +2,7 @@
 from .value_objects import DiceExpression
 from rpg_narrative_server.domain.random.random_provider import RandomProvider
 
+
 def roll_dice(expr: DiceExpression, rng: RandomProvider) -> int:
     total = 0
 

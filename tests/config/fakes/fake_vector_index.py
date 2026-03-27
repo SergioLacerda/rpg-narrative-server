@@ -40,7 +40,7 @@ class FakeMetadataStore:
 class FakeComponents:
     def __init__(self):
         self.document_store = FakeDocumentStore()
-        self.metadata_store = FakeMetadataStore() 
+        self.metadata_store = FakeMetadataStore()
 
 
 class FakeVectorIndex:
@@ -58,9 +58,7 @@ class FakeVectorIndex:
         return self.docs[:k] or ["fake context"]
 
     async def search_async(self, query: str, k: int = 5):
-        return [
-            {"content": f"doc about {query}", "score": 0.9}
-        ]
+        return [{"content": f"doc about {query}", "score": 0.9}]
 
     async def index_campaign(self, *args, **kwargs):
         self.docs.append("fake context")

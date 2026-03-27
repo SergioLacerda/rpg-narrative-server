@@ -1,12 +1,14 @@
-from pathlib import Path
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.vector.json_vector_store import JSONVectorStore
+from rpg_narrative_server.infrastructure.storage.vector.json_vector_store import (
+    JSONVectorStore,
+)
 
 
 # ---------------------------------------------------------
 # FIXTURE
 # ---------------------------------------------------------
+
 
 @pytest.fixture
 def store(tmp_path):
@@ -16,6 +18,7 @@ def store(tmp_path):
 # ---------------------------------------------------------
 # TESTES
 # ---------------------------------------------------------
+
 
 def test_add_and_get(store):
     store.add("doc1", [1.0, 0.0])

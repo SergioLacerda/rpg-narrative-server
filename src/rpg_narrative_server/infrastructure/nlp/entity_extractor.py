@@ -14,8 +14,4 @@ class EntityExtractor:
 
         tokens = re.findall(r"\w+", text)
 
-        return [
-            t.lower()
-            for t in tokens
-            if len(t) >= self.min_length
-        ]
+        return [t.lower() for t in tokens if len(t) >= self.min_length]

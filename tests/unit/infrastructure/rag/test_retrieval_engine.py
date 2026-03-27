@@ -13,6 +13,7 @@ from tests.config.fakes.retrieval import (
 # FIXTURE
 # --------------------------------------------------
 
+
 @pytest.fixture
 def engine():
     return RetrievalEngine(
@@ -26,6 +27,7 @@ def engine():
 # BASIC SEARCH
 # --------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_search_basic(engine):
     result = await engine.search("hello", k=2)
@@ -36,6 +38,7 @@ async def test_search_basic(engine):
 # --------------------------------------------------
 # SEMANTIC CACHE
 # --------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_search_uses_semantic_cache(engine):
@@ -50,6 +53,7 @@ async def test_search_uses_semantic_cache(engine):
 # --------------------------------------------------
 # INFLIGHT DEDUPLICATION
 # --------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_inflight_deduplication(engine):
@@ -66,6 +70,7 @@ async def test_inflight_deduplication(engine):
 # --------------------------------------------------
 # INDEX FACTORY
 # --------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_index_factory_usage():
@@ -95,6 +100,7 @@ async def test_index_factory_usage():
 # DEFAULT INDEX
 # --------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_default_index_when_no_factory(engine):
 
@@ -106,6 +112,7 @@ async def test_default_index_when_no_factory(engine):
 # --------------------------------------------------
 # MULTIPLE CAMPAIGNS
 # --------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_multiple_campaign_indexes():
@@ -133,6 +140,7 @@ async def test_multiple_campaign_indexes():
 # --------------------------------------------------
 # CACHE HIT
 # --------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_semantic_cache_skips_search(engine):

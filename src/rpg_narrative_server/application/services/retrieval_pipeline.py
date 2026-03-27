@@ -1,17 +1,10 @@
 class RetrievalService:
 
-    def __init__(
-        self,
-        vector_index,
-        planner,
-        context_window,
-        selector
-    ):
+    def __init__(self, vector_index, planner, context_window, selector):
         self.vector_index = vector_index
         self.planner = planner
         self.context_window = context_window
         self.selector = selector
-
 
     async def search(self, query, k=4):
 

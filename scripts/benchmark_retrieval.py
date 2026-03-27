@@ -13,6 +13,7 @@ from rpg_narrative_server.infrastructure.runtime.executor import Executor, Execu
 # CPU WORK
 # ==================================================
 
+
 def cpu_heavy_compute(work: int):
     total = 0
     for i in range(work):
@@ -23,6 +24,7 @@ def cpu_heavy_compute(work: int):
 # ==================================================
 # INDEXES
 # ==================================================
+
 
 class SlowIndex:
     def __init__(self, delay=0.05):
@@ -62,6 +64,7 @@ class CpuBoundIndex:
 # EMBEDDINGS
 # ==================================================
 
+
 class FakeEmbedding:
     async def get(self, query):
         return [1.0]
@@ -84,6 +87,7 @@ class BatchEmbedding:
 # CACHE
 # ==================================================
 
+
 class FakeSemanticCache:
     def __init__(self):
         self.store = {}
@@ -99,17 +103,15 @@ class FakeSemanticCache:
 # FACTORY
 # ==================================================
 
+
 def create_engine(mode="io", batch=False, cpu_work=2_000_000):
 
     if mode == "cpu":
         index = CpuBoundIndex(work=cpu_work)
-        
+
         workers = max(2, os.cpu_count() // 2)
 
-        executor = Executor(
-            mode=ExecutorType.PROCESS,
-            max_workers=workers
-        )
+        executor = Executor(mode=ExecutorType.PROCESS, max_workers=workers)
 
     elif mode == "jitter":
         index = JitterIndex()
@@ -138,6 +140,7 @@ def create_engine(mode="io", batch=False, cpu_work=2_000_000):
 # METRICS
 # ==================================================
 
+
 def percentile(data, p):
     data = sorted(data)
     k = (len(data) - 1) * (p / 100)
@@ -153,6 +156,7 @@ def percentile(data, p):
 # ==================================================
 # BENCHMARKS
 # ==================================================
+
 
 async def perf_cold(engine):
 
@@ -224,9 +228,7 @@ async def perf_scaling(engine):
     async def run(n):
         start = time.perf_counter()
 
-        await asyncio.gather(*[
-            engine.search(f"q{i}") for i in range(n)
-        ])
+        await asyncio.gather(*[engine.search(f"q{i}") for i in range(n)])
 
         return time.perf_counter() - start
 
@@ -271,9 +273,7 @@ async def perf_batch(engine, n=50):
 
     await engine.embedding_cache.embed_batch(queries)
 
-    await asyncio.gather(*[
-        engine.search(q) for q in queries
-    ])
+    await asyncio.gather(*[engine.search(q) for q in queries])
 
     elapsed = time.perf_counter() - start
 
@@ -287,6 +287,7 @@ async def perf_batch(engine, n=50):
 # MAIN
 # ==================================================
 
+
 async def main(args):
 
     print("\n🚀 Retrieval Engine Benchmark\n")
@@ -298,11 +299,7 @@ async def main(args):
     await perf_warm(engine)
 
     engine = create_engine(args.mode, args.batch, args.cpu_work)
-    await perf_concurrent(
-        engine,
-        n=args.n,
-        same_query=not args.no_dedup
-    )
+    await perf_concurrent(engine, n=args.n, same_query=not args.no_dedup)
 
     engine = create_engine(args.mode, args.batch, args.cpu_work)
     await perf_scaling(engine)

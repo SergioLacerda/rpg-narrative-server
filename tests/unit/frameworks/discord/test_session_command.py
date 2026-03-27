@@ -8,12 +8,15 @@ from tests.config.helpers.discord_factory import (
 )
 from tests.config.fakes.discord.usecases import DummyUsecases, DummyEndSession
 
-from rpg_narrative_server.frameworks.discord.commands.session_command import register_session_commands
+from rpg_narrative_server.frameworks.discord.commands.session_command import (
+    register_session_commands,
+)
 
 
 # ---------------------------------------------------------
 # FIXTURES
 # ---------------------------------------------------------
+
 
 @pytest.fixture
 def bot():
@@ -30,7 +33,9 @@ async def test_endsession_success(executor):
 
     bot = DummyBot()
 
-    register_session_commands(bot, DummyUsecases(end_session=DummyEndSession()), executor)
+    register_session_commands(
+        bot, DummyUsecases(end_session=DummyEndSession()), executor
+    )
 
     ctx = make_ctx()
 
@@ -44,7 +49,9 @@ async def test_endsession_no_summary(executor):
 
     bot = DummyBot()
 
-    register_session_commands(bot, DummyUsecases(end_session=DummyEndSession(None)), executor)
+    register_session_commands(
+        bot, DummyUsecases(end_session=DummyEndSession(None)), executor
+    )
 
     ctx = make_ctx()
 

@@ -6,6 +6,7 @@ from tests.config.fakes.llm.fake_request import DummyRequest
 from rpg_narrative_server.application.services.llm.llm_service import LLMService
 from rpg_narrative_server.application.services.llm.circuit_breaker import CircuitBreaker
 
+
 @pytest.mark.asyncio
 async def test_generate_empty_prompt():
     service = LLMService(provider=MagicMock())
@@ -52,12 +53,16 @@ async def test_generate_calls_provider():
     provider = MagicMock()
     provider.generate = AsyncMock(return_value="response")
 
-    with patch("rpg_narrative_server.application.services.llm.llm_service.resilient_call",new=AsyncMock(return_value="ok"),):
+    with patch(
+        "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
+        new=AsyncMock(return_value="ok"),
+    ):
         service = LLMService(provider=provider)
 
         result = await service.generate(DummyRequest())
 
     assert result == "ok"
+
 
 @pytest.mark.asyncio
 async def test_generate_sets_caches():
@@ -68,7 +73,10 @@ async def test_generate_sets_caches():
     response_cache.get = AsyncMock(return_value=None)
     response_cache.set = AsyncMock()
 
-    with patch("rpg_narrative_server.application.services.llm.llm_service.resilient_call",new=AsyncMock(return_value="ok"),):
+    with patch(
+        "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
+        new=AsyncMock(return_value="ok"),
+    ):
         service = LLMService(
             provider=MagicMock(),
             ttl_cache=ttl_cache,
@@ -84,7 +92,10 @@ async def test_generate_sets_caches():
 
 @pytest.mark.asyncio
 async def test_generate_empty_response():
-    with patch("rpg_narrative_server.application.services.llm.llm_service.resilient_call",new=AsyncMock(return_value=""),):
+    with patch(
+        "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
+        new=AsyncMock(return_value=""),
+    ):
         service = LLMService(provider=MagicMock())
 
         result = await service.generate(DummyRequest())
@@ -94,7 +105,10 @@ async def test_generate_empty_response():
 
 @pytest.mark.asyncio
 async def test_generate_exception():
-    with patch("rpg_narrative_server.application.services.llm.llm_service.resilient_call",new=AsyncMock(side_effect=Exception("fail")),):
+    with patch(
+        "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
+        new=AsyncMock(side_effect=Exception("fail")),
+    ):
         service = LLMService(provider=MagicMock())
 
         with pytest.raises(Exception):
@@ -174,7 +188,10 @@ async def test_circuit_open_blocks_call():
 async def test_success_resets_circuit():
     cb = CircuitBreaker(failure_threshold=1)
 
-    with patch("rpg_narrative_server.application.services.llm.llm_service.resilient_call", new=AsyncMock(return_value="ok")):
+    with patch(
+        "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
+        new=AsyncMock(return_value="ok"),
+    ):
         service = LLMService(
             provider=MagicMock(),
             circuit_breaker=cb,
@@ -190,7 +207,10 @@ async def test_success_resets_circuit():
 async def test_failure_triggers_circuit():
     cb = CircuitBreaker(failure_threshold=1)
 
-    with patch("rpg_narrative_server.application.services.llm.llm_service.resilient_call", new=AsyncMock(side_effect=Exception())):
+    with patch(
+        "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
+        new=AsyncMock(side_effect=Exception()),
+    ):
         service = LLMService(
             provider=MagicMock(),
             circuit_breaker=cb,
@@ -200,5 +220,3 @@ async def test_failure_triggers_circuit():
             await service.generate(DummyRequest())
 
     assert cb.state == "OPEN"
-
-

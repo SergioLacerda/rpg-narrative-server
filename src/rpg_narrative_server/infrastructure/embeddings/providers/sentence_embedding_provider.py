@@ -12,10 +12,12 @@ logger = logging.getLogger("rpg_narrative_server.embedding.sentence")
 # lazy backend loader
 # ---------------------------------------------------------
 
+
 def _load_backend():
     try:
         from sentence_transformers import SentenceTransformer
         import torch
+
         return SentenceTransformer, torch
     except ImportError:
         raise RuntimeError("sentence-transformers not installed")
@@ -24,6 +26,7 @@ def _load_backend():
 # ---------------------------------------------------------
 # helpers
 # ---------------------------------------------------------
+
 
 def _detect_device(device: str | None, torch):
 
@@ -58,6 +61,7 @@ def _auto_batch_size(device: str):
 # provider
 # ---------------------------------------------------------
 
+
 class SentenceEmbeddingProvider(EmbeddingGateway):
 
     supports_batch = True
@@ -87,10 +91,7 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
             self.timeout,
         )
 
-        self.model = SentenceTransformer(
-            model,
-            device=self.device
-        )
+        self.model = SentenceTransformer(model, device=self.device)
 
         self.is_e5 = "e5" in model.lower()
         self._dimension = self.model.get_sentence_embedding_dimension()
@@ -117,10 +118,7 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
 
         if self._torch:
             with self._torch.no_grad():
-                return self.model.encode(
-                    text,
-                    normalize_embeddings=True
-                )
+                return self.model.encode(text, normalize_embeddings=True)
 
         return self.model.encode(text)
 
@@ -132,7 +130,7 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
                     texts,
                     batch_size=self.batch_size,
                     show_progress_bar=False,
-                    normalize_embeddings=True
+                    normalize_embeddings=True,
                 )
 
         return self.model.encode(texts)
@@ -201,6 +199,7 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
 # ---------------------------------------------------------
 # factory
 # ---------------------------------------------------------
+
 
 def create_sentence_embedding(**kwargs):
     return SentenceEmbeddingProvider(

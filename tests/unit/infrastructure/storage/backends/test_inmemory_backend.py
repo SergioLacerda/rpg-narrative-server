@@ -1,4 +1,7 @@
-from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import InMemoryVectorStore, InMemoryStorageBackend
+from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import (
+    InMemoryVectorStore,
+    InMemoryStorageBackend,
+)
 
 
 def test_inmemory_backend_builds():
@@ -15,7 +18,6 @@ def test_inmemory_backend_builds():
     doc.set("a", {"x": 1})
 
     assert doc.get("a")["x"] == 1
-
 
 
 def test_vector_store_basic():

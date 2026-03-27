@@ -5,10 +5,9 @@ from tests.config.harness.message import MessageHarness
 
 
 def make_msg(content="attack"):
-    return type("Msg", (), {
-        "content": content,
-        "author": type("A", (), {"bot": False})
-    })()
+    return type(
+        "Msg", (), {"content": content, "author": type("A", (), {"bot": False})}
+    )()
 
 
 @pytest.mark.asyncio
@@ -46,7 +45,7 @@ async def test_execute_and_send_success():
         "camp",
         "attack",
         "user",
-        intent="ACTION", 
+        intent="ACTION",
     )
 
     assert h.sent == ["hello"]
@@ -139,10 +138,9 @@ async def test_handle_respects_lock():
 async def test_handle_ignores_bot():
     h = MessageHarness()
 
-    msg = type("Msg", (), {
-        "content": "attack",
-        "author": type("A", (), {"bot": True})
-    })()
+    msg = type(
+        "Msg", (), {"content": "attack", "author": type("A", (), {"bot": True})}
+    )()
 
     service = h.build()
 

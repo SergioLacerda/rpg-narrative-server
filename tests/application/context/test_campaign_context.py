@@ -1,4 +1,3 @@
-import pytest
 from pathlib import Path
 
 from rpg_narrative_server.application.context.campaign_context import CampaignContext
@@ -8,10 +7,11 @@ from rpg_narrative_server.application.context.campaign_context import CampaignCo
 # TESTES
 # ---------------------------------------------------------
 
+
 def test_initialization_sets_campaign_id(monkeypatch):
     monkeypatch.setattr(
         "rpg_narrative_server.application.context.campaign_context.get_campaign_path",
-        lambda cid: Path(f"/fake/{cid}")
+        lambda cid: Path(f"/fake/{cid}"),
     )
 
     ctx = CampaignContext("camp1")
@@ -28,7 +28,7 @@ def test_base_path_uses_get_campaign_path(monkeypatch):
 
     monkeypatch.setattr(
         "rpg_narrative_server.application.context.campaign_context.get_campaign_path",
-        fake_get_path
+        fake_get_path,
     )
 
     ctx = CampaignContext("camp1")

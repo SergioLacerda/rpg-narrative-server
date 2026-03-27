@@ -13,11 +13,13 @@ class DocumentResolver:
             doc = self.document_store.get(doc_id) or {}
             meta = self.metadata_store.get(doc_id) or {}
 
-            docs.append({
-                "id": doc_id,
-                "text": doc.get("text", ""),
-                "score": meta.get("score", 0),
-                "metadata": meta,
-            })
+            docs.append(
+                {
+                    "id": doc_id,
+                    "text": doc.get("text", ""),
+                    "score": meta.get("score", 0),
+                    "metadata": meta,
+                }
+            )
 
         return docs

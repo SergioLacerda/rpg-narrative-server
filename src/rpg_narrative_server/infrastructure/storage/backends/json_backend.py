@@ -1,16 +1,30 @@
 from pathlib import Path
 
-from rpg_narrative_server.infrastructure.storage.vector_store_config import VectorStoreConfig
+from rpg_narrative_server.infrastructure.storage.vector_store_config import (
+    VectorStoreConfig,
+)
 
 from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
 
-from rpg_narrative_server.infrastructure.storage.vector.json_vector_store import JSONVectorStore
-from rpg_narrative_server.infrastructure.storage.kv.json_kv_store import JSONKeyValueStore
+from rpg_narrative_server.infrastructure.storage.vector.json_vector_store import (
+    JSONVectorStore,
+)
+from rpg_narrative_server.infrastructure.storage.kv.json_kv_store import (
+    JSONKeyValueStore,
+)
 
-from rpg_narrative_server.infrastructure.storage.adapters.vector_store import VectorStoreAdapter
-from rpg_narrative_server.infrastructure.storage.adapters.document_store import DocumentStoreAdapter
-from rpg_narrative_server.infrastructure.storage.adapters.token_store import TokenStoreAdapter
-from rpg_narrative_server.infrastructure.storage.adapters.metadata_store import MetadataStoreAdapter
+from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
+    VectorStoreAdapter,
+)
+from rpg_narrative_server.infrastructure.storage.adapters.document_store import (
+    DocumentStoreAdapter,
+)
+from rpg_narrative_server.infrastructure.storage.adapters.token_store import (
+    TokenStoreAdapter,
+)
+from rpg_narrative_server.infrastructure.storage.adapters.metadata_store import (
+    MetadataStoreAdapter,
+)
 
 from rpg_narrative_server.infrastructure.storage.bootstrap import (
     ensure_storage_structure,
@@ -31,6 +45,7 @@ class JSONStorageBackend(StorageBackend):
         self.base = base_path
         self._ensure_base()
         self.config = config or VectorStoreConfig()
+
     # ---------------------------------------------------------
     # setup
     # ---------------------------------------------------------

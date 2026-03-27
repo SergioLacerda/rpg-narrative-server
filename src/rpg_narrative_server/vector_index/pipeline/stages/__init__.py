@@ -82,43 +82,33 @@ from .narrative_importance_stage import NarrativeImportanceStage
 # ==========================================================
 
 __all__ = [
-
     # expansion
     "QueryExpansion",
     "CausalExpansion",
     "TemporalExpansion",
     "TimelineExpansion",
-
     # embedding
     "EmbedStage",
     "ResetEmbeddingStage",
-
     # retrieval
     "CandidateRetriever",
-
     # prefilter
     "ANNPrefilter",
-
     # cache
     "QueryLocalCache",
-
     # control
     "CandidateSetReservoir",
     "AdaptiveCandidateLimiter",
-
     # context
     "TemporalPriorityStage",
     "ClusterDedupStage",
     "DeduplicateStage",
-
     # ranking
     "RankingStage1",
     "RankingStage2",
     "AdaptiveRankingStage",
-
     # fusion
     "HybridFusionStage",
-
     # narrative
     "NarrativeImportanceStage",
 ]

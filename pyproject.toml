@@ -1,14 +1,17 @@
 [project]
 name = "rpg_narrative_server"
 version = "0.1.0"
-description = "Discord RPG AI bot"
+description = "Narrative engine for RPG storytelling (LLM + RAG)"
 requires-python = ">=3.11,<3.13"
 readme = "README.md"
 
 authors = [
-    { name = "Sérgio Lacerda Vieira" }
+    { name = "Sergio Lacerda Vieira" }
 ]
 
+# ---------------------------------------------------------
+# Core dependencies (runtime mínimo)
+# ---------------------------------------------------------
 dependencies = [
     "fastapi>=0.115,<1.0",
     "uvicorn[standard]>=0.34,<1.0",
@@ -18,7 +21,7 @@ dependencies = [
     "openai>=1.51,<2.0",
     "tenacity>=9.0,<10.0",
 
-    # vector / math (compat com chroma + torch)
+    # compatibilidade com chroma + torch
     "numpy>=1.26,<2.0",
 
     # ANN
@@ -26,29 +29,29 @@ dependencies = [
 ]
 
 # ---------------------------------------------------------
-# Optional features (profiles)
+# Optional dependencies (profiles)
 # ---------------------------------------------------------
 [project.optional-dependencies]
 
-# 🔹 banco vetorial
+# 🔹 Vector DB
 vector-db = [
     "chromadb>=0.4.24,<0.6"
 ]
 
-# 🔹 embeddings locais
+# 🔹 Embeddings locais
 local = [
     "torch>=2.2,<3.0",
     "sentence-transformers>=2.7,<3.0",
 ]
 
-# 🔹 tudo (DEV / FULL LOCAL)
+# 🔹 Full stack
 full = [
     "torch>=2.2,<3.0",
     "sentence-transformers>=2.7,<3.0",
     "chromadb>=0.4.24,<0.6"
 ]
 
-# 🔹 testes
+# 🔹 Testes
 test = [
     "pytest>=8.3,<9.0",
     "pytest-asyncio>=0.23,<0.25",
@@ -57,70 +60,19 @@ test = [
     "pytest-mock>=3.14,<4.0",
 ]
 
-# 🔹 desenvolvimento
+# 🔹 Desenvolvimento (local)
 dev = [
     "black>=24.0,<25.0",
     "ruff>=0.6,<1.0",
     "mypy>=1.10,<2.0",
 ]
 
-# ---------------------------------------------------------
-# CLI
-# ---------------------------------------------------------
-[project.scripts]
-rpg_narrative_server = "rpg_narrative_server.app:run"
-
-# ---------------------------------------------------------
-# Build
-# ---------------------------------------------------------
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
-# ---------------------------------------------------------
-# Packages
-# ---------------------------------------------------------
-[tool.setuptools.packages.find]
-where = ["src"]
-
-# ---------------------------------------------------------
-# Pytest
-# ---------------------------------------------------------
-[tool.pytest.ini_options]
-addopts = "--cov=rpg_narrative_server --cov-report=term-missing"
-asyncio_mode = "auto"
-pythonpath = ["src"]
-markers = [
-    "unit: testes unitários puros",
-    "integration: testes com container",
-    "api: testes de endpoint",
-    "slow: testes pesados",
-]
-env = [
-    "ENVIRONMENT=test",
-    "DISCORD_TOKEN=test-token",
-    "LLM_PROVIDER=mock",
-    "EMBEDDING_PROVIDER=mock",
+# 🔹 CI (leve + completo)
+ci = [
+    "rpg_narrative_server[test]",
+    "black>=24.0,<25.0",
+    "ruff>=0.6,<1.0",
+    "mypy>=1.10,<2.0",
 ]
 
-# ---------------------------------------------------------
-# Ruff
-# ---------------------------------------------------------
-[tool.ruff]
-line-length = 100
-target-version = "py312"
-
-# ---------------------------------------------------------
-# Black
-# ---------------------------------------------------------
-[tool.black]
-line-length = 100
-target-version = ["py312"]
-
-# ---------------------------------------------------------
-# Mypy
-# ---------------------------------------------------------
-[tool.mypy]
-python_version = "3.12"
-strict = false
-ignore_missing_imports = true
+# ---------------

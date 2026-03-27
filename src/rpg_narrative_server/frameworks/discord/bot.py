@@ -5,12 +5,22 @@ from discord.ext import commands
 from rpg_narrative_server.bootstrap.container import get_container
 
 from rpg_narrative_server.frameworks.discord.command_base import CommandExecutor
-from rpg_narrative_server.frameworks.discord.context.message_context import MessageContext
+from rpg_narrative_server.frameworks.discord.context.message_context import (
+    MessageContext,
+)
 
-from rpg_narrative_server.frameworks.discord.commands.gm_commands import register_gm_command
-from rpg_narrative_server.frameworks.discord.commands.roll_commands import register_roll_command
-from rpg_narrative_server.frameworks.discord.commands.session_command import register_session_commands
-from rpg_narrative_server.frameworks.discord.commands.campaign_commands import register_campaign_commands
+from rpg_narrative_server.frameworks.discord.commands.gm_commands import (
+    register_gm_command,
+)
+from rpg_narrative_server.frameworks.discord.commands.roll_commands import (
+    register_roll_command,
+)
+from rpg_narrative_server.frameworks.discord.commands.session_command import (
+    register_session_commands,
+)
+from rpg_narrative_server.frameworks.discord.commands.campaign_commands import (
+    register_campaign_commands,
+)
 
 from rpg_narrative_server.frameworks.discord.responder import send
 
@@ -33,10 +43,7 @@ def create_bot(*, settings, usecases, container=None):
 
     bot.debug = settings.runtime.environment != "prod"
 
-    executor = CommandExecutor(
-        settings=settings,
-        debug=bot.debug
-    )
+    executor = CommandExecutor(settings=settings, debug=bot.debug)
 
     # -------------------------------------------------
     # 🔥 BOOTSTRAP (fora de eventos)

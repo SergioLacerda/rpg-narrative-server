@@ -27,10 +27,7 @@ class ContextFormatter:
         # entidades
         # -----------------------------
         if entities:
-            parts.append(
-                "Entidades relevantes:\n" +
-                ", ".join(dict.fromkeys(entities))
-            )
+            parts.append("Entidades relevantes:\n" + ", ".join(dict.fromkeys(entities)))
 
         # -----------------------------
         # retrieval

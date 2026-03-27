@@ -1,8 +1,7 @@
-
 class DummyIndex:
     def __init__(self):
         self.calls = []
-    
+
     async def search(self, query, q_vec, k):
         self.calls.append((query, q_vec, k))
         return [f"result:{query}:{k}"]

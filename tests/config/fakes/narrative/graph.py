@@ -1,4 +1,3 @@
-
 class DummyGraph:
     def __init__(self):
         self.updated_with = None

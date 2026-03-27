@@ -19,6 +19,7 @@ def parser():
 # BASIC
 # --------------------------------------------------
 
+
 def test_parse_basic(parser):
 
     node = parser.parse("2d6")
@@ -32,6 +33,7 @@ def test_parse_basic(parser):
 # EXPLODE
 # --------------------------------------------------
 
+
 def test_parse_explode(parser):
 
     node = parser.parse("2d6!")
@@ -43,6 +45,7 @@ def test_parse_explode(parser):
 # --------------------------------------------------
 # KEEP HIGHEST
 # --------------------------------------------------
+
 
 def test_parse_keep_highest(parser):
 
@@ -57,6 +60,7 @@ def test_parse_keep_highest(parser):
 # DROP LOWEST
 # --------------------------------------------------
 
+
 def test_parse_drop_lowest(parser):
 
     node = parser.parse("4d6dl1")
@@ -69,6 +73,7 @@ def test_parse_drop_lowest(parser):
 # --------------------------------------------------
 # REROLL
 # --------------------------------------------------
+
 
 def test_parse_reroll(parser):
 
@@ -94,6 +99,7 @@ def test_parse_reroll_greater_equal(parser):
 # INVALID
 # --------------------------------------------------
 
+
 def test_parse_invalid_expression(parser):
 
     with pytest.raises(ValueError):
@@ -110,6 +116,7 @@ def test_reroll_invalid_operator(parser):
 # --------------------------------------------------
 # COMBINED (🔥 importante)
 # --------------------------------------------------
+
 
 def test_parse_combined(parser):
 
@@ -133,6 +140,7 @@ def test_parse_combined(parser):
 # EDGE CASES
 # --------------------------------------------------
 
+
 def test_parse_minimum(parser):
 
     node = parser.parse("1d1")
@@ -154,6 +162,7 @@ def test_parse_large_values(parser):
 # --------------------------------------------------
 # AST SHAPE (robusto)
 # --------------------------------------------------
+
 
 def test_ast_shape(parser):
 

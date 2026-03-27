@@ -5,15 +5,14 @@ from rpg_narrative_server.domain.narrative.narrative_builder import NarrativeBui
 
 def build_prompt(builder, ctx, action):
     system = builder.build_system_prompt(ctx.get("scene_type"))
-    user = builder.build_user_prompt(
-        ctx=ctx,
-        action=action
-    )
+    user = builder.build_user_prompt(ctx=ctx, action=action)
     return f"{system}\n\n{user}"
+
 
 # ---------------------------------------------------------
 # PROMPT
 # ---------------------------------------------------------
+
 
 def test_prompt_structure():
 
@@ -27,11 +26,7 @@ def test_prompt_structure():
         "scene_type": "DEFAULT",
     }
 
-    prompt = build_prompt(
-        builder,
-        ctx=ctx,
-        action="abrir porta"
-    )
+    prompt = build_prompt(builder, ctx=ctx, action="abrir porta")
 
     assert "Você é um mestre de RPG" in prompt
     assert "Eventos recentes:" in prompt
@@ -53,11 +48,7 @@ def test_prompt_without_context():
         "scene_type": "DEFAULT",
     }
 
-    prompt = build_prompt(
-        builder,
-        ctx=ctx,
-        action="andar"
-    )
+    prompt = build_prompt(builder, ctx=ctx, action="andar")
 
     assert "Ação do jogador:" in prompt
     assert "andar" in prompt
@@ -70,7 +61,7 @@ def test_system_prompt():
     system = builder.build_system_prompt()
 
     assert "Você é um mestre de RPG" in system
-    assert "Nunca diga \"OOC\"" in system
+    assert 'Nunca diga "OOC"' in system
 
 
 def test_user_prompt():
@@ -99,6 +90,7 @@ def test_user_prompt():
 # ---------------------------------------------------------
 # UTILIDADES
 # ---------------------------------------------------------
+
 
 def test_normalize_action():
 

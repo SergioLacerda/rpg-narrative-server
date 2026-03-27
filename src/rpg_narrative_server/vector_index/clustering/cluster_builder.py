@@ -22,7 +22,7 @@ class ClusterBuilder:
             base_vec = vectors[base_id]
 
             # pegar vetores restantes
-            remaining_ids = doc_ids[i + 1:]
+            remaining_ids = doc_ids[i + 1 :]
             remaining_vecs = [vectors[rid] for rid in remaining_ids]
 
             sims = batch_cosine_similarity(base_vec, remaining_vecs)

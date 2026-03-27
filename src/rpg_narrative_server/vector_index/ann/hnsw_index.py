@@ -8,8 +8,8 @@ class HNSWIndex:
 
     def __init__(self, docs, M=6, ef=20):
 
-        self.M = M          # número de vizinhos
-        self.ef = ef        # largura da busca
+        self.M = M  # número de vizinhos
+        self.ef = ef  # largura da busca
 
         self.docs = docs
         self.layers = []
@@ -39,8 +39,8 @@ class HNSWIndex:
             while len(self.layers) <= level:
                 self.layers.append([])
 
-            for l in range(level + 1):
-                self.layers[l].append(doc)
+            for layer_idx in range(level + 1):
+                self.layers[layer_idx].append(doc)
 
             if self.entry_point is None:
                 self.entry_point = doc
@@ -48,7 +48,7 @@ class HNSWIndex:
 
             neighbors = self._search_layer(doc["vector"], self.entry_point)
 
-            for n in neighbors[:self.M]:
+            for n in neighbors[: self.M]:
 
                 self.graph[doc["id"]].append(n)
                 self.graph[id(n)].append(doc)
@@ -76,11 +76,13 @@ class HNSWIndex:
 
                 score = cosine_similarity(q_vec, neighbor["vector"])
 
-                if len(best) < self.ef or score > cosine_similarity(q_vec, best[-1]["vector"]):
+                if len(best) < self.ef or score > cosine_similarity(
+                    q_vec, best[-1]["vector"]
+                ):
                     best.append(neighbor)
                     best.sort(
                         key=lambda d: cosine_similarity(q_vec, d["vector"]),
-                        reverse=True
+                        reverse=True,
                     )
 
                     if len(best) > self.ef:

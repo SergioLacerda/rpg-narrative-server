@@ -2,10 +2,7 @@ from contextvars import ContextVar
 from contextlib import contextmanager
 
 
-_current_campaign: ContextVar[str | None] = ContextVar(
-    "current_campaign",
-    default=None
-)
+_current_campaign: ContextVar[str | None] = ContextVar("current_campaign", default=None)
 
 
 class CampaignContext:

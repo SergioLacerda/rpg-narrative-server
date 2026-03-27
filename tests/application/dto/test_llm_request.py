@@ -7,6 +7,7 @@ from rpg_narrative_server.application.dto.llm_request import LLMRequest
 # SUCESSO
 # ---------------------------------------------------------
 
+
 def test_create_with_required_fields():
     req = LLMRequest(prompt="hello")
 
@@ -45,6 +46,7 @@ def test_custom_values():
 # VALIDAÇÕES - PROMPT
 # ---------------------------------------------------------
 
+
 @pytest.mark.parametrize("invalid_prompt", ["", "   ", None])
 def test_invalid_prompt_raises(invalid_prompt):
     with pytest.raises(ValueError):
@@ -54,6 +56,7 @@ def test_invalid_prompt_raises(invalid_prompt):
 # ---------------------------------------------------------
 # VALIDAÇÕES - TEMPERATURE
 # ---------------------------------------------------------
+
 
 @pytest.mark.parametrize("invalid_temp", [-0.1, 2.1, 999])
 def test_invalid_temperature_raises(invalid_temp):
@@ -70,6 +73,7 @@ def test_temperature_bounds():
 # VALIDAÇÕES - TOKENS
 # ---------------------------------------------------------
 
+
 @pytest.mark.parametrize("invalid_tokens", [0, -1, -100])
 def test_invalid_max_tokens_raises(invalid_tokens):
     with pytest.raises(ValueError):
@@ -79,6 +83,7 @@ def test_invalid_max_tokens_raises(invalid_tokens):
 # ---------------------------------------------------------
 # METADATA
 # ---------------------------------------------------------
+
 
 def test_metadata_is_not_shared_between_instances():
     r1 = LLMRequest(prompt="a")

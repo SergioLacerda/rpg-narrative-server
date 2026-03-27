@@ -1,4 +1,3 @@
-
 class RankingStage1:
 
     def __init__(self, ranker):

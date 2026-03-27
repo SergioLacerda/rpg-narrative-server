@@ -33,6 +33,4 @@ class NarrativeMemoryRepository:
 
         data = memory.to_dict()
 
-        self.path.write_text(
-            json.dumps(data, indent=2)
-        )
+        self.path.write_text(json.dumps(data, indent=2))

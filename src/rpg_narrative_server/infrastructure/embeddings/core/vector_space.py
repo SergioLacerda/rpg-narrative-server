@@ -9,6 +9,6 @@ class VectorSpace:
             return vec
 
         if len(vec) > self.target_dim:
-            return vec[:self.target_dim]
+            return vec[: self.target_dim]
 
         return vec + [0.0] * (self.target_dim - len(vec))

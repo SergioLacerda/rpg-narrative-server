@@ -45,10 +45,7 @@ class NarrativeGraph:
 
     def to_dict(self) -> dict:
 
-        return {
-            k: list(v)
-            for k, v in self._graph.items()
-        }
+        return {k: list(v) for k, v in self._graph.items()}
 
     @classmethod
     def from_dict(cls, data: dict):

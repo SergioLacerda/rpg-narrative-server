@@ -24,9 +24,12 @@ from rpg_narrative_server.vector_index.narrative.timeline_index import TimelineI
 from rpg_narrative_server.vector_index.narrative.causality_graph import CausalityGraph
 
 # classifier
-from rpg_narrative_server.vector_index.classifiers.default_query_classifier import DefaultQueryClassifier
+from rpg_narrative_server.vector_index.classifiers.default_query_classifier import (
+    DefaultQueryClassifier,
+)
 
 logger = logging.getLogger("rpg_narrative_server.vector_index.builder")
+
 
 class VectorIndexBuilder:
 
@@ -136,20 +139,15 @@ class VectorIndexBuilder:
 
         components = VectorIndexComponents(
             query_classifier=DefaultQueryClassifier(),
-
             stage1_ranker=Stage1Ranker(),
             stage2_ranker=Stage2Ranker(),
-
             cluster_manager=cluster_manager,
-
             vector_store=vector_store,
             document_store=document_store,
             token_store=token_store,
             metadata_store=metadata_store,
-
             ivf_builder=ivf_builder,
             ivf_router=ivf_router,
-
             temporal_index=temporal_index,
             causal_graph=causal_graph,
         )

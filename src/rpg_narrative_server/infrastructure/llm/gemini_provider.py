@@ -5,6 +5,7 @@ except ImportError:
 
 from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
 
+
 class GeminiProvider(BaseProvider):
 
     def __init__(self, api_key: str, model: str):

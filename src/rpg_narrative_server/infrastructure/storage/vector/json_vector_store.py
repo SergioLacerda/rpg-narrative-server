@@ -2,13 +2,16 @@ from pathlib import Path
 import numpy as np
 from datetime import datetime
 
-from rpg_narrative_server.infrastructure.storage.vector_store_config import VectorStoreConfig
+from rpg_narrative_server.infrastructure.storage.vector_store_config import (
+    VectorStoreConfig,
+)
 
 from rpg_narrative_server.vector_index.storage.json_utils import load_json, save_json
 
 # ---------------------------------------------------------
 # STORE
 # ---------------------------------------------------------
+
 
 class JSONVectorStore:
 
@@ -27,12 +30,10 @@ class JSONVectorStore:
             return 0.0
         return path.stat().st_size / 1024.0
 
-
     def _load(self):
         if self._cache is None:
             self._cache = load_json(self.path, {})
         return self._cache
-
 
     def _persist(self):
 
@@ -44,18 +45,15 @@ class JSONVectorStore:
         if self.config.enable_rotation:
             size_kb = self._get_file_size_kb(self.path)
 
-            if (
-                size_kb > self.config.max_file_size_kb
-                or self._should_rotate(self._cache)
+            if size_kb > self.config.max_file_size_kb or self._should_rotate(
+                self._cache
             ):
                 self._rotate_file()
 
         save_json(self.path, self._cache)
 
-
     def _should_rotate(self, data):
         return len(data) > self.config.max_entries_per_file
-
 
     def _rotate_file(self):
         """
@@ -68,9 +66,7 @@ class JSONVectorStore:
             return
 
         timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S_%f")
-        rotated_path = self.path.with_name(
-            f"{self.path.stem}_{timestamp}.json"
-        )
+        rotated_path = self.path.with_name(f"{self.path.stem}_{timestamp}.json")
 
         self.path.rename(rotated_path)
 

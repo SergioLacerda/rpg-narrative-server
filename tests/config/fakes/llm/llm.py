@@ -5,9 +5,11 @@ class DummyLLM:
         self.calls = []
 
     async def generate(self, request):
-        self.calls.append({
-            "prompt": request.prompt,
-            "temperature": request.temperature,
-            "max_tokens": request.max_tokens,
-        })
+        self.calls.append(
+            {
+                "prompt": request.prompt,
+                "temperature": request.temperature,
+                "max_tokens": request.max_tokens,
+            }
+        )
         return self.result

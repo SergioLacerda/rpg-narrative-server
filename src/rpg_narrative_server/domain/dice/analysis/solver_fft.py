@@ -91,7 +91,7 @@ class FFTDiceSolver:
             if len(result) < len(current):
                 result = np.pad(result, (0, len(current) - len(result)))
 
-            result[:len(current)] += current
+            result[: len(current)] += current
 
             current = self._fft_convolve(current, base) * p_explode
 

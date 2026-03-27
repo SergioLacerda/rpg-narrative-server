@@ -1,6 +1,8 @@
 import pytest
 
-from rpg_narrative_server.application.services.embedding_strategy import EmbeddingStrategy
+from rpg_narrative_server.application.services.embedding_strategy import (
+    EmbeddingStrategy,
+)
 from tests.config.fakes.retrieval.embedding import DummyEmbedding
 
 
@@ -35,7 +37,7 @@ async def test_multiple_fallbacks_uses_first_success():
     primary = DummyEmbedding(error=Exception())
     f1 = DummyEmbedding(error=Exception())
     f2 = DummyEmbedding(result=[3.0])
-    f3 = DummyEmbedding(result=[4.0]) 
+    f3 = DummyEmbedding(result=[4.0])
 
     strategy = EmbeddingStrategy(primary, [f1, f2, f3])
 

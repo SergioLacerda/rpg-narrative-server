@@ -22,7 +22,9 @@ class LLMIntentClassifier:
         t = text.lower()
 
         # ação típica de RPG
-        if any(w in t for w in ["ataco", "olho", "corro", "entro", "pego", "investigo"]):
+        if any(
+            w in t for w in ["ataco", "olho", "corro", "entro", "pego", "investigo"]
+        ):
             return "ACTION"
 
         # chat casual

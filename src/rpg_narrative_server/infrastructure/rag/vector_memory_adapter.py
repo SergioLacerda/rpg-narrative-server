@@ -45,18 +45,24 @@ class VectorMemoryAdapter:
             # -------------------------------------------------
             # 4. salvar documento (texto)
             # -------------------------------------------------
-            self.document_store.set(doc_id, {
-                "text": text,
-                "campaign_id": campaign_id,
-            })
+            self.document_store.set(
+                doc_id,
+                {
+                    "text": text,
+                    "campaign_id": campaign_id,
+                },
+            )
 
             # -------------------------------------------------
             # 5. salvar metadata
             # -------------------------------------------------
-            self.metadata_store.set(doc_id, {
-                **metadata,
-                "campaign_id": campaign_id,
-            })
+            self.metadata_store.set(
+                doc_id,
+                {
+                    **metadata,
+                    "campaign_id": campaign_id,
+                },
+            )
 
     # ---------------------------------------------------------
     # INTERNAL

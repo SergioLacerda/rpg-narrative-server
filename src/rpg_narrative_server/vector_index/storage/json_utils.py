@@ -6,9 +6,6 @@ from typing import Any
 # ---------------------------------------------------------
 # load
 # ---------------------------------------------------------
-import json
-from pathlib import Path
-from typing import Any
 
 
 def _backup_corrupted_file(path: Path):
@@ -17,7 +14,8 @@ def _backup_corrupted_file(path: Path):
         path.rename(backup_path)
     except Exception:
         pass
-    
+
+
 def load_json(path: Path, default: Any):
 
     # ---------------------------------------------------------
@@ -46,6 +44,7 @@ def load_json(path: Path, default: Any):
 # save
 # ---------------------------------------------------------
 
+
 def save_json(path: Path, data: Any):
 
     def _default(obj):
@@ -57,13 +56,14 @@ def save_json(path: Path, data: Any):
 
     path.write_text(
         json.dumps(data, indent=2, ensure_ascii=False, default=_default),
-        encoding="utf-8"
+        encoding="utf-8",
     )
 
 
 # ---------------------------------------------------------
 # update (helper útil)
 # ---------------------------------------------------------
+
 
 def update_json(path: Path, updater):
 

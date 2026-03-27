@@ -1,5 +1,6 @@
 from pathlib import Path
 from rpg_narrative_server.infrastructure.storage.json_utils import read_json, write_json
+from rpg_narrative_server.config.settings import Settings
 
 
 class JSONKeyValueStore:
@@ -20,4 +21,5 @@ class JSONKeyValueStore:
         write_json(self.path, {})
 
     def _should_rotate(self, data):
-        return len(data) > settings.app.max_entries_per_file
+        app = Settings.app
+        return len(data) > app.max_entries_per_file

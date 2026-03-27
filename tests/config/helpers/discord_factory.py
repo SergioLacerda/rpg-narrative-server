@@ -1,10 +1,10 @@
-
 class DummyFollowup:
     def __init__(self, ctx):
         self.ctx = ctx
 
     async def send(self, content):
         self.ctx.sent_messages.append(content)
+
 
 class DummyResponse:
     def __init__(self, ctx):
@@ -24,10 +24,11 @@ class DummyResponse:
         if hasattr(self.ctx, "interaction"):
             self.ctx.interaction.deferred = True
 
+
 class DummyInteraction:
     def __init__(self, ctx):
         self.response = DummyResponse(ctx)
-        self.followup = DummyFollowup(ctx) 
+        self.followup = DummyFollowup(ctx)
         self.deferred = False
 
     async def defer(self, thinking=False):
@@ -66,7 +67,9 @@ class DummyBot:
         def wrapper(fn):
             self._command = fn
             return fn
+
         return wrapper
+
 
 class DummyUsecase:
     """
@@ -86,10 +89,12 @@ class DummyUsecase:
         self.calls = []  # histórico de chamadas
 
     async def execute(self, *args, **kwargs):
-        self.calls.append({
-            "args": args,
-            "kwargs": kwargs,
-        })
+        self.calls.append(
+            {
+                "args": args,
+                "kwargs": kwargs,
+            }
+        )
 
         if self._error:
             raise self._error
@@ -99,9 +104,11 @@ class DummyUsecase:
 
         return self._result
 
+
 class DummySettings:
     class runtime:
         execution_timeout = 10
+
 
 class DummyExecutor:
     def __init__(self, settings=None, debug=False):
@@ -125,9 +132,11 @@ class DummyCtx:
     async def send(self, content):
         self.sent_messages.append(content)
 
+
 # ----------------------------------------
 # FACTORY
 # ----------------------------------------
+
 
 def make_ctx(*, interaction=False):
     return DummyCtx(interaction=interaction)

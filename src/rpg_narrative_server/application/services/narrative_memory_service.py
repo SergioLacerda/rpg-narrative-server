@@ -72,8 +72,4 @@ class NarrativeMemoryService:
 
     def extract_tokens(self, text: str):
 
-        return [
-            token.lower()
-            for token in text.split()
-            if len(token) > 2
-        ]
+        return [token.lower() for token in text.split() if len(token) > 2]

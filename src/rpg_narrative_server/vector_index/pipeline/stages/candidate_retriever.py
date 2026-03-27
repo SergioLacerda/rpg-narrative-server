@@ -51,10 +51,7 @@ class CandidateRetriever:
 
         try:
             if hasattr(ctx.vector_store, "search"):
-                ctx.candidates = ctx.vector_store.search(
-                    ctx.q_vec,
-                    k=ctx.k
-                )
+                ctx.candidates = ctx.vector_store.search(ctx.q_vec, k=ctx.k)
                 return ctx
 
         except Exception:

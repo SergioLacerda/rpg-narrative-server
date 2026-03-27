@@ -1,5 +1,3 @@
-
-
 class DummyExtractor:
     def __init__(self, entities):
         self.entities = entities

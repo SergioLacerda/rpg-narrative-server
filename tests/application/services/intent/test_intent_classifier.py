@@ -1,13 +1,18 @@
 import pytest
 
 from tests.config.fakes.llm.llm_intent import DummyLLM
-from rpg_narrative_server.application.services.intent.intent_classifier import IntentClassifier
-from rpg_narrative_server.application.services.intent.language_profiles import SUPPORTED_LANGUAGES
+from rpg_narrative_server.application.services.intent.intent_classifier import (
+    IntentClassifier,
+)
+from rpg_narrative_server.application.services.intent.language_profiles import (
+    SUPPORTED_LANGUAGES,
+)
 
 
 # ---------------------------------------------------------
 # SCORE BASE
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_empty_text_score():
@@ -49,6 +54,7 @@ async def test_trigger_positive_score():
 # LLM INFLUENCE
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_llm_score_applied():
     clf = IntentClassifier(SUPPORTED_LANGUAGES, DummyLLM("ACTION"))
@@ -71,6 +77,7 @@ async def test_llm_exception_fallback():
 # CLASSIFY (🔥 PRINCIPAL)
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_classify_action():
     clf = IntentClassifier(SUPPORTED_LANGUAGES)
@@ -86,7 +93,7 @@ async def test_classify_exploration():
 
     result = await clf.classify("olho ao redor da sala")
 
-    assert result in ("EXPLORATION", "ACTION") 
+    assert result in ("EXPLORATION", "ACTION")
 
 
 @pytest.mark.asyncio
@@ -111,6 +118,7 @@ async def test_classify_ooc():
 # IS_ACTION
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_is_action_true():
     clf = IntentClassifier(SUPPORTED_LANGUAGES)
@@ -132,6 +140,7 @@ async def test_is_action_false():
 # ---------------------------------------------------------
 # INTERNAL METHODS (comportamento, não valores fixos)
 # ---------------------------------------------------------
+
 
 def test_trigger_score_multiple():
     clf = IntentClassifier(SUPPORTED_LANGUAGES)

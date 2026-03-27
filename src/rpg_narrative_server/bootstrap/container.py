@@ -5,29 +5,51 @@ from rpg_narrative_server.config.loader import load_settings
 
 # embeddings
 from rpg_narrative_server.infrastructure.embeddings.registry import EmbeddingRegistry
-from rpg_narrative_server.infrastructure.embeddings.providers.sentence_embedding_provider import create_sentence_embedding
-from rpg_narrative_server.infrastructure.embeddings.providers.openai_embedding_provider import create_openai_embedding
-from rpg_narrative_server.infrastructure.embeddings.providers.ollama_embedding_provider import create_ollama_embedding
-from rpg_narrative_server.infrastructure.embeddings.providers.lmstudio_embedding_provider import create_lmstudio_embedding
-from rpg_narrative_server.infrastructure.embeddings.providers.gemini_embedding_provider import create_gemini_embedding
+from rpg_narrative_server.infrastructure.embeddings.providers.sentence_embedding_provider import (
+    create_sentence_embedding,
+)
+from rpg_narrative_server.infrastructure.embeddings.providers.openai_embedding_provider import (
+    create_openai_embedding,
+)
+from rpg_narrative_server.infrastructure.embeddings.providers.ollama_embedding_provider import (
+    create_ollama_embedding,
+)
+from rpg_narrative_server.infrastructure.embeddings.providers.lmstudio_embedding_provider import (
+    create_lmstudio_embedding,
+)
+from rpg_narrative_server.infrastructure.embeddings.providers.gemini_embedding_provider import (
+    create_gemini_embedding,
+)
 
 from rpg_narrative_server.infrastructure.cache.ttl_cache import TTLCache
 from rpg_narrative_server.infrastructure.cache.response_cache import ResponseCache
-from rpg_narrative_server.infrastructure.cache.response_cache_storage import build_file_storage
+from rpg_narrative_server.infrastructure.cache.response_cache_storage import (
+    build_file_storage,
+)
 
 # storage
-from rpg_narrative_server.infrastructure.storage.vector_store_config import VectorStoreConfig
+from rpg_narrative_server.infrastructure.storage.vector_store_config import (
+    VectorStoreConfig,
+)
 
-from rpg_narrative_server.infrastructure.storage.backends.json_backend import JSONStorageBackend
-from rpg_narrative_server.infrastructure.storage.backends.chroma_backend import ChromaStorageBackend
-from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import InMemoryStorageBackend
+from rpg_narrative_server.infrastructure.storage.backends.json_backend import (
+    JSONStorageBackend,
+)
+from rpg_narrative_server.infrastructure.storage.backends.chroma_backend import (
+    ChromaStorageBackend,
+)
+from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import (
+    InMemoryStorageBackend,
+)
 
 
 # vector index
 from rpg_narrative_server.vector_index.builder import VectorIndexBuilder
 
 # repositories
-from rpg_narrative_server.infrastructure.storage.repositories.json_campaign_repository import JSONCampaignRepository
+from rpg_narrative_server.infrastructure.storage.repositories.json_campaign_repository import (
+    JSONCampaignRepository,
+)
 
 # use cases
 from rpg_narrative_server.usecases.narrative_event import NarrativeUseCase
@@ -35,7 +57,9 @@ from rpg_narrative_server.usecases.roll_dice import RollDiceUseCase
 from rpg_narrative_server.usecases.end_session import EndSessionUseCase
 
 # infra
-from rpg_narrative_server.infrastructure.random.python_random_provider import PythonRandomProvider
+from rpg_narrative_server.infrastructure.random.python_random_provider import (
+    PythonRandomProvider,
+)
 from rpg_narrative_server.infrastructure.events.blinker_event_bus import BlinkerEventBus
 
 # services
@@ -43,9 +67,14 @@ from rpg_narrative_server.application.services.memory_service import MemoryServi
 from rpg_narrative_server.application.services.health_service import HealthService
 from rpg_narrative_server.application.services.llm.llm_service import LLMService
 from rpg_narrative_server.application.services.document_resolver import DocumentResolver
-from rpg_narrative_server.application.services.intent.llm_intent_classifier import LLMIntentClassifier
-from rpg_narrative_server.application.services.intent.intent_classifier import IntentClassifier
+from rpg_narrative_server.application.services.intent.llm_intent_classifier import (
+    LLMIntentClassifier,
+)
+from rpg_narrative_server.application.services.intent.intent_classifier import (
+    IntentClassifier,
+)
 from rpg_narrative_server.application.services.intent.language_profiles import PT_BR, EN
+
 # rag
 from rpg_narrative_server.domain.rag.context_window import DynamicContextWindow
 
@@ -54,10 +83,14 @@ from rpg_narrative_server.infrastructure.runtime.executor import Executor, Execu
 
 # retrieval
 from rpg_narrative_server.infrastructure.rag.retrieval_engine import RetrievalEngine
-from rpg_narrative_server.infrastructure.rag.async_vector_memory_adapter import AsyncVectorMemoryAdapter
+from rpg_narrative_server.infrastructure.rag.async_vector_memory_adapter import (
+    AsyncVectorMemoryAdapter,
+)
 
 from rpg_narrative_server.interfaces.dice.parser_adapter import DiceParserAdapter
-from rpg_narrative_server.application.state.campaign_state_store import CampaignStateStore
+from rpg_narrative_server.application.state.campaign_state_store import (
+    CampaignStateStore,
+)
 
 from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
 from rpg_narrative_server.domain.rag.context_formatter import ContextFormatter
@@ -69,6 +102,7 @@ logger = logging.getLogger("rpg_narrative_server.container")
 # ==========================================================
 # 🔥 SIMPLE CACHE (CORRETO)
 # ==========================================================
+
 
 class SimpleCache:
 
@@ -85,6 +119,7 @@ class SimpleCache:
 # ==========================================================
 # CONTAINER
 # ==========================================================
+
 
 class Container:
 
@@ -199,31 +234,52 @@ class Container:
         provider = s.provider.lower()
 
         if provider == "openai":
-            from rpg_narrative_server.infrastructure.llm.openai_provider import OpenAIProvider
+            from rpg_narrative_server.infrastructure.llm.openai_provider import (
+                OpenAIProvider,
+            )
+
             return OpenAIProvider(api_key=s.api_key, model=s.model, base_url=s.base_url)
 
         elif provider == "lmstudio":
-            from rpg_narrative_server.infrastructure.llm.lmstudio_provider import LMStudioProvider
+            from rpg_narrative_server.infrastructure.llm.lmstudio_provider import (
+                LMStudioProvider,
+            )
+
             return LMStudioProvider(base_url=s.base_url, model=s.model)
 
         elif provider == "ollama":
-            from rpg_narrative_server.infrastructure.llm.ollama_provider import OllamaProvider
+            from rpg_narrative_server.infrastructure.llm.ollama_provider import (
+                OllamaProvider,
+            )
+
             return OllamaProvider(model=s.model, base_url=s.base_url)
 
         elif provider == "gemini":
-            from rpg_narrative_server.infrastructure.llm.gemini_provider import GeminiProvider
+            from rpg_narrative_server.infrastructure.llm.gemini_provider import (
+                GeminiProvider,
+            )
+
             return GeminiProvider(api_key=s.api_key, model=s.model)
 
         elif provider == "groq":
-            from rpg_narrative_server.infrastructure.llm.groq_provider import GroqProvider
+            from rpg_narrative_server.infrastructure.llm.groq_provider import (
+                GroqProvider,
+            )
+
             return GroqProvider(api_key=s.api_key, model=s.model)
 
         elif provider == "deepseek":
-            from rpg_narrative_server.infrastructure.llm.deepseek_provider import DeepSeekProvider
+            from rpg_narrative_server.infrastructure.llm.deepseek_provider import (
+                DeepSeekProvider,
+            )
+
             return DeepSeekProvider(api_key=s.api_key, model=s.model)
 
         elif provider == "anthropic":
-            from rpg_narrative_server.infrastructure.llm.anthropic_provider import AnthropicProvider
+            from rpg_narrative_server.infrastructure.llm.anthropic_provider import (
+                AnthropicProvider,
+            )
+
             return AnthropicProvider(api_key=s.api_key, model=s.model)
 
         else:
@@ -362,13 +418,11 @@ class Container:
             self._tokenizer = DynamicContextWindow()
         return self._tokenizer
 
-
     @property
     def vector_memory(self):
         if not hasattr(self, "_vector_memory"):
             self._vector_memory = AsyncVectorMemoryAdapter(self.vector_index)
         return self._vector_memory
-
 
     @property
     def document_resolver(self):
@@ -383,6 +437,7 @@ class Container:
     def campaign_state(self):
         if not hasattr(self, "_campaign_state_store"):
             from pathlib import Path
+
             self._campaign_state_store = CampaignStateStore(
                 Path("data/campaign_state.json")
             )
@@ -422,7 +477,6 @@ class Container:
 
         return self._response_cache
 
-
     @property
     def memory_service(self):
         if self._memory_service is None:
@@ -437,9 +491,7 @@ class Container:
     @property
     def context_builder(self):
         if self._context_builder is None:
-            self._context_builder = ContextBuilder(
-                memory_service=self.memory_service
-            )
+            self._context_builder = ContextBuilder(memory_service=self.memory_service)
         return self._context_builder
 
     @property
@@ -447,6 +499,7 @@ class Container:
         if self._context_formatter is None:
             self._context_formatter = ContextFormatter()
         return self._context_formatter
+
 
 # ==========================================================
 # SINGLETON

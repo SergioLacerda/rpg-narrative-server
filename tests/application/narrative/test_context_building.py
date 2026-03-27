@@ -9,6 +9,7 @@ from tests.config.fakes.narrative.memory_service import DummyMemoryService
 # BASICO
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_context_includes_history_and_retrieved():
 
@@ -57,6 +58,7 @@ async def test_context_empty():
 # HISTORY
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_history_truncation():
 
@@ -84,6 +86,7 @@ async def test_history_truncation():
 # RETRIEVED
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_retrieved_deduplication():
 
@@ -104,9 +107,11 @@ async def test_retrieved_deduplication():
     assert "doc1" in context
     assert "doc2" in context
 
+
 # ---------------------------------------------------------
 # ORDEM
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_block_order():
@@ -126,4 +131,3 @@ async def test_block_order():
     context = formatter.format(ctx)
 
     assert context.index("Eventos") < context.index("Memória relevante")
-

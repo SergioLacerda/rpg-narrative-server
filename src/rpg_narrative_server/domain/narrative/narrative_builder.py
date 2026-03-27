@@ -11,7 +11,7 @@ class NarrativeBuilder:
         base = (
             "Você é um mestre de RPG narrativo.\n\n"
             "REGRAS:\n"
-            "- Nunca diga \"OOC\"\n"
+            '- Nunca diga "OOC"\n'
             "- Nunca explique regras\n"
             "- Nunca controle o jogador\n\n"
         )
@@ -54,10 +54,7 @@ class NarrativeBuilder:
         # 🔥 entidades
         if entities:
             unique = list(dict.fromkeys(entities))
-            parts.append(
-                "Elementos importantes:\n" +
-                ", ".join(unique)
-            )
+            parts.append("Elementos importantes:\n" + ", ".join(unique))
 
         # 🔥 retrieval
         if retrieved:
@@ -65,11 +62,7 @@ class NarrativeBuilder:
 
         context_block = "\n\n".join(parts).strip()
 
-        return (
-            f"{context_block}\n\n"
-            f"Ação do jogador:\n{action}\n\n"
-            f"{instruction}"
-        )
+        return f"{context_block}\n\n" f"Ação do jogador:\n{action}\n\n" f"{instruction}"
 
     # ---------------------------------------------------------
     # STYLE
@@ -86,24 +79,12 @@ class NarrativeBuilder:
             )
 
         if scene_type in ("CHAT", "DIALOGUE"):
-            return (
-                "ESTILO:\n"
-                "- Diálogo natural\n"
-                "- Emoções e expressões\n\n"
-            )
+            return "ESTILO:\n" "- Diálogo natural\n" "- Emoções e expressões\n\n"
 
         if scene_type == "INVESTIGATION":
-            return (
-                "ESTILO:\n"
-                "- Observação detalhada\n"
-                "- Ênfase em pistas\n\n"
-            )
+            return "ESTILO:\n" "- Observação detalhada\n" "- Ênfase em pistas\n\n"
 
-        return (
-            "ESTILO:\n"
-            "- Narrativa imersiva\n"
-            "- Descrições sensoriais\n\n"
-        )
+        return "ESTILO:\n" "- Narrativa imersiva\n" "- Descrições sensoriais\n\n"
 
     # ---------------------------------------------------------
     # INSTRUCTION
@@ -157,11 +138,7 @@ class NarrativeBuilder:
         if text is None:
             raise ValueError("Output cannot be None")
 
-        lines = [
-            line.strip()
-            for line in text.strip().splitlines()
-            if line.strip()
-        ]
+        lines = [line.strip() for line in text.strip().splitlines() if line.strip()]
 
         return "\n".join(lines)
 

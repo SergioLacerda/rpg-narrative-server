@@ -1,4 +1,3 @@
-import pytest
 import time
 
 from rpg_narrative_server.application.services.llm.circuit_breaker import CircuitBreaker
@@ -36,7 +35,7 @@ def test_half_open_single_trial():
     cb.failure()
     time.sleep(0.2)
 
-    assert cb.allow() is True   # primeira tentativa
+    assert cb.allow() is True  # primeira tentativa
     assert cb.allow() is False  # bloqueia segunda
 
 
@@ -67,20 +66,6 @@ def test_half_open_failure_reopens():
 
     assert cb.state == "OPEN"
 
-
-def test_half_open_failure_reopens():
-    cb = CircuitBreaker(failure_threshold=3, recovery_time=0.1)
-
-    cb.failure()
-    cb.failure()
-    cb.failure()
-
-    time.sleep(0.2)
-
-    cb.allow()  # HALF_OPEN
-    cb.failure()
-
-    assert cb.state == "OPEN"
 
 def test_success_resets_everything():
     cb = CircuitBreaker(failure_threshold=1)

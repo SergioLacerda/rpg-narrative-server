@@ -3,7 +3,7 @@ class DummyLLM:
     def __init__(
         self,
         *,
-        mode: str = "valid",   # valid | invalid | error
+        mode: str = "valid",  # valid | invalid | error
         response: str | None = None,
         error: Exception | None = None,
     ):

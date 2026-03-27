@@ -1,9 +1,16 @@
 import pytest
 
-from tests.config.helpers.discord_factory import make_ctx, DummyBot, DummyExecutor, DummySettings
+from tests.config.helpers.discord_factory import (
+    make_ctx,
+    DummyBot,
+    DummyExecutor,
+    DummySettings,
+)
 from tests.config.fakes.discord.usecases import DummyUsecases, DummyNarrative
 
-from rpg_narrative_server.frameworks.discord.commands.gm_commands import register_gm_command
+from rpg_narrative_server.frameworks.discord.commands.gm_commands import (
+    register_gm_command,
+)
 
 
 @pytest.fixture
@@ -43,7 +50,9 @@ async def test_gm_empty_action(bot, executor):
 @pytest.mark.asyncio
 async def test_gm_no_response(bot, executor):
 
-    register_gm_command(bot, DummyUsecases(narrative=DummyNarrative(result=None)), executor)
+    register_gm_command(
+        bot, DummyUsecases(narrative=DummyNarrative(result=None)), executor
+    )
 
     ctx = make_ctx()
 

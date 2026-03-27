@@ -7,6 +7,7 @@ from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGa
 # FAKES
 # ---------------------------------------------------------
 
+
 class DummyEmbeddingGateway(EmbeddingGateway):
     async def embed(self, text: str):
         return [1.0]
@@ -33,6 +34,7 @@ class CustomBatchGateway(EmbeddingGateway):
 # PROPERTIES
 # ---------------------------------------------------------
 
+
 def test_default_properties():
     gateway = DummyEmbeddingGateway()
 
@@ -44,6 +46,7 @@ def test_default_properties():
 # ABC CONTRACT
 # ---------------------------------------------------------
 
+
 def test_cannot_instantiate_abstract_class():
     with pytest.raises(TypeError):
         EmbeddingGateway()
@@ -52,6 +55,7 @@ def test_cannot_instantiate_abstract_class():
 # ---------------------------------------------------------
 # FALLBACK BATCH
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_embed_batch_fallback_calls_embed():
@@ -88,6 +92,7 @@ async def test_embed_batch_accepts_iterable():
 # ---------------------------------------------------------
 # CUSTOM BATCH
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_custom_batch_override():

@@ -1,4 +1,3 @@
-
 class VectorStoreConfig:
 
     def __init__(

@@ -1,6 +1,6 @@
 import pytest
 
-from tests.config.helpers.discord_factory import make_ctx, DummyInteraction, DummyChannel
+from tests.config.helpers.discord_factory import make_ctx
 
 from rpg_narrative_server.frameworks.discord.processing import start_processing
 

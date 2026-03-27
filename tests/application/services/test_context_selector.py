@@ -17,6 +17,7 @@ def tokenizer():
 def selector():
     def _build(max_tokens=2000):
         return ContextSelector(max_tokens=max_tokens)
+
     return _build
 
 

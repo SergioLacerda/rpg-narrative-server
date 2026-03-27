@@ -11,14 +11,10 @@ def health():
 
 
 @router.get("/ready")
-async def ready(
-    health_service = Depends(get_health_service)
-):
+async def ready(health_service=Depends(get_health_service)):
     is_ready = True
 
     if hasattr(health_service, "is_ready"):
         is_ready = await health_service.is_ready()
 
-    return {
-        "status": "ready" if is_ready else "loading"
-    }
+    return {"status": "ready" if is_ready else "loading"}

@@ -5,6 +5,7 @@ import pytest
 # HELPERS
 # ---------------------------------------------------------
 
+
 class FailingLLM:
     async def generate(self, prompt):
         raise Exception("fail")
@@ -19,6 +20,7 @@ class EmptyLLM:
 # TESTES BASE
 # ---------------------------------------------------------
 
+
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_end_session_basic(container):
@@ -30,9 +32,7 @@ async def test_end_session_basic(container):
 @pytest.mark.asyncio
 async def test_end_session_persists_summary(container):
     await container.narrative.execute(
-        campaign_id="test",
-        action="something",
-        user_id="user1"
+        campaign_id="test", action="something", user_id="user1"
     )
 
     result = await container.end_session.execute("test")
@@ -43,6 +43,7 @@ async def test_end_session_persists_summary(container):
 # ---------------------------------------------------------
 # FALHAS (AGRUPADAS)
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("llm", [FailingLLM(), EmptyLLM()])
@@ -56,7 +57,11 @@ async def test_end_session_llm_edge_cases(container_factory, llm):
 
 @pytest.mark.asyncio
 async def test_end_session_event_bus_failure(container, monkeypatch):
-    monkeypatch.setattr(container.event_bus, "publish", lambda *a, **k: (_ for _ in ()).throw(Exception()))
+    monkeypatch.setattr(
+        container.event_bus,
+        "publish",
+        lambda *a, **k: (_ for _ in ()).throw(Exception()),
+    )
 
     result = await container.end_session.execute("test")
 
@@ -79,6 +84,7 @@ async def test_end_session_index_failure(container, monkeypatch):
 # MEMORY CASES
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_end_session_no_memory(container):
     await container.memory_service.clear("empty")
@@ -91,9 +97,7 @@ async def test_end_session_no_memory(container):
 @pytest.mark.asyncio
 async def test_end_session_clears_memory(container):
     await container.narrative.execute(
-        campaign_id="test",
-        action="action",
-        user_id="user"
+        campaign_id="test", action="action", user_id="user"
     )
 
     await container.end_session.execute("test")

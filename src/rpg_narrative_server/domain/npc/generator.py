@@ -13,5 +13,5 @@ class GenerateNPCUseCase:
         return {
             "name": random.choice(names),
             "description": desc,
-            "trait": random.choice(traits)
+            "trait": random.choice(traits),
         }

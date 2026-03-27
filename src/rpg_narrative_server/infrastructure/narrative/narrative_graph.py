@@ -1,3 +1,11 @@
+from rpg_narrative_server.utils.json_utils import load_json, save_json
+from rpg_narrative_server.infrastructure.nlp.entity_extractor import EntityExtractor
+
+GRAPH_FILE = "data/narrative_graph.json"
+
+entity_extractor = EntityExtractor()
+
+
 class NarrativeGraph:
 
     def __init__(self):
@@ -6,7 +14,7 @@ class NarrativeGraph:
 
     def update_from_event(self, text):
 
-        entities = extract_entities(text)
+        entities = entity_extractor.extract(text)
 
         for e in entities:
 
@@ -24,7 +32,7 @@ class NarrativeGraph:
 
     def related(self, query):
 
-        entities = extract_entities(query)
+        entities = entity_extractor.extract(query)
 
         related = set()
 

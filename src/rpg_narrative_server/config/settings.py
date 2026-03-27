@@ -7,6 +7,7 @@ import logging
 # LLM
 # ==========================================================
 
+
 @dataclass(frozen=True)
 class LLMSettings:
     provider: Literal["openai", "lmstudio", "ollama", "groq", "anthropic"]
@@ -18,6 +19,7 @@ class LLMSettings:
 # ==========================================================
 # EMBEDDINGS
 # ==========================================================
+
 
 @dataclass(frozen=True)
 class EmbeddingSettings:
@@ -40,6 +42,7 @@ class EmbeddingSettings:
 # RUNTIME
 # ==========================================================
 
+
 @dataclass(frozen=True)
 class RuntimeSettings:
 
@@ -54,6 +57,7 @@ class RuntimeSettings:
 # ==========================================================
 # APP
 # ==========================================================
+
 
 @dataclass(frozen=True)
 class AppSettings:
@@ -71,6 +75,7 @@ class AppSettings:
 # ==========================================================
 # ROOT
 # ==========================================================
+
 
 @dataclass(frozen=True)
 class Settings:

@@ -52,11 +52,7 @@ class KeywordIndex:
         if not scores:
             return []
 
-        results = [
-            (key, score)
-            for key, score in scores.items()
-            if score >= min_score
-        ]
+        results = [(key, score) for key, score in scores.items() if score >= min_score]
 
         # ordena por score
         results.sort(key=lambda x: x[1], reverse=True)

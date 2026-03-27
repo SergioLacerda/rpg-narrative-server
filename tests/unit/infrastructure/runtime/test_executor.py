@@ -16,10 +16,7 @@ def test_executor_multiple_tasks():
 
     executor = Executor(max_workers=2)
 
-    futures = [
-        executor.run(lambda x: x * 2, i)
-        for i in range(3)
-    ]
+    futures = [executor.run(lambda x: x * 2, i) for i in range(3)]
 
     results = [f.result() for f in futures]
 

@@ -4,6 +4,7 @@ from rpg_narrative_server.bootstrap.container import get_container
 # USE CASES
 # ------------------------------
 
+
 def get_narrative_usecase():
     return get_container().narrative
 
@@ -19,6 +20,7 @@ def get_end_session_usecase():
 # ------------------------------
 # SERVICES
 # ------------------------------
+
 
 def get_health_service():
     c = get_container()
@@ -37,6 +39,7 @@ def get_health_service():
 # ------------------------------
 # INFRA (somente se necessário)
 # ------------------------------
+
 
 def get_event_bus():
     return get_container().event_bus

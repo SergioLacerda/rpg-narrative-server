@@ -15,7 +15,9 @@ def is_internal(module: str) -> bool:
 
 
 def get_module_name(file: Path) -> str:
-    return "rpg_narrative_server." + str(file.relative_to("src")).replace("/", ".").replace(".py", "")
+    return "rpg_narrative_server." + str(file.relative_to("src")).replace(
+        "/", "."
+    ).replace(".py", "")
 
 
 def get_layer(module: str):
@@ -96,9 +98,7 @@ def test_no_cycles():
 
     cycles = find_cycles(graph)
 
-    assert not cycles, "\n\n".join(
-        " -> ".join(cycle) for cycle in cycles
-    )
+    assert not cycles, "\n\n".join(" -> ".join(cycle) for cycle in cycles)
 
 
 def test_no_cross_layer_cycles():

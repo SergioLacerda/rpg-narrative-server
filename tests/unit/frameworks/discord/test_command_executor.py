@@ -1,5 +1,4 @@
 import pytest
-import asyncio
 
 from tests.config.helpers.discord_factory import make_ctx, DummySettings
 

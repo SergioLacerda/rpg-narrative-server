@@ -4,6 +4,8 @@ from rpg_narrative_server.bootstrap.container import Container
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
 
 from tests.config.fakes.fake_llm import FakeLLMService
+
+
 def test_container_builds_core(container):
 
     assert container.embedding is not None
@@ -36,9 +38,6 @@ def test_narrative_usecase_wiring(container):
 @pytest.mark.asyncio
 async def test_llm_integration(container):
 
-
-    response = await container.llm.generate(
-        LLMRequest(prompt="teste")
-    )
+    response = await container.llm.generate(LLMRequest(prompt="teste"))
 
     assert response is not None

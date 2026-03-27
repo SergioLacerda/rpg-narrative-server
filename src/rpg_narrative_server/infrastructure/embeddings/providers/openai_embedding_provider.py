@@ -79,16 +79,10 @@ class OpenAIEmbeddingProvider(EmbeddingGateway):
             return vec
 
         try:
-            return await resilient_call(
-                [call],
-                timeout=self.timeout
-            )
+            return await resilient_call([call], timeout=self.timeout)
 
         except Exception:
-            logger.exception(
-                "OpenAI embedding failed (len=%s)",
-                len(text)
-            )
+            logger.exception("OpenAI embedding failed (len=%s)", len(text))
             raise
 
     # ---------------------------------------------------------
@@ -120,17 +114,12 @@ class OpenAIEmbeddingProvider(EmbeddingGateway):
             return vectors
 
         try:
-            return await resilient_call(
-                [call],
-                timeout=self.timeout
-            )
+            return await resilient_call([call], timeout=self.timeout)
 
         except Exception:
-            logger.exception(
-                "OpenAI batch embedding failed (n=%s)",
-                len(texts)
-            )
+            logger.exception("OpenAI batch embedding failed (n=%s)", len(texts))
             raise
+
 
 def create_openai_embedding(**kwargs):
     return OpenAIEmbeddingProvider(

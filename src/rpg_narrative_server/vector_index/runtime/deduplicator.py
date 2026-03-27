@@ -22,11 +22,7 @@ class InflightDeduplicator:
     # execução deduplicada
     # ---------------------------------------------------------
 
-    async def run(
-        self,
-        key: str,
-        coro_factory: Callable[[], Awaitable[Any]]
-    ) -> Any:
+    async def run(self, key: str, coro_factory: Callable[[], Awaitable[Any]]) -> Any:
 
         now = time.monotonic()
 

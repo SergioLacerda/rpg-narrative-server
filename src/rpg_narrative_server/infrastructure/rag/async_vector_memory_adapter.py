@@ -70,9 +70,8 @@ class AsyncVectorMemoryAdapter:
 
             now = time.time()
 
-            if (
-                len(buffer) >= self.batch_size
-                or (buffer and now - last_flush >= self.flush_interval)
+            if len(buffer) >= self.batch_size or (
+                buffer and now - last_flush >= self.flush_interval
             ):
                 await self._flush(buffer)
                 buffer.clear()
@@ -112,16 +111,22 @@ class AsyncVectorMemoryAdapter:
             self.vector_store.add(doc_id, embeddings[i])
 
             # document
-            self.document_store.set(doc_id, {
-                "text": texts[i],
-                "campaign_id": campaign_ids[i],
-            })
+            self.document_store.set(
+                doc_id,
+                {
+                    "text": texts[i],
+                    "campaign_id": campaign_ids[i],
+                },
+            )
 
             # metadata
-            self.metadata_store.set(doc_id, {
-                **metadatas[i],
-                "campaign_id": campaign_ids[i],
-            })
+            self.metadata_store.set(
+                doc_id,
+                {
+                    **metadatas[i],
+                    "campaign_id": campaign_ids[i],
+                },
+            )
 
     # ---------------------------------------------------------
     # EMBEDDING

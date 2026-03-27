@@ -36,7 +36,6 @@ def test_reset_with_token():
         ctx.get_campaign()
 
 
-
 def test_reset_without_token():
 
     ctx = CampaignContext()

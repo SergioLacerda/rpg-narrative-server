@@ -40,7 +40,7 @@ class IVFIndex:
             top_clusters = sorted(
                 range(len(self.centroids)),
                 key=lambda i: cosine_similarity(query_vector, self.centroids[i]),
-                reverse=True
+                reverse=True,
             )[:n_probe]
         except Exception:
             return []

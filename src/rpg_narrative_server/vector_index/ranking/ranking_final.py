@@ -1,4 +1,6 @@
-from rpg_narrative_server.vector_index.runtime.lazy_similarity import LazyVectorSimilarity
+from rpg_narrative_server.vector_index.runtime.lazy_similarity import (
+    LazyVectorSimilarity,
+)
 
 
 class RankingFinal:
@@ -29,8 +31,7 @@ class RankingFinal:
         lazy = LazyVectorSimilarity(ctx.vector_store)
 
         base_scores = {
-            doc_id: lazy.similarity(ctx.q_vec, doc_id)
-            for doc_id in candidates
+            doc_id: lazy.similarity(ctx.q_vec, doc_id) for doc_id in candidates
         }
 
         query_tokens = set(getattr(ctx, "query_tokens", []) or [])
@@ -38,8 +39,7 @@ class RankingFinal:
         get_tokens = getattr(ctx, "get_tokens", None)
 
         docs_tokens = [
-            get_tokens(doc_id) if get_tokens else []
-            for doc_id in candidates
+            get_tokens(doc_id) if get_tokens else [] for doc_id in candidates
         ]
 
         context_scores = (
@@ -59,9 +59,9 @@ class RankingFinal:
         for i, doc_id in enumerate(candidates):
 
             final_score = (
-                self.weight_base * base_scores.get(doc_id, 0.0) +
-                self.weight_context * context_scores[i] +
-                self.weight_entity * entity_scores[i]
+                self.weight_base * base_scores.get(doc_id, 0.0)
+                + self.weight_context * context_scores[i]
+                + self.weight_entity * entity_scores[i]
             )
 
             results.append((final_score, doc_id))

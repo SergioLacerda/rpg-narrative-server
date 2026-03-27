@@ -1,5 +1,6 @@
 from rpg_narrative_server.vector_index.ranking.ranking_final import RankingFinal
 
+
 class RankingFinalStage:
 
     priority = 100

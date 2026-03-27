@@ -22,7 +22,7 @@ class ContextBuilder:
         *,
         campaign_id: str,
         action: str,
-        memory=None,              # 🔥 novo (evita reload)
+        memory=None,  # 🔥 novo (evita reload)
         history=None,
         retrieved=None,
         scene_type="DEFAULT",
@@ -42,7 +42,7 @@ class ContextBuilder:
 
         if memory:
             summary = (memory.summary or "").strip()
-            recent_events = (memory.recent_events or [])[-self.max_recent_events:]
+            recent_events = (memory.recent_events or [])[-self.max_recent_events :]
 
         # ----------------------------------
         # 2. ENTIDADES
@@ -102,9 +102,7 @@ class ContextBuilder:
             if isinstance(retrieved, str):
                 retrieved_context = retrieved.strip()
             elif isinstance(retrieved, list):
-                retrieved_context = "\n".join(
-                    str(x).strip() for x in retrieved if x
-                )
+                retrieved_context = "\n".join(str(x).strip() for x in retrieved if x)
 
         # ----------------------------------
         # 5. HISTORY (compat)

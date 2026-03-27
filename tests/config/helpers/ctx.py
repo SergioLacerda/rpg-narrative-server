@@ -70,6 +70,7 @@ class TestCtx:
 # INTERACTION
 # ---------------------------------------------------------
 
+
 class DummyInteraction:
     def __init__(self):
         self.deferred = False
@@ -87,6 +88,7 @@ class DummyResponse:
 # ---------------------------------------------------------
 # FACTORY (compatível com seu padrão atual)
 # ---------------------------------------------------------
+
 
 def make_ctx(*, interaction=False, **kwargs):
     return TestCtx(interaction=interaction, **kwargs)

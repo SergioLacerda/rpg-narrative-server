@@ -10,11 +10,7 @@ class RetrievalSelector:
             return []
 
         # ordena por score se existir
-        docs = sorted(
-            docs,
-            key=lambda d: d.get("score", 0),
-            reverse=True
-        )
+        docs = sorted(docs, key=lambda d: d.get("score", 0), reverse=True)
 
         return docs[:limit]
 

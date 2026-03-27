@@ -11,6 +11,7 @@ from rpg_narrative_server.interfaces.api.middleware.request_context_middleware i
 # DUMMIES
 # ---------------------------------------------------------
 
+
 class DummyRequest:
     method = "GET"
 
@@ -36,15 +37,12 @@ class DummyContainer:
 # FIXTURES
 # ---------------------------------------------------------
 
+
 @pytest.fixture
 def fake_container(monkeypatch):
     container = DummyContainer()
 
-    monkeypatch.setattr(
-        dependencies,
-        "get_container",
-        lambda: container
-    )
+    monkeypatch.setattr(dependencies, "get_container", lambda: container)
 
     return container
 
@@ -52,6 +50,7 @@ def fake_container(monkeypatch):
 # ---------------------------------------------------------
 # MIDDLEWARE
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_request_context_success():
@@ -75,6 +74,7 @@ async def test_request_context_exception():
 # ---------------------------------------------------------
 # DEPENDENCIES
 # ---------------------------------------------------------
+
 
 def test_get_narrative(fake_container):
     assert dependencies.get_narrative_usecase() == "narrative"
@@ -104,11 +104,7 @@ def test_get_health_service_fallback(monkeypatch):
     class NoHealthContainer:
         pass
 
-    monkeypatch.setattr(
-        dependencies,
-        "get_container",
-        lambda: NoHealthContainer()
-    )
+    monkeypatch.setattr(dependencies, "get_container", lambda: NoHealthContainer())
 
     service = dependencies.get_health_service()
 

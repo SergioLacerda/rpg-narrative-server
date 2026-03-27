@@ -31,9 +31,7 @@ class TopK:
 
     def results(self) -> List[Any]:
 
-        return [
-            item for _, item in sorted(self._heap, reverse=True)
-        ]
+        return [item for _, item in sorted(self._heap, reverse=True)]
 
     # ---------------------------------------------------------
     # retornar com score (debug útil)

@@ -1,9 +1,16 @@
 import pytest
 
-from tests.config.helpers.discord_factory import make_ctx, DummyBot, DummyExecutor, DummySettings
+from tests.config.helpers.discord_factory import (
+    make_ctx,
+    DummyBot,
+    DummyExecutor,
+    DummySettings,
+)
 from tests.config.fakes.discord.usecases import DummyUsecases, DummyRollDice
 
-from rpg_narrative_server.frameworks.discord.commands.roll_commands import register_roll_command
+from rpg_narrative_server.frameworks.discord.commands.roll_commands import (
+    register_roll_command,
+)
 
 
 @pytest.fixture
@@ -19,7 +26,9 @@ def executor():
 @pytest.mark.asyncio
 async def test_roll_success(bot, executor):
 
-    register_roll_command(bot, DummyUsecases(roll_dice=DummyRollDice("resultado")), executor)
+    register_roll_command(
+        bot, DummyUsecases(roll_dice=DummyRollDice("resultado")), executor
+    )
 
     ctx = make_ctx()
 

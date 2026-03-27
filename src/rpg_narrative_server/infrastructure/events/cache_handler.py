@@ -1,3 +1,6 @@
+from domain.events.response_generated_event import ResponseGeneratedEvent
+
+
 def register_cache_handler(event_bus, cache):
 
     def handler(event):

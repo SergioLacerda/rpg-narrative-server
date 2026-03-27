@@ -2,9 +2,15 @@ from pathlib import Path
 import chromadb
 
 from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
-from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store import ChromaVectorStore
-from rpg_narrative_server.infrastructure.storage.adapters.vector_store import VectorStoreAdapter
-from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import InMemoryKVStore
+from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store import (
+    ChromaVectorStore,
+)
+from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
+    VectorStoreAdapter,
+)
+from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
+    InMemoryKVStore,
+)
 
 
 class ChromaStorageBackend(StorageBackend):
@@ -30,9 +36,7 @@ class ChromaStorageBackend(StorageBackend):
 
     def build_vector_store(self):
         collection = self._get_collection("vectors")
-        return VectorStoreAdapter(
-            ChromaVectorStore(collection)
-        )
+        return VectorStoreAdapter(ChromaVectorStore(collection))
 
     def build_document_store(self):
         return InMemoryKVStore()

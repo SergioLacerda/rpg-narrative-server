@@ -36,7 +36,7 @@ class IVFBuilder:
 
                 best = max(
                     range(len(centroids)),
-                    key=lambda i: cosine_similarity(v, centroids[i])
+                    key=lambda i: cosine_similarity(v, centroids[i]),
                 )
 
                 clusters[best].append(v)
@@ -67,10 +67,15 @@ class IVFBuilder:
 
             best = max(
                 range(len(centroids)),
-                key=lambda i: cosine_similarity(vec, centroids[i])
+                key=lambda i: cosine_similarity(vec, centroids[i]),
             )
 
             inverted[best].append(doc_id)
             doc_map[doc_id] = best
 
-        return IVFIndex(centroids, inverted, doc_map, vector_store=vector_store,)
+        return IVFIndex(
+            centroids,
+            inverted,
+            doc_map,
+            vector_store=vector_store,
+        )

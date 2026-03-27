@@ -9,7 +9,9 @@ from rpg_narrative_server.frameworks.discord.utils import (
     send_long_response,
 )
 
-from rpg_narrative_server.frameworks.discord.context.campaign_context import resolve_campaign_id
+from rpg_narrative_server.frameworks.discord.context.campaign_context import (
+    resolve_campaign_id,
+)
 
 
 logger = logging.getLogger("rpg_narrative_server.discord")

@@ -2,7 +2,10 @@ import json
 import asyncio
 from pathlib import Path
 
-from rpg_narrative_server.application.ports.campaign_repository import CampaignRepositoryPort
+from rpg_narrative_server.application.ports.campaign_repository import (
+    CampaignRepositoryPort,
+)
+
 
 class JSONCampaignRepository(CampaignRepositoryPort):
 

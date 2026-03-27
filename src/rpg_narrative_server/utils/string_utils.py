@@ -8,6 +8,7 @@ from typing import Iterable
 # NORMALIZAÇÃO
 # ---------------------------------------------------------
 
+
 def normalize_whitespace(text: str) -> str:
     """
     Remove espaços duplicados e normaliza quebras de linha.
@@ -31,6 +32,7 @@ def normalize_linebreaks(text: str) -> str:
 # ---------------------------------------------------------
 # LIMPEZA
 # ---------------------------------------------------------
+
 
 def strip_lines(text: str) -> str:
     """
@@ -62,6 +64,7 @@ def clean_text(text: str) -> str:
 # TRUNCAMENTO
 # ---------------------------------------------------------
 
+
 def truncate(text: str, max_chars: int) -> str:
     """
     Limita o tamanho de uma string.
@@ -83,6 +86,7 @@ def truncate_lines(lines: list[str], max_items: int) -> list[str]:
 # DEDUPLICAÇÃO
 # ---------------------------------------------------------
 
+
 def deduplicate(items: Iterable[str]) -> list[str]:
     """
     Remove duplicados mantendo ordem.
@@ -101,6 +105,7 @@ def deduplicate(items: Iterable[str]) -> list[str]:
 # ---------------------------------------------------------
 # JOIN / FORMATAÇÃO
 # ---------------------------------------------------------
+
 
 def safe_join(items: Iterable[str], sep: str = "\n") -> str:
     """
@@ -121,6 +126,7 @@ def ensure_prefix(text: str, prefix: str) -> str:
 # ---------------------------------------------------------
 # MEDIÇÃO
 # ---------------------------------------------------------
+
 
 def count_chars(text: str) -> int:
     return len(text or "")

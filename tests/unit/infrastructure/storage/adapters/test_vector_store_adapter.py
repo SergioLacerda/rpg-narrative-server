@@ -1,11 +1,14 @@
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.adapters.vector_store import VectorStoreAdapter
+from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
+    VectorStoreAdapter,
+)
 
 
 # ---------------------------------------------------------
 # DUMMY
 # ---------------------------------------------------------
+
 
 class DummyBackend:
     def __init__(self):

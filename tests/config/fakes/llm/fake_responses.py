@@ -6,10 +6,14 @@ class FakeChoice:
 class FakeResponseOpenAI:
     def __init__(self, content="ok"):
         self.choices = [FakeChoice(content)]
-        self.usage = type("Usage", (), {
-            "prompt_tokens": 10,
-            "completion_tokens": 20,
-        })
+        self.usage = type(
+            "Usage",
+            (),
+            {
+                "prompt_tokens": 10,
+                "completion_tokens": 20,
+            },
+        )
 
 
 class FakeResponseEmpty:

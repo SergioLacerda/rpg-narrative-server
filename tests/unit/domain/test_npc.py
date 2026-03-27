@@ -44,8 +44,7 @@ def test_generate_npc_deterministic(usecase, monkeypatch):
         return seq[0]
 
     monkeypatch.setattr(
-        "rpg_narrative_server.domain.npc.generator.random.choice",
-        fake_choice
+        "rpg_narrative_server.domain.npc.generator.random.choice", fake_choice
     )
 
     result = usecase.execute("teste")

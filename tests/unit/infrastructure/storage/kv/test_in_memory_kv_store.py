@@ -1,4 +1,6 @@
-from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import InMemoryKVStore
+from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
+    InMemoryKVStore,
+)
 
 
 def test_set_and_get():

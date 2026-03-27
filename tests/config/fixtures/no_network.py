@@ -1,6 +1,7 @@
 import socket
 import pytest
 
+
 @pytest.fixture(autouse=True)
 def no_network(monkeypatch):
 

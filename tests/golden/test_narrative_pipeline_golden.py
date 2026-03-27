@@ -32,7 +32,7 @@ async def test_narrative_pipeline_prompt_golden():
         memory_service=memory_service,
         vector_memory=DummyVectorMemory(),
         document_resolver=DummyDocumentResolver(),
-        context_builder=context_builder, 
+        context_builder=context_builder,
     )
 
     # ---------------------------------------------------------
@@ -54,16 +54,9 @@ async def test_narrative_pipeline_prompt_golden():
 
     # ---------------------------------------------------------
 
-    await usecase.execute(
-        campaign_id="c",
-        action="enter room",
-        user_id="u"
-    )
+    await usecase.execute(campaign_id="c", action="enter room", user_id="u")
 
-    prompt = next(
-        p for p in llm.calls
-        if "Ação do jogador" in p
-    )
+    prompt = next(p for p in llm.calls if "Ação do jogador" in p)
 
     # ---------------------------------------------------------
     # ASSERTS FUNCIONAIS

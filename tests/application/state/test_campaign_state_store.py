@@ -1,11 +1,12 @@
-import pytest
-
-from rpg_narrative_server.application.state.campaign_state_store import CampaignStateStore
+from rpg_narrative_server.application.state.campaign_state_store import (
+    CampaignStateStore,
+)
 
 
 # ---------------------------------------------------------
 # HELPERS
 # ---------------------------------------------------------
+
 
 def make_store(tmp_path, content=None):
     path = tmp_path / "state.json"
@@ -19,6 +20,7 @@ def make_store(tmp_path, content=None):
 # ---------------------------------------------------------
 # TESTES
 # ---------------------------------------------------------
+
 
 def test_load_valid_json(tmp_path):
     store, _ = make_store(tmp_path, '{"123": "campaign_a"}')

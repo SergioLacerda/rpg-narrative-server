@@ -54,9 +54,7 @@ def test_layer_dependencies():
                 if any(imp.startswith(a) for a in allowed):
                     continue
 
-                errors.append(
-                    f"{file} → {layer} cannot depend on {forbidden} ({imp})"
-                )
+                errors.append(f"{file} → {layer} cannot depend on {forbidden} ({imp})")
 
     assert not errors, "\n".join(errors)
 

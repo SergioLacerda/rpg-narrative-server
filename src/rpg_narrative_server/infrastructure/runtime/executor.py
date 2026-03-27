@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 logger = logging.getLogger("rpg_narrative_server")
 
+
 class ExecutorType(str, Enum):
     THREAD = "thread"
     PROCESS = "process"

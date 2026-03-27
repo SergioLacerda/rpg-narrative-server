@@ -30,6 +30,7 @@ if device == "cpu":
 # helpers
 # ---------------------------------------------------------
 
+
 def _get(name: str, default=None):
     return os.getenv(name, default)
 
@@ -72,6 +73,7 @@ def _get_embedding_defaults(profile_embedding: str):
 # settings loader
 # ---------------------------------------------------------
 
+
 @lru_cache
 def load_settings() -> Settings:
 
@@ -82,7 +84,6 @@ def load_settings() -> Settings:
     provider = _get("EMBEDDING_PROVIDER", embedding_defaults["provider"])
 
     settings = Settings(
-
         # -------------------------------------------------
         # runtime
         # -------------------------------------------------
@@ -92,7 +93,6 @@ def load_settings() -> Settings:
             log_level=_get_log_level(),
             execution_timeout=_get_int("LLM_TIMEOUT", 180),
         ),
-
         # -------------------------------------------------
         # LLM
         # -------------------------------------------------
@@ -102,42 +102,26 @@ def load_settings() -> Settings:
             api_key=_get("LLM_API_KEY"),
             base_url=_get("LLM_BASE_URL"),
         ),
-
         # -------------------------------------------------
         # embeddings
         # -------------------------------------------------
         embeddings=EmbeddingSettings(
             profile=profile.embedding,
-
             provider=provider,
-
-            model=_get(
-                "EMBEDDING_MODEL",
-                embedding_defaults["model"]
-            ),
-
+            model=_get("EMBEDDING_MODEL", embedding_defaults["model"]),
             api_key=_get("EMBEDDING_API_KEY"),
             base_url=_get("EMBEDDING_BASE_URL"),
-
             batch_size=_get_int("EMBEDDING_BATCH_SIZE", 32),
-
             # 🔥 FIX estrutural
-            dimension=_get_int(
-                "EMBEDDING_DIMENSION",
-                embedding_defaults["dimension"]
-            ),
+            dimension=_get_int("EMBEDDING_DIMENSION", embedding_defaults["dimension"]),
         ),
-
         # -------------------------------------------------
         # app
         # -------------------------------------------------
         app=AppSettings(
             discord_token=_require("DISCORD_TOKEN"),
-
             max_cache_size=_get_int("MAX_CACHE_SIZE", 10000),
-
             campaign_file=_get("CAMPAIGN_PATH", "./data"),
-
             storage=profile.storage,
         ),
     )
@@ -145,7 +129,13 @@ def load_settings() -> Settings:
     # -------------------------------------------------
     # validação mínima (fail fast)
     # -------------------------------------------------
-    if settings.embeddings.provider not in {"openai", "sentence", "ollama", "lmstudio", "gemini"}:
+    if settings.embeddings.provider not in {
+        "openai",
+        "sentence",
+        "ollama",
+        "lmstudio",
+        "gemini",
+    }:
         raise ValueError(f"Invalid embedding provider: {settings.embeddings.provider}")
 
     return settings

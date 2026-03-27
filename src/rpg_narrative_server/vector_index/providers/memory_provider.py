@@ -11,8 +11,4 @@ class MemoryProvider:
         # sync wrapper simples
         events = self.repo.get_events_sync(limit=limit)
 
-        return [
-            e.get("text", "")
-            for e in events
-            if e.get("text")
-        ]
+        return [e.get("text", "") for e in events if e.get("text")]

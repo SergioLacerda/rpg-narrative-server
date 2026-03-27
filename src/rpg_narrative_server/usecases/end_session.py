@@ -4,6 +4,7 @@ from rpg_narrative_server.application.dto.llm_request import LLMRequest
 
 from rpg_narrative_server.domain.narrative.session_summarizer import SessionSummarizer
 
+
 class EndSessionUseCase:
 
     def __init__(self, memory_service, llm, vector_memory):
@@ -13,10 +14,8 @@ class EndSessionUseCase:
 
         self.summarizer = SessionSummarizer()
 
-
     def _fallback_summary(self, text: str) -> str:
         return text[:500].strip()
-
 
     async def execute(self, campaign_id: str) -> str:
 
@@ -26,9 +25,7 @@ class EndSessionUseCase:
         if not events:
             return "Nenhum evento ocorreu nesta sessão."
 
-        text = self.summarizer.extract(
-            [{"text": e} for e in events]
-        )
+        text = self.summarizer.extract([{"text": e} for e in events])
 
         if not text.strip():
             return "A sessão terminou sem eventos relevantes."

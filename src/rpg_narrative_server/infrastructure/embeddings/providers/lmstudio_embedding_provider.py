@@ -26,9 +26,7 @@ class LMStudioEmbeddingProvider:
         self.timeout = timeout
 
         self.client = AsyncOpenAI(
-            base_url=base_url,
-            api_key="lmstudio",
-            timeout=httpx.Timeout(timeout)
+            base_url=base_url, api_key="lmstudio", timeout=httpx.Timeout(timeout)
         )
 
         self._dimension = None
@@ -65,16 +63,10 @@ class LMStudioEmbeddingProvider:
             return vec
 
         try:
-            return await resilient_call(
-                [call],
-                timeout=self.timeout
-            )
+            return await resilient_call([call], timeout=self.timeout)
 
         except Exception:
-            logger.exception(
-                "LMStudio embedding failed (len=%s)",
-                len(text)
-            )
+            logger.exception("LMStudio embedding failed (len=%s)", len(text))
             raise
 
     # ---------------------------------------------------------
@@ -105,16 +97,10 @@ class LMStudioEmbeddingProvider:
             return vectors
 
         try:
-            return await resilient_call(
-                [call],
-                timeout=self.timeout
-            )
+            return await resilient_call([call], timeout=self.timeout)
 
         except Exception:
-            logger.exception(
-                "LMStudio batch embedding failed (n=%s)",
-                len(texts)
-            )
+            logger.exception("LMStudio batch embedding failed (n=%s)", len(texts))
             raise
 
     # ---------------------------------------------------------
@@ -127,6 +113,7 @@ class LMStudioEmbeddingProvider:
             return [0.0] * self._dimension
 
         return [0.0] * 384
+
 
 def create_lmstudio_embedding(**kwargs):
     return LMStudioEmbeddingProvider(

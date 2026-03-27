@@ -42,8 +42,6 @@ async def test_on_command_error_cooldown():
 
     ctx = make_ctx()
 
-    from discord.ext import commands
-
     cooldown = commands.Cooldown(1, 3)
     error = commands.CommandOnCooldown(cooldown, 1.5, commands.BucketType.user)
 

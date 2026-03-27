@@ -20,10 +20,7 @@ class ANNPrefilter:
             if hasattr(self.ann, "search"):
                 docs = self.ann.search(ctx.q_vec)
 
-                ctx.candidates = [
-                    d["id"] if isinstance(d, dict) else d
-                    for d in docs
-                ]
+                ctx.candidates = [d["id"] if isinstance(d, dict) else d for d in docs]
 
                 if ctx.candidates:
                     return ctx

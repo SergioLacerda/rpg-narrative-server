@@ -87,14 +87,8 @@ class LMStudioProvider(BaseProvider):
         messages = []
 
         if request.system_prompt:
-            messages.append({
-                "role": "system",
-                "content": request.system_prompt
-            })
+            messages.append({"role": "system", "content": request.system_prompt})
 
-        messages.append({
-            "role": "user",
-            "content": request.prompt
-        })
+        messages.append({"role": "user", "content": request.prompt})
 
         return messages

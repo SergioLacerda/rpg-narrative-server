@@ -1,4 +1,3 @@
-
 class IntentClassifier:
 
     def __init__(
@@ -83,8 +82,14 @@ class IntentClassifier:
 
     def _is_ooc(self, text: str) -> bool:
         ooc_patterns = [
-            "isso está", "isso nao", "isso não",
-            "bug", "erro", "wtf", "lol", "kkk"
+            "isso está",
+            "isso nao",
+            "isso não",
+            "bug",
+            "erro",
+            "wtf",
+            "lol",
+            "kkk",
         ]
 
         if text.startswith("("):
@@ -101,7 +106,7 @@ class IntentClassifier:
 
         for profile in self.profiles:
             if words & set(profile.weak_words):
-                return -1.0 
+                return -1.0
 
         return 0.0
 
@@ -113,7 +118,7 @@ class IntentClassifier:
             matches = words & set(profile.triggers)
 
             if matches:
-                score += min(3.0, 2.0 * len(matches)) 
+                score += min(3.0, 2.0 * len(matches))
 
         return score
 
@@ -140,7 +145,7 @@ class IntentClassifier:
         result = result.strip().upper()
 
         if result == "ACTION":
-            return 2.0 
+            return 2.0
 
         if result == "OOC":
             return -2.0

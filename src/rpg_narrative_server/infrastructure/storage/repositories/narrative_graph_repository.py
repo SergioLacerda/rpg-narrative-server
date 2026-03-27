@@ -14,7 +14,7 @@ class NarrativeGraphRepository:
             return json.loads(self.path.read_text())
         except Exception:
             return {}
-            
+
     # ---------------------------------------------------------
     # load
     # ---------------------------------------------------------
@@ -39,6 +39,4 @@ class NarrativeGraphRepository:
 
         data = graph.to_dict()
 
-        self.path.write_text(
-            json.dumps(data, indent=2)
-        )
+        self.path.write_text(json.dumps(data, indent=2))

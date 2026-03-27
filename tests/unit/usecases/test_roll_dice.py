@@ -13,6 +13,7 @@ def usecase(container):
 # UNIT / BASIC
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_roll_dice_invalid(usecase):
     result = await usecase.execute("invalid")
@@ -32,6 +33,7 @@ async def test_roll_dice_usecase(usecase):
 # ---------------------------------------------------------
 # FLOW
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_roll_dice_with_expression(usecase):
@@ -53,7 +55,7 @@ async def test_roll_dice_with_analysis(usecase):
 async def test_roll_dice_analysis_failure(usecase, monkeypatch):
     monkeypatch.setattr(
         "rpg_narrative_server.usecases.roll_dice.analyze_distribution",
-        lambda ast: (_ for _ in ()).throw(Exception())
+        lambda ast: (_ for _ in ()).throw(Exception()),
     )
 
     usecase.enable_analysis = True

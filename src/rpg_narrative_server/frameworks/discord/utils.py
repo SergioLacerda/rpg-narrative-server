@@ -42,25 +42,25 @@ async def send_long_response(
     - Long: envia header primeiro + chunks do conteúdo
     """
     if not content:
-        await send(ctx,"Sem conteúdo para enviar.")
+        await send(ctx, "Sem conteúdo para enviar.")
         return
 
     if header:
         combined = header + content
         if len(combined) <= MAX_MESSAGE_LEN:
-            await send(ctx,combined)
+            await send(ctx, combined)
 
             return
         # long → header separado
-        await send(ctx,header)
+        await send(ctx, header)
 
         content_to_send = content
     else:
         if len(content) <= MAX_MESSAGE_LEN:
-            await send(ctx,content)
+            await send(ctx, content)
 
             return
         content_to_send = content
 
     for i in range(0, len(content_to_send), MAX_MESSAGE_LEN):
-        await send(ctx,content_to_send[i : i + MAX_MESSAGE_LEN])
+        await send(ctx, content_to_send[i : i + MAX_MESSAGE_LEN])

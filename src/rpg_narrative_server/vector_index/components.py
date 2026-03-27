@@ -6,6 +6,7 @@ from typing import Protocol, runtime_checkable, Iterable, Any, Optional
 # PROTOCOLS (CONTRATOS)
 # ==========================================================
 
+
 @runtime_checkable
 class VectorStore(Protocol):
     def add(self, doc_id: str, vector: list[float]) -> None: ...
@@ -68,6 +69,7 @@ class ClusterRouter(Protocol):
 # ==========================================================
 # COMPONENT CONTAINER
 # ==========================================================
+
 
 @dataclass(slots=True)
 class VectorIndexComponents:
@@ -169,15 +171,21 @@ class VectorIndexComponents:
         assert isinstance(self.stage2_ranker, Ranker), "Invalid stage2_ranker"
 
         # classifier
-        assert isinstance(self.query_classifier, QueryClassifier), "Invalid query_classifier"
+        assert isinstance(
+            self.query_classifier, QueryClassifier
+        ), "Invalid query_classifier"
 
         # ANN
         assert isinstance(self.ivf_builder, IVFBuilder), "Invalid ivf_builder"
         assert isinstance(self.ivf_router, IVFRouter), "Invalid ivf_router"
 
         # clustering
-        assert isinstance(self.cluster_manager, ClusterManager), "Invalid cluster_manager"
+        assert isinstance(
+            self.cluster_manager, ClusterManager
+        ), "Invalid cluster_manager"
 
         # opcional
         if self.cluster_router is not None:
-            assert isinstance(self.cluster_router, ClusterRouter), "Invalid cluster_router"
+            assert isinstance(
+                self.cluster_router, ClusterRouter
+            ), "Invalid cluster_router"

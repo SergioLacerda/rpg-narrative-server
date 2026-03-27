@@ -57,7 +57,7 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
                 json={
                     "model": self.model,
                     "prompt": text,
-                }
+                },
             )
 
             resp.raise_for_status()
@@ -76,16 +76,10 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
             return vec
 
         try:
-            return await resilient_call(
-                [call],
-                timeout=self.timeout
-            )
+            return await resilient_call([call], timeout=self.timeout)
 
         except Exception:
-            logger.exception(
-                "Ollama embedding failed (len=%s)",
-                len(text)
-            )
+            logger.exception("Ollama embedding failed (len=%s)", len(text))
             raise
 
     # ---------------------------------------------------------
@@ -126,6 +120,7 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
             return [0.0] * self._dimension
 
         return [0.0] * 384
+
 
 def create_ollama_embedding(**kwargs):
     return OllamaEmbeddingProvider(

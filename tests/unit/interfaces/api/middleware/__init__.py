@@ -1,5 +1,4 @@
 import pytest
-from fastapi import Request
 from starlette.responses import Response
 
 from rpg_narrative_server.interfaces.api.middleware.request_context_middleware import (

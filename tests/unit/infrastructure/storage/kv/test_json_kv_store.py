@@ -1,6 +1,6 @@
-from pathlib import Path
-
-from rpg_narrative_server.infrastructure.storage.kv.json_kv_store import JSONKeyValueStore
+from rpg_narrative_server.infrastructure.storage.kv.json_kv_store import (
+    JSONKeyValueStore,
+)
 
 
 def test_set_and_get(tmp_path):

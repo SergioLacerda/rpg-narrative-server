@@ -13,7 +13,7 @@ def diff_strings(expected: str, actual: str) -> str:
             normalize(actual),
             fromfile="expected",
             tofile="actual",
-            lineterm=""
+            lineterm="",
         )
     )
 
@@ -29,6 +29,4 @@ def assert_golden(path: Path, actual: str, update: bool = False):
     if normalize(expected) != normalize(actual):
         diff = diff_strings(expected, actual)
 
-        raise AssertionError(
-            f"\n\n❌ GOLDEN MISMATCH: {path.name}\n\n{diff}\n"
-        )
+        raise AssertionError(f"\n\n❌ GOLDEN MISMATCH: {path.name}\n\n{diff}\n")

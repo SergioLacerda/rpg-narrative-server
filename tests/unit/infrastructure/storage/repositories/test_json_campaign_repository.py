@@ -1,7 +1,8 @@
 import pytest
-from pathlib import Path
 
-from rpg_narrative_server.infrastructure.storage.repositories.json_campaign_repository import JSONCampaignRepository
+from rpg_narrative_server.infrastructure.storage.repositories.json_campaign_repository import (
+    JSONCampaignRepository,
+)
 
 
 @pytest.mark.asyncio

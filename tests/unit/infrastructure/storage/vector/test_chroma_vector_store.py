@@ -1,11 +1,12 @@
-import pytest
-
-from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store import ChromaVectorStore
+from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store import (
+    ChromaVectorStore,
+)
 
 
 # ---------------------------------------------------------
 # DUMMY
 # ---------------------------------------------------------
+
 
 class DummyCollection:
 
@@ -31,6 +32,7 @@ class DummyCollection:
 # ---------------------------------------------------------
 # TESTES
 # ---------------------------------------------------------
+
 
 def test_add_and_keys():
     store = ChromaVectorStore(DummyCollection())

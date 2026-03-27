@@ -1,10 +1,10 @@
-
 try:
     import anthropic
 except ImportError:
     anthropic = None
 
 from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
+
 
 class AnthropicProvider(BaseProvider):
 

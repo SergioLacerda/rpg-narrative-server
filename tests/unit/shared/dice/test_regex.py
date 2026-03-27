@@ -12,6 +12,7 @@ def match():
 # BASIC MATCH
 # --------------------------------------------------
 
+
 def test_match_basic(match):
 
     m = match("2d6")
@@ -25,6 +26,7 @@ def test_match_basic(match):
 # EXPLODE
 # --------------------------------------------------
 
+
 def test_match_explode(match):
 
     m = match("2d6!")
@@ -36,6 +38,7 @@ def test_match_explode(match):
 # --------------------------------------------------
 # KEEP HIGHEST
 # --------------------------------------------------
+
 
 def test_match_keep(match):
 
@@ -49,6 +52,7 @@ def test_match_keep(match):
 # DROP LOWEST
 # --------------------------------------------------
 
+
 def test_match_drop(match):
 
     m = match("4d6dl1")
@@ -60,6 +64,7 @@ def test_match_drop(match):
 # --------------------------------------------------
 # REROLL
 # --------------------------------------------------
+
 
 def test_match_reroll(match):
 
@@ -81,6 +86,7 @@ def test_match_reroll_greater_equal(match):
 # COMBINED
 # --------------------------------------------------
 
+
 def test_match_combined(match):
 
     m = match("4d6!kh3r<2")
@@ -96,17 +102,21 @@ def test_match_combined(match):
 # INVALID EXPRESSIONS
 # --------------------------------------------------
 
-@pytest.mark.parametrize("expr", [
-    "",
-    "d6",
-    "2d",
-    "2d6kk3",
-    "2d6!!",
-    "abc",
-    "2d6kh",
-    "2d6dl",
-    "2d6r",
-])
+
+@pytest.mark.parametrize(
+    "expr",
+    [
+        "",
+        "d6",
+        "2d",
+        "2d6kk3",
+        "2d6!!",
+        "abc",
+        "2d6kh",
+        "2d6dl",
+        "2d6r",
+    ],
+)
 def test_invalid_expressions(match, expr):
 
     assert match(expr) is None
@@ -115,6 +125,7 @@ def test_invalid_expressions(match, expr):
 # --------------------------------------------------
 # EDGE CASES
 # --------------------------------------------------
+
 
 def test_min_values(match):
 

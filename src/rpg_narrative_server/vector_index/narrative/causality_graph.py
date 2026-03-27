@@ -9,7 +9,7 @@ class CausalityGraph:
     """
 
     def __init__(self):
-        self.forward = defaultdict(list)   # A -> [B, C]
+        self.forward = defaultdict(list)  # A -> [B, C]
         self.backward = defaultdict(list)  # B -> [A]
 
     # ---------------------------------------------------------

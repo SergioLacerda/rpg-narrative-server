@@ -13,7 +13,7 @@ async def resilient_call(
     backoff: float = 1.5,
     base_delay: float = 0.1,
     timeout: float | None = None,
-    **kwargs
+    **kwargs,
 ):
 
     delay = base_delay

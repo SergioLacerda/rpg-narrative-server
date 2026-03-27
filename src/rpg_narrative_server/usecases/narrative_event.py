@@ -4,9 +4,15 @@ import logging
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
 
 from rpg_narrative_server.application.services.context_selector import ContextSelector
-from rpg_narrative_server.application.services.intent.intent_classifier import IntentClassifier
-from rpg_narrative_server.application.services.intent.llm_intent_classifier import LLMIntentClassifier
-from rpg_narrative_server.application.services.intent.language_profiles import SUPPORTED_LANGUAGES
+from rpg_narrative_server.application.services.intent.intent_classifier import (
+    IntentClassifier,
+)
+from rpg_narrative_server.application.services.intent.llm_intent_classifier import (
+    LLMIntentClassifier,
+)
+from rpg_narrative_server.application.services.intent.language_profiles import (
+    SUPPORTED_LANGUAGES,
+)
 
 from rpg_narrative_server.domain.rag.retrieval_selector import RetrievalSelector
 from rpg_narrative_server.domain.rag.context_window import DynamicContextWindow
@@ -100,9 +106,7 @@ class NarrativeUseCase:
 
     async def _build_context(self, campaign_id, action, intent):
 
-        memory_task = asyncio.create_task(
-            self.memory.load_memory(campaign_id)
-        )
+        memory_task = asyncio.create_task(self.memory.load_memory(campaign_id))
 
         k = 4 if intent == "ACTION" else 8 if intent == "EXPLORATION" else 6
 
@@ -110,10 +114,7 @@ class NarrativeUseCase:
             self.vector_index.search_async(action, k=k)
         )
 
-        memory, doc_ids = await asyncio.gather(
-            memory_task,
-            retrieval_task
-        )
+        memory, doc_ids = await asyncio.gather(memory_task, retrieval_task)
 
         docs = self.document_resolver.resolve(doc_ids)
         docs = self.selector.select(docs)
@@ -192,11 +193,7 @@ class NarrativeUseCase:
         # CONTEXT
         # -------------------------
 
-        ctx, memory = await self._build_context(
-            campaign_id,
-            action,
-            intent
-        )
+        ctx, memory = await self._build_context(campaign_id, action, intent)
 
         if not ctx:
             return self._fallback_response(action)
@@ -252,9 +249,8 @@ class NarrativeUseCase:
         )
 
         task.add_done_callback(
-            lambda t: t.exception() and logger.error(
-                "Index failed", exc_info=t.exception()
-            )
+            lambda t: t.exception()
+            and logger.error("Index failed", exc_info=t.exception())
         )
 
         # -------------------------

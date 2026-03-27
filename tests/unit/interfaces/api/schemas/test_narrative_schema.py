@@ -11,10 +11,7 @@ from rpg_narrative_server.interfaces.api.schemas.narrative_schema import (
 # -----------------------------
 def test_valid_narrative_request():
 
-    data = {
-        "action": "Ataco o goblin",
-        "user_id": "user_123"
-    }
+    data = {"action": "Ataco o goblin", "user_id": "user_123"}
 
     req = NarrativeEventRequest(**data)
 
@@ -28,10 +25,7 @@ def test_valid_narrative_request():
 def test_action_empty_should_fail():
 
     with pytest.raises(ValidationError):
-        NarrativeEventRequest(
-            action="",
-            user_id="user_123"
-        )
+        NarrativeEventRequest(action="", user_id="user_123")
 
 
 # -----------------------------
@@ -40,10 +34,7 @@ def test_action_empty_should_fail():
 def test_action_too_long_should_fail():
 
     with pytest.raises(ValidationError):
-        NarrativeEventRequest(
-            action="a" * 501,
-            user_id="user_123"
-        )
+        NarrativeEventRequest(action="a" * 501, user_id="user_123")
 
 
 # -----------------------------
@@ -52,9 +43,7 @@ def test_action_too_long_should_fail():
 def test_user_id_missing_should_fail():
 
     with pytest.raises(ValidationError):
-        NarrativeEventRequest(
-            action="Ataco"
-        )
+        NarrativeEventRequest(action="Ataco")
 
 
 # -----------------------------
@@ -63,15 +52,10 @@ def test_user_id_missing_should_fail():
 def test_action_missing_should_fail():
 
     with pytest.raises(ValidationError):
-        NarrativeEventRequest(
-            user_id="user_123"
-        )
+        NarrativeEventRequest(user_id="user_123")
 
 
 def test_invalid_types():
 
     with pytest.raises(ValidationError):
-        NarrativeEventRequest(
-            action=123,  # inválido
-            user_id=None
-        )
+        NarrativeEventRequest(action=123, user_id=None)  # inválido

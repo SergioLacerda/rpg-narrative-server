@@ -11,6 +11,7 @@ from rpg_narrative_server.application.services.llm.llm_errors import (
 # 4xx → CLIENT ERROR
 # ---------------------------------------------------------
 
+
 @pytest.mark.parametrize("status", [400, 401, 403, 404, 422, 499])
 def test_4xx_raises_client_error(status):
     with pytest.raises(LLMClientError) as exc:
@@ -23,6 +24,7 @@ def test_4xx_raises_client_error(status):
 # NON-4xx → RETRYABLE
 # ---------------------------------------------------------
 
+
 @pytest.mark.parametrize("status", [200, 201, 300, 500, 502, 503])
 def test_non_4xx_raises_retryable_error(status):
     with pytest.raises(LLMRetryableError) as exc:
@@ -34,6 +36,7 @@ def test_non_4xx_raises_retryable_error(status):
 # ---------------------------------------------------------
 # EDGE: 399 vs 400 boundary
 # ---------------------------------------------------------
+
 
 def test_boundary_399_not_client_error():
     with pytest.raises(LLMRetryableError):
@@ -48,6 +51,7 @@ def test_boundary_400_is_client_error():
 # ---------------------------------------------------------
 # MESSAGE PROPAGATION
 # ---------------------------------------------------------
+
 
 def test_message_is_preserved():
     msg = "specific error message"

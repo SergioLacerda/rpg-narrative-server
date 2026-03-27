@@ -1,8 +1,21 @@
-# ---------------------------------------------------------
-# PATH
-# ---------------------------------------------------------
+import pytest
+import os
 import sys
 from pathlib import Path
+import importlib
+from fastapi.testclient import TestClient
+
+from rpg_narrative_server.app import create_app
+
+from tests.config.factories.container_factory import create_test_container
+from rpg_narrative_server.config.loader import load_settings
+from rpg_narrative_server.infrastructure.runtime.campaign_context import CampaignContext
+
+from rpg_narrative_server.interfaces.api.dependencies import (
+    get_container,
+    get_narrative_usecase,
+    get_roll_dice_usecase,
+)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
@@ -10,38 +23,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 # ---------------------------------------------------------
 # ENV
 # ---------------------------------------------------------
-import os
 
 os.environ["ENVIRONMENT"] = "test"
 os.environ["DEVICE"] = "cpu"
 os.environ["LLM_PROVIDER"] = "openai"
 os.environ["EMBEDDING_PROVIDER"] = "sentence"
 
-
 # ---------------------------------------------------------
 # SETTINGS CACHE
 # ---------------------------------------------------------
-from rpg_narrative_server.config.loader import load_settings
+
 
 load_settings.cache_clear()
-
-
-# ---------------------------------------------------------
-# IMPORTS
-# ---------------------------------------------------------
-import pytest
-
-from fastapi.testclient import TestClient
-
-from tests.config.factories.container_factory import create_test_container
-from tests.config.fixtures.no_network import no_network
-
-from rpg_narrative_server.infrastructure.runtime.campaign_context import CampaignContext
-from rpg_narrative_server.interfaces.api.dependencies import (
-    get_container,
-    get_narrative_usecase,
-    get_roll_dice_usecase,
-)
 
 
 # ---------------------------------------------------------
@@ -51,7 +44,7 @@ from rpg_narrative_server.interfaces.api.dependencies import (
 def reset_global_state():
 
     # reset container singleton
-    import importlib
+
     c = importlib.import_module("rpg_narrative_server.bootstrap.container")
     c._container = None
 
@@ -89,8 +82,6 @@ def container_factory():
 @pytest.fixture
 def app(container):
 
-    from rpg_narrative_server.app import create_app
-
     app = create_app()
 
     # container override
@@ -117,13 +108,15 @@ def reset_campaign_context():
     ctx = CampaignContext()
     ctx.reset()
 
+
 def pytest_addoption(parser):
     parser.addoption(
         "--update-golden",
         action="store_true",
         default=False,
-        help="Update golden snapshot files"
+        help="Update golden snapshot files",
     )
+
 
 @pytest.fixture
 def update_golden(request):

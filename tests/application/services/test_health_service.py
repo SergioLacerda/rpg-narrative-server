@@ -1,5 +1,4 @@
 import pytest
-import asyncio
 
 from rpg_narrative_server.application.services.health_service import HealthService
 
@@ -34,7 +33,6 @@ class AsyncEnsureIndex:
 class FailingIndex:
     def ensure_ann_ready(self):
         raise Exception("fail")
-
 
 
 def test_is_alive():
@@ -115,8 +113,11 @@ async def test_status_not_ready():
 
 @pytest.mark.asyncio
 async def test_status_component_types():
-    class Embedding: pass
-    class Storage: pass
+    class Embedding:
+        pass
+
+    class Storage:
+        pass
 
     container = DummyContainer(
         vector_index=NoEnsureIndex(),

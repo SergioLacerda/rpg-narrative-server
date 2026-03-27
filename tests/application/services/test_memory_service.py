@@ -21,10 +21,12 @@ async def test_load_memory_empty():
 @pytest.mark.asyncio
 async def test_load_memory_with_events():
     repo = MagicMock()
-    repo.get_events = AsyncMock(return_value=[
-        {"text": "event1"},
-        {"text": "event2"},
-    ])
+    repo.get_events = AsyncMock(
+        return_value=[
+            {"text": "event1"},
+            {"text": "event2"},
+        ]
+    )
 
     service = MemoryService(repo)
 
@@ -36,9 +38,11 @@ async def test_load_memory_with_events():
 @pytest.mark.asyncio
 async def test_load_memory_missing_text_field():
     repo = MagicMock()
-    repo.get_events = AsyncMock(return_value=[
-        {"foo": "bar"},
-    ])
+    repo.get_events = AsyncMock(
+        return_value=[
+            {"foo": "bar"},
+        ]
+    )
 
     service = MemoryService(repo)
 
@@ -61,8 +65,7 @@ async def test_save_memory():
     await service.save_memory("camp", memory)
 
     repo.save_events.assert_called_once_with(
-        "camp",
-        [{"text": "event1"}, {"text": "event2"}]
+        "camp", [{"text": "event1"}, {"text": "event2"}]
     )
 
 
@@ -82,9 +85,7 @@ async def test_append_new_memory():
 @pytest.mark.asyncio
 async def test_append_existing_memory():
     repo = MagicMock()
-    repo.get_events = AsyncMock(return_value=[
-        {"text": "old"}
-    ])
+    repo.get_events = AsyncMock(return_value=[{"text": "old"}])
     repo.save_events = AsyncMock()
 
     service = MemoryService(repo)

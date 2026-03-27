@@ -6,13 +6,14 @@ from rpg_narrative_server.frameworks.discord.utils import (
     get_campaign_id,
     get_user_id,
     send_long_response,
-    MAX_MESSAGE_LEN
+    MAX_MESSAGE_LEN,
 )
 
 
 # ----------------------------------------
 # get_campaign_id
 # ----------------------------------------
+
 
 def test_campaign_id_from_guild():
     ctx = make_ctx()
@@ -37,6 +38,7 @@ def test_campaign_id_dm():
 # get_user_id
 # ----------------------------------------
 
+
 def test_get_user_id():
     ctx = make_ctx()
     ctx.author.id = "abc"
@@ -47,6 +49,7 @@ def test_get_user_id():
 # ----------------------------------------
 # send_long_response
 # ----------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_send_long_response_short():

@@ -70,8 +70,7 @@ class GeminiEmbeddingProvider(EmbeddingGateway):
 
         async def call():
             resp = await asyncio.wait_for(
-                asyncio.to_thread(_call),
-                timeout=self.timeout
+                asyncio.to_thread(_call), timeout=self.timeout
             )
 
             vec = resp["embedding"]
@@ -86,10 +85,7 @@ class GeminiEmbeddingProvider(EmbeddingGateway):
             return await resilient_call([call])
 
         except Exception:
-            logger.exception(
-                "Gemini embedding failed (len=%s)",
-                len(text)
-            )
+            logger.exception("Gemini embedding failed (len=%s)", len(text))
             raise
 
     # ---------------------------------------------------------
@@ -112,6 +108,7 @@ class GeminiEmbeddingProvider(EmbeddingGateway):
                 return await self.embed(t)
 
         return await asyncio.gather(*[safe_embed(t) for t in texts])
+
 
 def create_gemini_embedding(**kwargs):
     return GeminiEmbeddingProvider(

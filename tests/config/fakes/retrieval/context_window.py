@@ -1,4 +1,3 @@
-
 class DummyContextWindow:
     def __init__(self):
         self.policy_called_with = None

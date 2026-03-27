@@ -51,9 +51,7 @@ class HybridFusionStage:
             timeline = []
 
             for doc_id in candidates:
-                timeline.extend(
-                    temporal.causal_chain(doc_id, depth=2)
-                )
+                timeline.extend(temporal.causal_chain(doc_id, depth=2))
 
             if timeline:
                 sources.append(timeline)

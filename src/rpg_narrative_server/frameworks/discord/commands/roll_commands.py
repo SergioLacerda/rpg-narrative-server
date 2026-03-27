@@ -26,9 +26,7 @@ def register_roll_command(bot, usecases, executor):
         async def handler():
 
             try:
-                result = await usecases.roll_dice.execute(
-                    expression=expression
-                )
+                result = await usecases.roll_dice.execute(expression=expression)
             except Exception:
                 logger.exception("Roll usecase failed")
                 raise

@@ -1,5 +1,6 @@
 from rpg_narrative_server.vector_index.utils.similarity import cosine_similarity
 
+
 class LazyVectorSimilarity:
     """
     Calcula similaridade vetorial sob demanda (lazy).
@@ -32,4 +33,3 @@ class LazyVectorSimilarity:
         self._cache[doc_id] = score
 
         return score
-

@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from rpg_narrative_server.infrastructure.storage.json_utils import read_json, write_json
 
 

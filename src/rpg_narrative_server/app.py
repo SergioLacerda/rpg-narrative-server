@@ -10,6 +10,7 @@ from rpg_narrative_server.shared.logging.config import setup_logging
 
 setup_logging()
 
+
 def create_app() -> FastAPI:
 
     app = FastAPI(

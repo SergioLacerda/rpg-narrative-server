@@ -1,5 +1,6 @@
 # tests/config/harness/retrieval.py
 
+
 class RetrievalHarness:
 
     def __init__(self, docs=None):
@@ -10,16 +11,20 @@ class RetrievalHarness:
 
     def build(self):
 
-        from rpg_narrative_server.application.services.retrieval_pipeline import RetrievalService
+        from rpg_narrative_server.application.services.retrieval_pipeline import (
+            RetrievalService,
+        )
 
-        self.selector = type("Selector", (), {
-            "select": lambda _, docs: docs[:2]
-        })()
+        self.selector = type("Selector", (), {"select": lambda _, docs: docs[:2]})()
 
-        self.context_window = type("CW", (), {
-            "get_policy": lambda _, q: {"limit": 1},
-            "apply": lambda _, docs, policy: docs[:1],
-        })()
+        self.context_window = type(
+            "CW",
+            (),
+            {
+                "get_policy": lambda _, q: {"limit": 1},
+                "apply": lambda _, docs, policy: docs[:1],
+            },
+        )()
 
         return RetrievalService(
             vector_index=self.vector_index,

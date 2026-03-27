@@ -1,5 +1,6 @@
 # vector_index/ann/hnsw_adapter.py
 
+
 class HNSWAdapter:
     """
     Adapter para integrar HNSW ao pipeline do VectorIndex.
@@ -18,8 +19,5 @@ class HNSWAdapter:
 
         results = self.index.search(q_vec, k)
 
-        #TODO: sua implementação retorna objetos → normalizar
-        return [
-            d["id"] if isinstance(d, dict) else d
-            for d in results
-        ]
+        # TODO: sua implementação retorna objetos → normalizar
+        return [d["id"] if isinstance(d, dict) else d for d in results]

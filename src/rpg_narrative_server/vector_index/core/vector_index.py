@@ -13,6 +13,7 @@ logger = logging.getLogger("rpg_narrative_server.vector_index")
 # PIPELINE DEPS
 # ==========================================================
 
+
 @dataclass
 class PipelineDeps:
     vector_store: Any
@@ -31,6 +32,7 @@ class PipelineDeps:
 # ==========================================================
 # ENGINE
 # ==========================================================
+
 
 class VectorIndex:
 
@@ -92,9 +94,7 @@ class VectorIndex:
             return self._fallback_ann
 
         if hasattr(self.vector_store, "search"):
-            logger.warning(
-                "ANN not configured — using vector_store.search (slow path)"
-            )
+            logger.warning("ANN not configured — using vector_store.search (slow path)")
 
             class VectorStoreANN:
                 def __init__(self, store):

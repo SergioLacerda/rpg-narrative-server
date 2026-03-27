@@ -1,3 +1,6 @@
+from cachetools import TTLCache
+
+
 class EmbeddingCache:
 
     def __init__(self, client):
@@ -20,4 +23,5 @@ class EmbeddingCache:
 
     def _key(self, text: str):
         import hashlib
+
         return hashlib.sha1(text.strip().lower().encode()).hexdigest()

@@ -17,7 +17,9 @@ class CommandExecutor:
         logger.info("[EXECUTOR] START")
 
         try:
-            logger.info(f"⏱️ [EXECUTOR] timeout={self.settings.runtime.execution_timeout}")
+            logger.info(
+                f"⏱️ [EXECUTOR] timeout={self.settings.runtime.execution_timeout}"
+            )
 
             result = await self._run_with_trace(fn)
 

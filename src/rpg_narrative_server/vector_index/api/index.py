@@ -1,5 +1,6 @@
 # vector_index/api/index.py
 
+
 class VectorIndexAPI:
 
     def __init__(self, engine):

@@ -9,6 +9,7 @@ class LLMError(Exception):
 # CLIENT ERRORS (não retry)
 # ---------------------------------------------------------
 
+
 class LLMClientError(LLMError):
     def __init__(self, message: str, *, code: str = None):
         super().__init__(message)
@@ -18,6 +19,7 @@ class LLMClientError(LLMError):
 # ---------------------------------------------------------
 # RETRYABLE ERRORS
 # ---------------------------------------------------------
+
 
 class LLMRetryableError(LLMError):
     """

@@ -56,14 +56,12 @@ class MemoryService:
 
         if len(memory.recent_events) > self.max_events:
 
-            overflow = memory.recent_events[:-self.max_events]
-            recent = memory.recent_events[-self.max_events:]
+            overflow = memory.recent_events[: -self.max_events]
+            recent = memory.recent_events[-self.max_events :]
 
             if self.summarizer and len(overflow) >= 3:
 
-                raw_text = self.summarizer.extract(
-                    [{"text": e} for e in overflow]
-                )
+                raw_text = self.summarizer.extract([{"text": e} for e in overflow])
 
                 if self.llm:
 

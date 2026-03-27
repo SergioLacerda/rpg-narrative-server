@@ -20,9 +20,7 @@ async def test_narrative_calls_llm():
 
     memory_service = DummyMemoryService(history=["look around"])
 
-    context_builder = ContextBuilder(
-        memory_service=memory_service
-    )
+    context_builder = ContextBuilder(memory_service=memory_service)
 
     usecase = NarrativeUseCase(
         repo=None,
@@ -48,11 +46,7 @@ async def test_narrative_calls_llm():
 
     usecase.context_builder.build = fake_build
 
-    await usecase.execute(
-        campaign_id="c",
-        action="enter room",
-        user_id="u"
-    )
+    await usecase.execute(campaign_id="c", action="enter room", user_id="u")
 
     prompt = llm.calls[-1]
 

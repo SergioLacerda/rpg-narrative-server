@@ -44,8 +44,7 @@ class MessageService:
         if not campaign_id:
             if self.runtime.should_warn(channel_id, 30):
                 await ctx.send(
-                    "🎲 Nenhuma campanha ativa.\n"
-                    "Use `/campaign switch <nome>`"
+                    "🎲 Nenhuma campanha ativa.\n" "Use `/campaign switch <nome>`"
                 )
             return
 
@@ -108,7 +107,7 @@ class MessageService:
                     content,
                     user_id,
                     intent,  # 🔥 agora passamos intent
-                )
+                ),
             )
 
     # ---------------------------------------------------------
@@ -180,4 +179,4 @@ class MessageService:
             return
 
         for i in range(0, len(response), 1900):
-            await ctx.send(response[i:i + 1900])
+            await ctx.send(response[i : i + 1900])

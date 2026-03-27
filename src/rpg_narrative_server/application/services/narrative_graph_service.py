@@ -1,4 +1,3 @@
-
 class NarrativeGraphService:
     """
     Orquestra graph + extractor + repository.

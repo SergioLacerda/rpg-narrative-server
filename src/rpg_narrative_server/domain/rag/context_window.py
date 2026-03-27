@@ -37,26 +37,26 @@ class DynamicContextWindow:
         # ---------------------------------------------------------
 
         self.vocabulary = {
-
             "combat": {
-                "atacar", "ataque", "golpe", "lutar",
-                "attack", "fight", "strike", "combat"
+                "atacar",
+                "ataque",
+                "golpe",
+                "lutar",
+                "attack",
+                "fight",
+                "strike",
+                "combat",
             },
-
-            "dialogue": {
-                "pergunto", "falo", "digo",
-                "ask", "tell", "say", "talk"
-            },
-
+            "dialogue": {"pergunto", "falo", "digo", "ask", "tell", "say", "talk"},
             "investigation": {
-                "investigo", "procuro", "pista",
-                "investigate", "search", "clue"
+                "investigo",
+                "procuro",
+                "pista",
+                "investigate",
+                "search",
+                "clue",
             },
-
-            "exploration": {
-                "exploro", "entro", "vasculho",
-                "explore", "enter", "look"
-            }
+            "exploration": {"exploro", "entro", "vasculho", "explore", "enter", "look"},
         }
 
     # ---------------------------------------------------------

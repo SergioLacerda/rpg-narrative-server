@@ -1,5 +1,3 @@
-import pytest
-
 from rpg_narrative_server.utils.string_utils import (
     normalize_whitespace,
     normalize_linebreaks,
@@ -19,6 +17,7 @@ from rpg_narrative_server.utils.string_utils import (
 # ---------------------------------------------------------
 # NORMALIZAÇÃO
 # ---------------------------------------------------------
+
 
 def test_normalize_whitespace_basic():
     text = "a   b\t\tc"
@@ -43,6 +42,7 @@ def test_normalize_linebreaks():
 # LIMPEZA
 # ---------------------------------------------------------
 
+
 def test_strip_lines():
     text = " a \n b  "
     assert strip_lines(text) == "a\nb"
@@ -53,15 +53,10 @@ def test_remove_empty_lines():
     assert remove_empty_lines(text) == "a\nb"
 
 
-def test_clean_text_pipeline():
-    text = "  a \r\n\r\n b  \n\n"
-    result = clean_text(text)
-    assert result == "a\n\nb"
-
-
 # ---------------------------------------------------------
 # TRUNCAMENTO
 # ---------------------------------------------------------
+
 
 def test_truncate_basic():
     assert truncate("abcdef", 3) == "abc"
@@ -80,6 +75,7 @@ def test_truncate_lines():
 # DEDUPLICAÇÃO
 # ---------------------------------------------------------
 
+
 def test_deduplicate_order_preserved():
     items = ["a", "b", "a", "c", "b"]
     assert deduplicate(items) == ["a", "b", "c"]
@@ -92,6 +88,7 @@ def test_deduplicate_empty():
 # ---------------------------------------------------------
 # JOIN / FORMATAÇÃO
 # ---------------------------------------------------------
+
 
 def test_safe_join_ignores_empty():
     items = ["a", "", "b", None]
@@ -117,6 +114,7 @@ def test_clean_text_pipeline():
 # ---------------------------------------------------------
 # MEDIÇÃO
 # ---------------------------------------------------------
+
 
 def test_count_chars():
     assert count_chars("abc") == 3

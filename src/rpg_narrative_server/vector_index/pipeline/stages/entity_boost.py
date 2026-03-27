@@ -6,6 +6,7 @@ class EntityProvider:
     Interface esperada:
     - get_entities() -> set[str]
     """
+
     def get_entities(self) -> set[str]:
         raise NotImplementedError
 
@@ -45,9 +46,7 @@ class EntityBoost:
     # ---------------------------------------------------------
 
     def batch_score(
-        self,
-        query_tokens: Iterable[str],
-        docs_tokens: list[Iterable[str]]
+        self, query_tokens: Iterable[str], docs_tokens: list[Iterable[str]]
     ) -> list[float]:
 
         entities = self.entity_provider.get_entities()

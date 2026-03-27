@@ -1,4 +1,3 @@
-
 class DummySelector:
     def __init__(self):
         self.received = None

@@ -42,10 +42,7 @@ class TTLCache:
         if not keys:
             return
 
-        samples = random.sample(
-            keys,
-            min(len(keys), self.cleanup_samples)
-        )
+        samples = random.sample(keys, min(len(keys), self.cleanup_samples))
 
         for k in samples:
 
@@ -114,7 +111,7 @@ class TTLCache:
     def peek(self, key: str):
         entry = self._data.get(key)
         return entry["value"] if entry else None
-    
+
     def items(self):
         """
         Itera sobre os valores válidos (não expirados).

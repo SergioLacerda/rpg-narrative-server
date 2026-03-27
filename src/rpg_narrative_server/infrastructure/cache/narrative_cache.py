@@ -72,10 +72,7 @@ class NarrativeLRUCache:
 
         now = time.time()
 
-        expired = [
-            k for k, (_, exp) in self.store.items()
-            if exp and now > exp
-        ]
+        expired = [k for k, (_, exp) in self.store.items() if exp and now > exp]
 
         for k in expired:
             self.store.pop(k, None)

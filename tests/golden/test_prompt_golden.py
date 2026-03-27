@@ -41,6 +41,7 @@ def build_prompt(ctx: dict, action: str) -> str:
 # HISTORY
 # ---------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_prompt_with_history_golden():
 
@@ -63,15 +64,13 @@ async def test_prompt_with_history_golden():
 
     assert_prompt_structure(prompt)
 
-    assert_golden(
-        GOLDEN_DIR / "with_history.txt",
-        prompt,
-        update=UPDATE_GOLDEN
-    )
+    assert_golden(GOLDEN_DIR / "with_history.txt", prompt, update=UPDATE_GOLDEN)
+
 
 # ---------------------------------------------------------
 # MEMORY
 # ---------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_prompt_with_memory_golden():
@@ -94,8 +93,4 @@ async def test_prompt_with_memory_golden():
 
     assert_prompt_structure(prompt)
 
-    assert_golden(
-        GOLDEN_DIR / "with_memory.txt",
-        prompt,
-        update=UPDATE_GOLDEN
-    )
+    assert_golden(GOLDEN_DIR / "with_memory.txt", prompt, update=UPDATE_GOLDEN)

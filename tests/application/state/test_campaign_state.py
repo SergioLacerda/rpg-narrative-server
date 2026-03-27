@@ -7,6 +7,7 @@ from rpg_narrative_server.application.state.campaign_state import CampaignState
 # FIXTURE
 # ---------------------------------------------------------
 
+
 @pytest.fixture
 def state():
     return CampaignState()
@@ -15,6 +16,7 @@ def state():
 # ---------------------------------------------------------
 # TESTES
 # ---------------------------------------------------------
+
 
 def test_initial_state_is_empty(state):
     assert state.get("channel_1") is None

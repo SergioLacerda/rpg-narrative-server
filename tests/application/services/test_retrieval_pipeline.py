@@ -1,6 +1,8 @@
 import pytest
 
-from rpg_narrative_server.application.services.retrieval_pipeline import RetrievalService
+from rpg_narrative_server.application.services.retrieval_pipeline import (
+    RetrievalService,
+)
 from tests.config.fakes.retrieval import (
     DummyVectorIndex,
     DummySelector,

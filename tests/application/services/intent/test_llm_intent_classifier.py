@@ -2,7 +2,9 @@ import pytest
 
 from tests.config.fakes.llm.llm import DummyLLM
 
-from rpg_narrative_server.application.services.intent.llm_intent_classifier import LLMIntentClassifier
+from rpg_narrative_server.application.services.intent.llm_intent_classifier import (
+    LLMIntentClassifier,
+)
 
 
 @pytest.mark.asyncio
@@ -78,6 +80,7 @@ def test_rule_based_none():
 
     assert clf._rule_based("texto neutro") is None
 
+
 @pytest.mark.asyncio
 async def test_llm_empty_response():
     class FakeLLM:
@@ -128,5 +131,3 @@ async def test_llm_exception():
     result = await clf.classify("teste")
 
     assert result == "CHAT"
-
-

@@ -11,5 +11,4 @@ class ANN(Protocol):
     - Nunca retorna objetos pesados
     """
 
-    def search(self, query_vector: list[float], k: int = 10) -> list[str]:
-        ...
+    def search(self, query_vector: list[float], k: int = 10) -> list[str]: ...

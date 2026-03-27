@@ -1,4 +1,3 @@
-
 class DummyRetrieval:
     def __init__(self, result=None):
         self.result = result or []
