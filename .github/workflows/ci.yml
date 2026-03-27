@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
 
 jobs:
@@ -16,39 +16,36 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
+      # 📥 Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 🐍 Setup Python + cache automático
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Install dependencies (lightweight)
+      # 📦 Instala dependências (profile leve)
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -e .[ci]
 
+      # 🔍 Lint
       - name: Lint (ruff)
         run: ruff check .
 
+      # 🎨 Format check
       - name: Format check (black)
         run: black --check .
 
+      # 🧠 Type check (não bloqueante)
       - name: Type check (mypy)
         run: mypy src || true
 
-      - name: Debug container file
-        run: |
-          echo "---- container.py ----"
-          sed -n '1,80p' src/rpg_narrative_server/bootstrap/container.py
-
-      - name: Debug chroma backend
-        run: |
-          echo "---- chroma_backend.py ----"
-          sed -n '1,40p' src/rpg_narrative_server/infrastructure/storage/backends/chroma_backend.py
-          
+      # 🧪 Testes + coverage
       - name: Run tests with coverage
         env:
           DISCORD_TOKEN: test-token
@@ -57,12 +54,12 @@ jobs:
           EMBEDDING_PROVIDER: mock
         run: pytest --cov=src/rpg_narrative_server --cov-report=xml --cov-report=term
 
+      # 📊 Upload coverage (apenas Linux)
       - name: Upload coverage to Codecov
         if: matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v4
         with:
-          files: ./coverage.xml
-          verbose: true
+          files: coverage.xml
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -72,17 +69,22 @@ jobs:
     needs: test
 
     steps:
+      # 📥 Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 🐳 Setup buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image (with cache)
+      # 🐳 Build com cache (sem push ainda)
+      - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: false
+          load: true
           tags: rpg-narrative-server:latest
+          platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max

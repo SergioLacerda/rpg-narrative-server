@@ -21,11 +21,8 @@ dependencies = [
     "openai>=1.51,<2.0",
     "tenacity>=9.0,<10.0",
 
-    # compatibilidade com chroma + torch
+    # compatível com tudo
     "numpy>=1.26,<2.0",
-
-    # ANN
-    "hnswlib>=0.8,<1.0",
 ]
 
 # ---------------------------------------------------------
@@ -33,9 +30,10 @@ dependencies = [
 # ---------------------------------------------------------
 [project.optional-dependencies]
 
-# 🔹 Vector DB
+# 🔹 Vector DB (inclui ANN)
 vector-db = [
-    "chromadb>=0.4.24,<0.6"
+    "chromadb>=0.4.24,<0.6",
+    "hnswlib>=0.8,<1.0"
 ]
 
 # 🔹 Embeddings locais
@@ -44,11 +42,12 @@ local = [
     "sentence-transformers>=2.7,<3.0",
 ]
 
-# 🔹 Full stack
+# 🔹 Full stack (DEV pesado)
 full = [
+    "chromadb>=0.4.24,<0.6",
+    "hnswlib>=0.8,<1.0",
     "torch>=2.2,<3.0",
     "sentence-transformers>=2.7,<3.0",
-    "chromadb>=0.4.24,<0.6"
 ]
 
 # 🔹 Testes
@@ -60,20 +59,29 @@ test = [
     "pytest-mock>=3.14,<4.0",
 ]
 
-# 🔹 Desenvolvimento (local)
+# 🔹 Desenvolvimento
 dev = [
     "black>=24.0,<25.0",
     "ruff>=0.6,<1.0",
     "mypy>=1.10,<2.0",
 ]
 
-# 🔹 CI (leve + completo)
+# 🔹 CI (leve)
 ci = [
     "rpg_narrative_server[test]",
-    "chromadb>=0.4.24,<0.6",
     "black>=24.0,<25.0",
     "ruff>=0.6,<1.0",
     "mypy>=1.10,<2.0",
 ]
 
-# ---------------
+dev-cpu = [
+    "chromadb>=0.4.24,<0.6",
+    "hnswlib>=0.8,<1.0",
+    "sentence-transformers>=2.7,<3.0",
+]
+
+# ---------------------------------------------------------
+# CLI
+# ---------------------------------------------------------
+[project.scripts]
+rpg_narrative_server = "rpg_narrative_server.app:run"
