@@ -30,19 +30,19 @@ RPG Narrative Server is a **modular narrative engine** powered by:
 
 ### 🇧🇷 Português
 
-- 📚 docs/pt-br/README.md
-- ⚙️ docs/pt-br/setup.md
-- 🧠 docs/pt-br/architecture.md
-- 🔎 docs/pt-br/rag_pipeline.md
-- 📊 docs/pt-br/benchmark.md
+- 📚 [docs/pt-br/README.md](docs/pt-br/README.md)
+- ⚙️ [docs/pt-br/setup.md](docs/pt-br/setup.md)
+- 🧠 [docs/pt-br/architecture.md](docs/pt-br/architecture.md)
+- 🔎 [docs/pt-br/rag_pipeline.md](docs/pt-br/rag_pipeline.md)
+- 📊 [docs/pt-br/benchmark.md](docs/pt-br/benchmark.md)
 
 ### 🇺🇸 English
 
-- 📚 docs/en/README.md
-- ⚙️ docs/en/setup.md
-- 🧠 docs/en/architecture.md
-- 🔎 docs/en/rag_pipeline.md
-- 📊 docs/en/benchmark.md
+- 📚 [docs/en/README.md](docs/en/README.md)
+- ⚙️ [docs/en/setup.md](docs/en/setup.md)
+- 🧠 [docs/en/architecture.md](docs/en/architecture.md)
+- 🔎 [docs/en/rag_pipeline.md](docs/en/rag_pipeline.md)
+- 📊 [docs/en/benchmark.md](docs/en/benchmark.md)
 
 ---
 
