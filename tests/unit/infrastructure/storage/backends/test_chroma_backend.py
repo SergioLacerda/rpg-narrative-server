@@ -1,3 +1,8 @@
+import pytest
+
+pytest.importorskip("chromadb")
+
+
 def test_chroma_backend_builds():
 
     from rpg_narrative_server.infrastructure.storage.backends.chroma_backend import (
