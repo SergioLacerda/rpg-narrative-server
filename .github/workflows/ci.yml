@@ -67,23 +67,49 @@ jobs:
           ENVIRONMENT: test
           LLM_PROVIDER: mock
           EMBEDDING_PROVIDER: mock
-        run: pytest -n auto --dist=worksteal --cov=src/rpg_narrative_server --cov-report=xml --cov-report=term
+        run: pytest -n auto --dist=worksteal --cov=src/rpg_narrative_server --cov-report=term
+
+      # 🔥 salva coverage binário (necessário para merge)
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.os }}
+          path: .coverage
 
 # ---------------------------------------------------------
-# 📊 COVERAGE (Linux apenas)
+# 📊 COVERAGE (combined Linux + Windows)
 # ---------------------------------------------------------
   coverage:
-    name: Coverage Upload
+    name: Coverage (combined)
     runs-on: ubuntu-latest
     needs: test
 
     steps:
-      - uses: actions/checkout@v4
+      # 🔽 baixa artifacts dos testes
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: coverage
 
+      # 🔍 debug (útil se algo quebrar)
+      - name: Debug files
+        run: ls -R coverage
+
+      # 🧠 instala coverage
+      - name: Install coverage
+        run: python -m pip install coverage
+
+      # 🔗 combina coverage dos OS
+      - name: Combine coverage
+        run: |
+          coverage combine coverage
+          coverage xml -o combined.xml
+
+      # 📊 upload para codecov
       - name: Upload coverage
         uses: codecov/codecov-action@v4
         with:
-          files: coverage.xml
+          files: combined.xml
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
