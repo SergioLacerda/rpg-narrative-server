@@ -66,8 +66,7 @@ dev = [
     "ruff>=0.6,<1.0",
     "mypy>=1.10,<2.0",
     "types-cachetools",
-    "pre-commit>=3.8,<4.0",
-    "pygments>=2.19.3"
+    "pre-commit>=3.8,<4.0"
 ]
 
 ci = [
@@ -78,7 +77,6 @@ ci = [
     "types-cachetools",
     "import-linter>=2.0,<3.0",
     "pip-audit>=2.7,<3.0",
-    "pygments>=2.19.3"
 ]
 
 # ---------------------------------------------------------

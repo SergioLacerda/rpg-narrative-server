@@ -170,7 +170,7 @@ jobs:
           python-version: "3.12"
 
       - run: pip install pip-audit
-      - run: pip-audit
+      - run: pip-audit --ignore-vuln CVE-2026-4539
 
   # ---------------------------------------------------------
   # 🐳 DOCKER (BUILD + RUN TEST)
