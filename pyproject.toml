@@ -144,6 +144,14 @@ exclude_lines = [
 [tool.coverage.xml]
 output = "coverage.xml"
 
+[tool.coverage.paths]
+source = [
+    "src/rpg_narrative_server",
+    # Linux CI runner
+    "*/rpg-narrative-server/src/rpg_narrative_server",
+    # Windows CI runner
+    "*\\rpg-narrative-server\\src\\rpg_narrative_server",
+]
 # ---------------------------------------------------------
 # 🧠 MYPY
 # ---------------------------------------------------------
