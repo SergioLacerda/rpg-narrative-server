@@ -60,27 +60,17 @@ jobs:
           ENVIRONMENT: test
           LLM_PROVIDER: mock
           EMBEDDING_PROVIDER: mock
-        run: pytest -n auto --dist=worksteal --cov=src/rpg_narrative_server --cov-report=term-missing --cov-report=xml --cov-fail-under=50
+        run: pytest -n auto --dist=worksteal --cov=rpg_narrative_server --cov-report=term-missing --cov-report=xml --cov-fail-under=50
 
-      - name: Debug coverage linux
-        if: runner.os != 'Windows'
-        run: |
-          echo "Arquivos gerados:"
-          ls
-          find . -name ".coverage*"
-
-      - name: Debug coverage windows
-        if: runner.os == 'Windows'
-        run: |
-          echo "Arquivos gerados:"
-          Get-ChildItem -Force
-          Get-ChildItem -Recurse -Filter ".coverage*"
+      # 🔥 GARANTE que .coverage existe
+      - name: Combine coverage locally
+        run: coverage combine || true
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-${{ matrix.os }}-${{ matrix.python-version }}
-          path: .coverage*
+          path: .coverage
 
   # ---------------------------------------------------------
   # 📊 COVERAGE CONSOLIDADO
@@ -108,12 +98,6 @@ jobs:
         run: |
           echo "Arquivos encontrados:"
           find . -name ".coverage*"
-
-          echo "Normalizando arquivos..."
-          find . -name ".coverage*" -exec cp {} . \;
-
-          echo "Após normalização:"
-          ls -la
 
           coverage combine
 
@@ -188,6 +172,7 @@ jobs:
           docker run -d -p 8000:8000 \
             -e DISCORD_TOKEN=test-token \
             -e ENVIRONMENT=prod \
+            -e STORAGE=memory \
             --name app rpg-narrative-server:ci
           sleep 5
 
