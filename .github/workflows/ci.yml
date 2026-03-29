@@ -62,11 +62,19 @@ jobs:
           EMBEDDING_PROVIDER: mock
         run: pytest -n auto --dist=worksteal --cov=src/rpg_narrative_server --cov-report=term-missing --cov-report=xml --cov-fail-under=50
 
-      - name: Debug coverage files
+      - name: Debug coverage linux
+        if: runner.os != 'Windows'
         run: |
           echo "Arquivos gerados:"
-          ls -la
+          ls
           find . -name ".coverage*"
+
+      - name: Debug coverage windows
+        if: runner.os == 'Windows'
+        run: |
+          echo "Arquivos gerados:"
+          Get-ChildItem -Force
+          Get-ChildItem -Recurse -Filter ".coverage*"
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
