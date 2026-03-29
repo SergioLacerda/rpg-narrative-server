@@ -62,6 +62,12 @@ jobs:
           EMBEDDING_PROVIDER: mock
         run: pytest -n auto --dist=worksteal --cov=src/rpg_narrative_server --cov-report=term-missing --cov-report=xml --cov-fail-under=50
 
+      - name: Debug coverage files
+        run: |
+          echo "Arquivos gerados:"
+          ls -la
+          find . -name ".coverage*"
+
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
@@ -84,12 +90,24 @@ jobs:
       - name: Install coverage
         run: pip install coverage
 
+      - name: Debug downloaded files
+        run: |
+          echo "Arquivos após download:"
+          ls -la
+          find . -name ".coverage*"
+
       - name: Combine coverage
         run: |
           echo "Arquivos encontrados:"
           find . -name ".coverage*"
 
-          coverage combine $(find . -name ".coverage*" -exec dirname {} \; | sort -u) || echo "combine failed"
+          echo "Normalizando arquivos..."
+          find . -name ".coverage*" -exec cp {} . \;
+
+          echo "Após normalização:"
+          ls -la
+
+          coverage combine
 
           coverage report --fail-under=80
           coverage xml -o combined.xml
