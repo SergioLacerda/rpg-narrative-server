@@ -92,12 +92,7 @@ jobs:
           ENVIRONMENT: test
           LLM_PROVIDER: mock
           EMBEDDING_PROVIDER: mock
-        run: |
-          pytest -n auto --dist=worksteal \
-            --cov=src/rpg_narrative_server \
-            --cov-report=term-missing \
-            --cov-report=xml \
-            --cov-fail-under=50
+        run: pytest -n auto --dist=worksteal --cov=src/rpg_narrative_server --cov-report=term-missing --cov-append --cov-fail-under=50
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
@@ -154,6 +149,9 @@ jobs:
 
       - name: Run architecture validation
         run: lint-imports
+        env:
+          PYTHONPATH: src
+
 
   # ---------------------------------------------------------
   # 🔐 SECURITY CHECK
