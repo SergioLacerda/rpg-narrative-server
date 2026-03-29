@@ -1,12 +1,12 @@
 import asyncio
 import logging
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from enum import Enum
+from enum import StrEnum
 
 logger = logging.getLogger("rpg_narrative_server")
 
 
-class ExecutorType(str, Enum):
+class ExecutorType(StrEnum):
     THREAD = "thread"
     PROCESS = "process"
 
