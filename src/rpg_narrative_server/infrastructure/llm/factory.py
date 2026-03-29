@@ -1,34 +1,65 @@
-# src/rpg_narrative_server/infrastructure/llm/factory.py
-
-from rpg_narrative_server.config.loader import Settings
+from rpg_narrative_server.config.profile import ProfileConfig
 
 
-def create_llm_provider(settings: Settings):
-    s = settings.llm
+def create_llm_provider(settings: ProfileConfig):
+    provider = settings.llm_provider.lower()
 
-    if s.provider == "openai":
+    # ---------------------------------------------------------
+    # OPENAI
+    # ---------------------------------------------------------
+    if provider == "openai":
         from rpg_narrative_server.infrastructure.llm.openai_provider import OpenAIProvider
 
         return OpenAIProvider(
-            api_key=s.api_key,
-            model=s.model,
-            base_url=s.base_url,
+            api_key=settings.llm_api_key,
+            model=settings.llm_model,
+            base_url=settings.llm_base_url,
         )
 
-    if s.provider == "lmstudio":
+    # ---------------------------------------------------------
+    # LM STUDIO
+    # ---------------------------------------------------------
+    if provider == "lmstudio":
         from rpg_narrative_server.infrastructure.llm.lmstudio_provider import LMStudioProvider
 
         return LMStudioProvider(
-            model=s.model,
-            base_url=s.base_url,
+            model=settings.llm_model,
+            base_url=settings.llm_base_url,
         )
 
-    if s.provider == "ollama":
+    # ---------------------------------------------------------
+    # OLLAMA
+    # ---------------------------------------------------------
+    if provider == "ollama":
         from rpg_narrative_server.infrastructure.llm.ollama_provider import OllamaProvider
 
         return OllamaProvider(
-            model=s.model,
-            base_url=s.base_url,
+            model=settings.llm_model,
+            base_url=settings.llm_base_url,
         )
 
-    raise ValueError(f"Unknown LLM provider: {s.provider}")
+    # ---------------------------------------------------------
+    # GROQ
+    # ---------------------------------------------------------
+    if provider == "groq":
+        from rpg_narrative_server.infrastructure.llm.groq_provider import GroqProvider
+
+        return GroqProvider(
+            api_key=settings.llm_api_key,
+            model=settings.llm_model,
+        )
+
+    # ---------------------------------------------------------
+    # ANTHROPIC
+    # ---------------------------------------------------------
+    if provider == "anthropic":
+        from rpg_narrative_server.infrastructure.llm.anthropic_provider import AnthropicProvider
+
+        return AnthropicProvider(
+            api_key=settings.llm_api_key,
+            model=settings.llm_model,
+        )
+
+    raise ValueError(
+        f"Unknown LLM provider: {provider!r}. " f"Valid: openai, lmstudio, ollama, groq, anthropic"
+    )

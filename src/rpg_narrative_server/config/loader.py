@@ -1,19 +1,9 @@
 import logging
 import os
 from functools import lru_cache
-from typing import cast
 
 from rpg_narrative_server.config.env_loader import load_environment
-from rpg_narrative_server.config.profile import load_profile
-from rpg_narrative_server.config.settings import (
-    AppSettings,
-    EmbeddingProfile,
-    EmbeddingSettings,
-    LLMSettings,
-    RuntimeSettings,
-    Settings,
-)
-from rpg_narrative_server.config.types import EmbeddingDefaults, LLMProvider
+from rpg_narrative_server.config.profile import ProfileConfig, build_profile, get_profile_defaults
 
 # ---------------------------------------------------------
 # bootstrap ENV
@@ -30,125 +20,66 @@ if device == "cpu":
 # ---------------------------------------------------------
 
 
-def _get(name: str, default: str | None = None) -> str | None:
-    return os.getenv(name, default)
+def _get(name: str) -> str | None:
+    """Campos opcionais — pode ser None."""
+    return os.getenv(name)
+
+
+def _get_str(name: str, default: str) -> str:
+    """Campos obrigatórios — nunca None."""
+    return os.getenv(name, default) or default
 
 
 def _get_int(name: str, default: int) -> int:
     try:
-        return int(os.getenv(name, default))
+        return int(os.getenv(name, str(default)))
     except Exception:
         return default
 
 
-def _require(name: str) -> str:
-    value = _get(name)
-    if not value:
-        raise RuntimeError(f"Missing env variable: {name}")
-    return value
-
-
 def _get_log_level() -> int:
-    level = os.getenv("LOG_LEVEL", "INFO").upper()
-    return getattr(logging, level, logging.INFO)
-
-
-def _get_embedding_defaults(profile_embedding: str) -> EmbeddingDefaults:
-    if profile_embedding == "local":
-        return {
-            "provider": "sentence",
-            "model": "intfloat/e5-base-v2",
-            "dimension": 768,
-        }
-
-    return {
-        "provider": "openai",
-        "model": "text-embedding-3-small",
-        "dimension": 1536,
-    }
-
-
-def _validate_llm_provider(value: str) -> LLMProvider:
-    if value not in {"openai", "lmstudio", "ollama", "groq", "anthropic"}:
-        raise ValueError(f"Invalid LLM provider: {value}")
-
-    return cast(LLMProvider, value)
+    return getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper(), logging.INFO)
 
 
 # ---------------------------------------------------------
-# settings loader
+# ponto único de entrada para todo o sistema
 # ---------------------------------------------------------
 
 
 @lru_cache
-def load_settings() -> Settings:
-    # -----------------------------------------------------
-    # profile (fonte de verdade)
-    # -----------------------------------------------------
-    profile_config = load_profile()
-    embedding_profile = cast(EmbeddingProfile, profile_config.embedding)
+def load_settings() -> ProfileConfig:
+    profile_name = _get_str("APP_PROFILE", "local")
+    d = get_profile_defaults(profile_name)
 
-    # -----------------------------------------------------
-    # embedding defaults (derivado do profile)
-    # -----------------------------------------------------
-    embedding_defaults = _get_embedding_defaults(profile_config.embedding)
-
-    # -----------------------------------------------------
-    # EMBEDDING
-    # -----------------------------------------------------
-    embedding_provider = (
-        _get("EMBEDDING_PROVIDER", embedding_defaults["provider"]) or embedding_defaults["provider"]
+    return build_profile(
+        # perfil
+        profile=profile_name,
+        # storage
+        storage=_get_str("STORAGE", str(d["storage"])),
+        campaign_file=_get_str("CAMPAIGN_PATH", "./data"),
+        max_file_size_kb=_get_int("MAX_FILE_SIZE_KB", 1024),
+        max_entries_per_file=_get_int("MAX_ENTRIES_PER_FILE", 5000),
+        # LLM
+        llm_provider=_get_str("LLM_PROVIDER", str(d["llm_provider"])),
+        llm_model=_get_str("LLM_MODEL", str(d["llm_model"])),
+        llm_api_key=_get("LLM_API_KEY"),
+        llm_base_url=_get("LLM_BASE_URL"),
+        llm_timeout=_get_int("LLM_TIMEOUT", 180),
+        # embeddings
+        embedding_provider=_get_str("EMBEDDING_PROVIDER", str(d["embedding_provider"])),
+        embedding_model=_get_str("EMBEDDING_MODEL", str(d["embedding_model"])),
+        embedding_api_key=_get("EMBEDDING_API_KEY"),
+        embedding_base_url=_get("EMBEDDING_BASE_URL"),
+        embedding_dim=_get_int("EMBEDDING_DIMENSION", int(d["embedding_dim"])),
+        embedding_batch=_get_int("EMBEDDING_BATCH_SIZE", 32),
+        # runtime
+        environment=ENVIRONMENT,
+        device=_get("DEVICE"),
+        log_level=_get_log_level(),
+        max_cache_size=_get_int("MAX_CACHE_SIZE", 10000),
+        # discord
+        discord_enable=_get("DISCORD_ENABLE"),
+        discord_token=_get("DISCORD_TOKEN"),
+        discord_public_key=_get("DISCORD_PUBLIC_KEY"),
+        discord_app_id=_get("DISCORD_APPLICATION_ID"),
     )
-
-    embedding_model = (
-        _get("EMBEDDING_MODEL", embedding_defaults["model"]) or embedding_defaults["model"]
-    )
-
-    embedding_dimension = _get_int("EMBEDDING_DIMENSION", embedding_defaults["dimension"])
-
-    # -----------------------------------------------------
-    # SETTINGS FINAL
-    # -----------------------------------------------------
-    settings = Settings(
-        runtime=RuntimeSettings(
-            environment=ENVIRONMENT,
-            device=_get("DEVICE"),
-            log_level=_get_log_level(),
-            execution_timeout=_get_int("LLM_TIMEOUT", 180),
-        ),
-        llm=LLMSettings(
-            provider=_validate_llm_provider(_get("LLM_PROVIDER", "openai") or "openai"),
-            model=_get("LLM_MODEL", "gpt-4o-mini") or "gpt-4o-mini",
-            api_key=_get("LLM_API_KEY"),
-            base_url=_get("LLM_BASE_URL"),
-        ),
-        embeddings=EmbeddingSettings(
-            profile=embedding_profile,
-            provider=embedding_provider,
-            model=embedding_model,
-            api_key=_get("EMBEDDING_API_KEY"),
-            base_url=_get("EMBEDDING_BASE_URL"),
-            batch_size=_get_int("EMBEDDING_BATCH_SIZE", 32),
-            dimension=embedding_dimension,
-        ),
-        app=AppSettings(
-            discord_token=_get("DISCORD_TOKEN"),
-            max_cache_size=_get_int("MAX_CACHE_SIZE", 10000),
-            campaign_file=_get("CAMPAIGN_PATH", "./data") or "./data",
-            storage=profile_config.storage,
-        ),
-    )
-
-    # -----------------------------------------------------
-    # validação leve
-    # -----------------------------------------------------
-    if settings.embeddings.provider not in {
-        "openai",
-        "sentence",
-        "ollama",
-        "lmstudio",
-        "gemini",
-    }:
-        raise ValueError(f"Invalid embedding provider: {settings.embeddings.provider}")
-
-    return settings

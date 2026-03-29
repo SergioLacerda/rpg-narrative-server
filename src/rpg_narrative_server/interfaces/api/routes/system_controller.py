@@ -7,13 +7,12 @@ router = APIRouter()
 
 @router.get("/system/config")
 def get_config():
-    settings = load_settings()
-
+    profile = load_settings()
     return {
-        "environment": settings.runtime.environment,
-        "storage": settings.app.storage,
-        "embedding_provider": settings.embeddings.provider,
-        "embedding_model": settings.embeddings.model,
-        "llm_provider": settings.llm.provider,
-        "llm_model": settings.llm.model,
+        "environment": profile.environment,
+        "storage": profile.storage,
+        "llm_provider": profile.llm_provider,
+        "llm_model": profile.llm_model,
+        "embedding_provider": profile.embedding_provider,
+        "embedding_model": profile.embedding_model,
     }

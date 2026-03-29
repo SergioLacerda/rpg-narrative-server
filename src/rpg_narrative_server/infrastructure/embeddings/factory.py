@@ -1,14 +1,9 @@
-# src/rpg_narrative_server/infrastructure/embeddings/factory.py
-
-from rpg_narrative_server.application.ports.embedding_gateway import (
-    EmbeddingGateway,
-)
-from rpg_narrative_server.config.loader import Settings
+from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGateway
+from rpg_narrative_server.config.profile import ProfileConfig
 
 
-def create_embedding(settings: Settings) -> EmbeddingGateway:
-    s = settings
-    provider = s.llm.provider.lower()
+def create_embedding(settings: ProfileConfig) -> EmbeddingGateway:
+    provider = settings.embedding_provider.lower()
 
     # ---------------------------------------------------------
     # LOCAL (sentence-transformers)
@@ -19,8 +14,8 @@ def create_embedding(settings: Settings) -> EmbeddingGateway:
         )
 
         return SentenceEmbeddingProvider(
-            model=s.embeddings.model or "all-MiniLM-L6-v2",
-            device=s.runtime.device,
+            model=settings.embedding_model or "all-MiniLM-L6-v2",
+            device=settings.device,
         )
 
     # ---------------------------------------------------------
@@ -32,9 +27,9 @@ def create_embedding(settings: Settings) -> EmbeddingGateway:
         )
 
         return OpenAIEmbeddingProvider(
-            api_key=s.embeddings.api_key,
-            model=s.embeddings.model,
-            base_url=s.embeddings.base_url,
+            api_key=settings.embedding_api_key,
+            model=settings.embedding_model,
+            base_url=settings.embedding_base_url,
         )
 
     # ---------------------------------------------------------
@@ -46,8 +41,8 @@ def create_embedding(settings: Settings) -> EmbeddingGateway:
         )
 
         return OllamaEmbeddingProvider(
-            model=s.embeddings.model,
-            base_url=s.embeddings.base_url,
+            model=settings.embedding_model,
+            base_url=settings.embedding_base_url,
         )
 
     # ---------------------------------------------------------
@@ -59,8 +54,8 @@ def create_embedding(settings: Settings) -> EmbeddingGateway:
         )
 
         return LMStudioEmbeddingProvider(
-            model=s.embeddings.model,
-            base_url=s.embeddings.base_url,
+            model=settings.embedding_model,
+            base_url=settings.embedding_base_url,
         )
 
     # ---------------------------------------------------------
@@ -72,8 +67,8 @@ def create_embedding(settings: Settings) -> EmbeddingGateway:
         )
 
         return GeminiEmbeddingProvider(
-            api_key=s.embeddings.api_key,
-            model=s.embeddings.model,
+            api_key=settings.embedding_api_key,
+            model=settings.embedding_model,
         )
 
     raise ValueError(f"Unknown embedding provider: {provider}")

@@ -81,12 +81,12 @@ class Container:
     # STORAGE
     # ==========================================================
     def _build_storage(self):
-        storage_type = self.settings.app.storage
-        base_path = Path(self.settings.app.campaign_file)
+        storage_type = self.settings.storage
+        base_path = Path(self.settings.campaign_file)
 
         config = VectorStoreConfig(
-            max_file_size_kb=self.settings.app.max_file_size_kb,
-            max_entries_per_file=self.settings.app.max_entries_per_file,
+            max_file_size_kb=self.settings.max_file_size_kb,
+            max_entries_per_file=self.settings.max_entries_per_file,
         )
 
         if storage_type == "json":
@@ -128,7 +128,6 @@ class Container:
     def llm(self):
         if self._llm_service is None:
             provider = create_llm_provider(self.settings)
-
             self._llm_service = LLMService(
                 provider=provider,
                 response_cache=self.response_cache,
@@ -150,11 +149,7 @@ class Container:
         if self._response_cache is None:
             path = Path("data/memory/response_cache.json")
             loader, saver = build_file_storage(path)
-
-            self._response_cache = ResponseCache(
-                loader=loader,
-                saver=saver,
-            )
+            self._response_cache = ResponseCache(loader=loader, saver=saver)
         return self._response_cache
 
     # ==========================================================
@@ -163,7 +158,7 @@ class Container:
     @property
     def campaign_repo(self):
         if self._campaign_repo is None:
-            self._campaign_repo = JSONCampaignRepository(Path(self.settings.app.campaign_file))
+            self._campaign_repo = JSONCampaignRepository(Path(self.settings.campaign_file))
         return self._campaign_repo
 
     @property
@@ -223,7 +218,6 @@ class Container:
     def intent_classifier(self):
         if self._intent_classifier is None:
             llm_intent = LLMIntentClassifier(lambda: self.llm)
-
             self._intent_classifier = IntentClassifier(
                 profiles=[PT_BR, EN],
                 llm_classifier=llm_intent,

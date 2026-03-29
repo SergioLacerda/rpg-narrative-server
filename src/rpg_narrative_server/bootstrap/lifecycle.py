@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     logger.info("🚀 Starting RPG Narrative Server")
 
     # --------------------------------------------------
-    # container (🔥 correto)
+    # container
     # --------------------------------------------------
     container = Container()
     app.state.container = container
@@ -34,43 +34,35 @@ async def lifespan(app: FastAPI):
     await container.vector_memory.start()
 
     # --------------------------------------------------
-    # warmup opcional (mantido)
+    # warmup opcional
     # --------------------------------------------------
     warmup_enabled = os.getenv("WARMUP_VECTOR_INDEX", "true").lower() == "true"
-
     if warmup_enabled:
         try:
             logger.info("🔥 Vector index warmup")
-
             vi = container.vector_index
-
             if hasattr(vi, "load"):
                 maybe = vi.load()
                 if asyncio.iscoroutine(maybe):
                     await maybe
-
             if hasattr(vi, "ensure_ann_ready"):
                 maybe = vi.ensure_ann_ready()
                 if asyncio.iscoroutine(maybe):
                     await maybe
-
         except Exception:
             logger.exception("❌ Warmup failed")
 
     # --------------------------------------------------
-    # discord (mantido)
+    # discord
     # --------------------------------------------------
     discord_enabled = os.getenv("ENABLE_DISCORD", "true").lower() == "true"
-
     bot = None
     task = None
-
-    token = container.settings.app.discord_token
+    token = container.settings.discord_token  # ProfileConfig.discord_token
 
     if discord_enabled and token:
         try:
             logger.info("🤖 Starting Discord bot")
-
             bot = create_bot(
                 settings=container.settings,
                 deps=CommandDependencies(
@@ -86,10 +78,8 @@ async def lifespan(app: FastAPI):
                 await bot.start(token)
 
             task = asyncio.create_task(run())
-
             app.state.discord_bot = bot
             app.state.discord_task = task
-
         except Exception:
             logger.exception("❌ Discord failed to start")
 
@@ -102,14 +92,12 @@ async def lifespan(app: FastAPI):
     # shutdown
     # --------------------------------------------------
     logger.info("🛑 Shutting down")
-
     if task:
         task.cancel()
         try:
             await task
         except asyncio.CancelledError:
             pass
-
     if bot:
         try:
             await bot.close()
