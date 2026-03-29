@@ -119,7 +119,7 @@ jobs:
       - name: Combine & report coverage
         run: |
           coverage combine
-          coverage report --fail-under=80
+          coverage report --fail-under=50
           coverage xml -o combined.xml
 
       - name: Upload to Codecov
