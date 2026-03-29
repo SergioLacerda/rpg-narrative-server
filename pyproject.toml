@@ -114,7 +114,11 @@ markers = [
 # ---------------------------------------------------------
 [tool.coverage.run]
 branch = true
-parallel = true
+# parallel = true removido — conflita com pytest-cov + pytest-xdist.
+# O pytest-cov já coordena os workers do xdist internamente e entrega
+# um único .coverage ao final. Com parallel=true ativo, os arquivos
+# parciais (.coverage.<host>.<pid>) nunca eram consolidados automaticamente,
+# impedindo o upload-artifact de encontrar o .coverage esperado.
 source = ["src/rpg_narrative_server"]
 omit = [
     "*/tests/*",
@@ -125,7 +129,10 @@ omit = [
 precision = 2
 show_missing = true
 skip_empty = true
-fail_under = 50
+# fail_under = 0 — o threshold real (65%) é aplicado no job `coverage`
+# do CI, que consolida os dados de todas as combinações OS × Python.
+# Manter fail_under aqui causaria falha duplicada e prematura no pytest.
+fail_under = 0
 
 exclude_lines = [
     "pragma: no cover",
