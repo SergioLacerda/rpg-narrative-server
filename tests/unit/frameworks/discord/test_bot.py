@@ -4,6 +4,7 @@ from discord.ext import commands
 from rpg_narrative_server.frameworks.discord.bot import create_bot
 from tests.config.factories.context import make_context
 from tests.config.factories.deps import make_deps
+from tests.config.helpers.discord_factory import DummySettings
 
 # ---------------------------------------------------------
 # HELPERS
@@ -12,9 +13,7 @@ from tests.config.factories.deps import make_deps
 
 def make_test_bot():
     return create_bot(
-        settings=type(
-            "Settings", (), {"runtime": type("Runtime", (), {"environment": "test"})()}
-        )(),
+        settings=DummySettings,
         deps=make_deps(),
     )
 

@@ -115,9 +115,8 @@ class DummyUsecase:
 
 
 class DummySettings:
-    class runtime:
-        execution_timeout = 10
-        environment = "test"
+    execution_timeout = 10
+    environment = "test"
 
 
 class DummyExecutor:
