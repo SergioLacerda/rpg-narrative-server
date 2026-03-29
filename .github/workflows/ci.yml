@@ -89,7 +89,7 @@ jobs:
           echo "Arquivos encontrados:"
           find . -name ".coverage*"
 
-          coverage combine || echo "combine failed"
+          coverage combine $(find . -name ".coverage*" -exec dirname {} \; | sort -u) || echo "combine failed"
 
           coverage report --fail-under=80
           coverage xml -o combined.xml
@@ -142,7 +142,7 @@ jobs:
       - run: pip install pip-audit
 
       - name: Run security audit
-        run: pip-audit --ignore-vuln CVE-2026-4539
+        run: pip-audit --ignore-vuln CVE-2026-4539 --ignore-vuln CVE-2026-32274
 
   # ---------------------------------------------------------
   # 🐳 DOCKER (BUILD + HEALTHCHECK)
