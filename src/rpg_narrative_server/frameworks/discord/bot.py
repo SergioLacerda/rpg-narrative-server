@@ -31,7 +31,7 @@ def create_bot(settings, deps, register_commands: bool = True) -> RPGDiscordBot:
     intents.message_content = True
 
     bot = RPGDiscordBot(command_prefix="!", intents=intents)
-    bot.debug = settings.runtime.environment != "prod"
+    bot.debug = settings.environment != "prod"
 
     # -------------------------------------------------
     # CORE (Application wiring)
@@ -65,7 +65,7 @@ def create_bot(settings, deps, register_commands: bool = True) -> RPGDiscordBot:
         logger.info(
             "Bot ready user=%s env=%s",
             bot.user,
-            settings.runtime.environment,
+            settings.environment,
         )
 
         try:

@@ -58,7 +58,7 @@ async def lifespan(app: FastAPI):
     discord_enabled = os.getenv("ENABLE_DISCORD", "true").lower() == "true"
     bot = None
     task = None
-    token = container.settings.discord_token  # ProfileConfig.discord_token
+    token = container.settings.discord_token
 
     if discord_enabled and token:
         try:
