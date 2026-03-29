@@ -62,49 +62,72 @@ jobs:
           EMBEDDING_PROVIDER: mock
         run: pytest -n auto --dist=worksteal --cov=rpg_narrative_server --cov-report=xml
 
-      - name: Ensure coverage file
-        run: |
-          coverage combine || true
-          coverage report
+      # pytest-xdist + parallel=true geram vários .coverage.<host>.<pid>
+      # combinamos aqui para garantir um único .coverage por runner
+      - name: Combine coverage (parallel workers)
+        run: coverage combine
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
+          # nome único por combinação de OS + Python para não colidir
           name: coverage-${{ matrix.os }}-${{ matrix.python-version }}
           path: .coverage
+          if-no-files-found: error   # falha cedo se o arquivo não existir
 
   # ---------------------------------------------------------
   # 📊 COVERAGE CONSOLIDADO
   # ---------------------------------------------------------
   coverage:
-  name: Coverage
-  runs-on: ubuntu-latest
-  needs: test
+    name: Coverage
+    runs-on: ubuntu-latest
+    needs: test
 
-  steps:
-    - uses: actions/download-artifact@v4
-      with:
-        path: .
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Install coverage
-      run: pip install coverage
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
 
-    - name: Combine coverage
-      run: |
-        echo "Arquivos encontrados:"
-        find . -name ".coverage*"
+      # Necessário para que o coverage entenda o source path igual ao dos runners
+      - name: Install package (sem deps pesadas)
+        run: pip install coverage -e .[ci]
 
-        coverage combine
+      # download-artifact@v4 sem 'name' baixa TODOS os artifacts,
+      # cada um numa subpasta: coverage-ubuntu-latest-3.11/.coverage etc.
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts          # diretório raiz dos downloads
 
-        coverage report --fail-under=80
-        coverage xml -o combined.xml
+      # Renomeia cada .coverage para um nome único antes de combinar
+      - name: Prepare coverage files
+        run: |
+          echo "Artifacts encontrados:"
+          find artifacts -name ".coverage" -type f
 
-    - name: Upload to Codecov (opcional)
-      uses: codecov/codecov-action@v4
-      with:
-        files: combined.xml
-        fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
+          i=0
+          while IFS= read -r f; do
+            cp "$f" ".coverage.part${i}"
+            i=$((i + 1))
+          done < <(find artifacts -name ".coverage" -type f)
+
+          echo "Arquivos prontos para combine:"
+          ls -la .coverage.part* 2>/dev/null || echo "Nenhum arquivo encontrado!"
+
+      - name: Combine & report coverage
+        run: |
+          coverage combine
+          coverage report --fail-under=80
+          coverage xml -o combined.xml
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: combined.xml
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   # ---------------------------------------------------------
   # 🧠 VALIDAR ARQUITETURA
@@ -168,6 +191,8 @@ jobs:
             -e DISCORD_TOKEN=test-token \
             -e ENVIRONMENT=prod \
             -e STORAGE=memory \
+            -e LLM_PROVIDER=mock \
+            -e EMBEDDING_PROVIDER=mock \
             --name app rpg-narrative-server:ci
           sleep 5
 
