@@ -185,20 +185,15 @@ jobs:
       - name: Run container
         run: |
           docker run -d -p 8000:8000 \
-            -e ENVIRONMENT=test \
-            -e ENABLE_DISCORD=false \
-            -e DISCORD_PUBLIC_KEY=test-public-key \
-            -e DISCORD_APPLICATION_ID=123456789 \
-            -e DISCORD_TOKEN=test-token \
+            -e APP_PROFILE=local \
+            -e STORAGE=memory \
             -e LLM_PROVIDER=ollama \
-            -e LLM_MODEL=llama3 \
             -e LLM_BASE_URL=http://localhost:11434 \
             -e EMBEDDING_PROVIDER=sentence \
-            -e EMBEDDING_MODEL=intfloat/e5-base-v2 \
-            -e EMBEDDING_PROFILE=local \
-            -e DEVICE=cpu \
-            -e STORAGE=memory \
-            -e CHROMA_PERSIST_DIR=/tmp/chroma \
+            -e ENABLE_DISCORD=false \
+            -e DISCORD_TOKEN=test-token \
+            -e DISCORD_PUBLIC_KEY=test-public-key \
+            -e DISCORD_APPLICATION_ID=123456789 \
             --name app rpg-narrative-server:ci
           sleep 5
 
