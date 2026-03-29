@@ -5,7 +5,6 @@ logger = logging.getLogger("rpg_narrative_server.discord")
 
 
 class CommandBus:
-
     def __init__(self, registry, executor):
         self.registry = registry
         self.executor = executor

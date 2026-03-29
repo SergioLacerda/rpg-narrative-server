@@ -10,7 +10,6 @@ class DiscordResponder:
         self.ctx = ctx
 
     async def send(self, content):
-
         if isinstance(content, Response):
             content = content.text
 

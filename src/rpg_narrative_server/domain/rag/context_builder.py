@@ -31,7 +31,6 @@ class ContextBuilder:
         retrieved: str | Iterable[str] | None = None,
         scene_type: str = "DEFAULT",
     ) -> tuple[dict[str, Any], Any]:
-
         # ----------------------------------
         # 1. MEMORY (com fallback seguro)
         # ----------------------------------

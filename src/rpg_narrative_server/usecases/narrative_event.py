@@ -55,7 +55,6 @@ class NarrativeUseCase:
     # ---------------------------------------------------------
 
     async def execute(self, campaign_id: str, action: str, user_id: str):
-
         logger.info("Narrative execution started")
 
         # -------------------------------------------------
