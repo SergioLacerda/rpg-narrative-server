@@ -53,9 +53,9 @@ dev-cpu = [
 ]
 
 test = [
-    "pytest>=8.3,<9.0",
-    "pytest-xdist>=3.5,<4.0",
-    "pytest-asyncio>=0.23,<0.25",
+    "pytest>=8.4,<9.0",
+    "pytest-xdist>=3.6,<4.0",
+    "pytest-asyncio>=0.24,<0.25",
     "pytest-cov>=5.0,<6.0",
     "pytest-mock>=3.14,<4.0",
 ]
@@ -67,6 +67,7 @@ dev = [
     "mypy>=1.10,<2.0",
     "types-cachetools",
     "pre-commit>=3.8,<4.0",
+    "pygments>=2.19.3"
 ]
 
 ci = [
@@ -77,6 +78,7 @@ ci = [
     "types-cachetools",
     "import-linter>=2.0,<3.0",
     "pip-audit>=2.7,<3.0",
+    "pygments>=2.19.3"
 ]
 
 # ---------------------------------------------------------
