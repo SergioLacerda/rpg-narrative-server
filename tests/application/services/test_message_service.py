@@ -1,13 +1,14 @@
-import pytest
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
+import pytest
+
+from rpg_narrative_server.application.contracts.response import Response
 from tests.config.harness.message import MessageHarness
+from tests.config.helpers.asserts import assert_response, assert_text
 
 
 def make_msg(content="attack"):
-    return type(
-        "Msg", (), {"content": content, "author": type("A", (), {"bot": False})}
-    )()
+    return type("Msg", (), {"content": content, "author": type("A", (), {"bot": False})})()
 
 
 @pytest.mark.asyncio
@@ -76,7 +77,7 @@ async def test_handle_success_flow():
 
     service = h.build()
 
-    await service.handle(msg, h.ctx)
+    await service.handle(msg, h.ctx, h.ctx)
 
     assert h.sent == ["ok"]
 
@@ -89,7 +90,7 @@ async def test_handle_no_campaign_warns():
 
     service = h.build()
 
-    await service.handle(msg, h.ctx)
+    await service.handle(msg, h.ctx, h.ctx)
 
     assert len(h.sent) == 1
     assert "Nenhuma campanha ativa" in h.sent[0]
@@ -103,7 +104,7 @@ async def test_handle_respects_cooldown():
 
     service = h.build()
 
-    await service.handle(msg, h.ctx)
+    await service.handle(msg, h.ctx, h.ctx)
 
     assert h.sent == []
 
@@ -116,7 +117,7 @@ async def test_handle_ignores_ooc_messages():
 
     service = h.build()
 
-    await service.handle(msg, h.ctx)
+    await service.handle(msg, h.ctx, h.ctx)
 
     assert h.sent == []
 
@@ -129,7 +130,7 @@ async def test_handle_respects_lock():
 
     service = h.build()
 
-    await service.handle(msg, h.ctx)
+    await service.handle(msg, h.ctx, h.ctx)
 
     assert h.sent == []
 
@@ -138,13 +139,11 @@ async def test_handle_respects_lock():
 async def test_handle_ignores_bot():
     h = MessageHarness()
 
-    msg = type(
-        "Msg", (), {"content": "attack", "author": type("A", (), {"bot": True})}
-    )()
+    msg = type("Msg", (), {"content": "attack", "author": type("A", (), {"bot": True})})()
 
     service = h.build()
 
-    await service.handle(msg, h.ctx)
+    await service.handle(msg, h.ctx, h.ctx)
 
     assert h.sent == []
 
@@ -157,7 +156,7 @@ async def test_handle_ignores_empty():
 
     service = h.build()
 
-    await service.handle(msg, h.ctx)
+    await service.handle(msg, h.ctx, h.ctx)
 
     assert h.sent == []
 
@@ -166,14 +165,11 @@ async def test_handle_ignores_empty():
 async def test_handle_intent_exception_fallback():
     h = MessageHarness()
 
-    # 🔥 sobrescreve o método
-    h.intent.classify = AsyncMock(side_effect=Exception())
+    with patch.object(h.intent, "classify", AsyncMock(side_effect=Exception())):
+        msg = make_msg()
+        service = h.build()
 
-    msg = make_msg()
-
-    service = h.build()
-
-    await service.handle(msg, h.ctx)
+        await service.handle(msg, h.ctx, h.ctx)
 
     assert h.sent != []
 
@@ -182,11 +178,11 @@ async def test_handle_intent_exception_fallback():
 async def test_execute_and_send_raises_on_failure():
     h = MessageHarness()
 
-    h.usecases.narrative.execute = AsyncMock(side_effect=Exception())
+    h.usecases.narrative.execute = AsyncMock(side_effect=ValueError())
 
     service = h.build()
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         await service._execute_and_send(
             h.ctx,
             "camp",
@@ -203,7 +199,7 @@ def test_adapt_response_unknown_intent():
 
     result = service._adapt_response_by_intent("hello", "UNKNOWN")
 
-    assert result == "hello"
+    assert_text(result, "hello")
 
 
 def test_adapt_response_empty():
@@ -213,25 +209,35 @@ def test_adapt_response_empty():
 
     result = service._adapt_response_by_intent("", "ACTION")
 
-    assert result == ""
+    assert_response(result)
+    assert result.text == ""
 
 
 def test_adapt_response_chat():
     h = MessageHarness()
     service = h.build()
 
-    assert service._adapt_response_by_intent("x", "CHAT") == "x"
+    result = service._adapt_response_by_intent("x", "CHAT")
+    assert_text(result, "x")
+    assert result.type == "chat"
 
 
 def test_adapt_response_exploration():
     h = MessageHarness()
     service = h.build()
 
-    assert service._adapt_response_by_intent("x", "EXPLORATION") == "x"
+    result = service._adapt_response_by_intent("x", "EXPLORATION")
+
+    assert isinstance(result, Response)
+    assert_text(result, "x")
+    assert result.type == "exploration"
 
 
 def test_adapt_response_action():
     h = MessageHarness()
     service = h.build()
 
-    assert service._adapt_response_by_intent("x", "ACTION") == "x"
+    result = service._adapt_response_by_intent("x", "ACTION")
+
+    assert_text(result, "x")
+    assert result.type == "action"

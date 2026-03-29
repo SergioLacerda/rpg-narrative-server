@@ -76,10 +76,7 @@ class HybridFusionStage:
         # deduplicação leve (🔥 importante)
         # ---------------------------------------------------------
 
-        sources = [
-            list(dict.fromkeys(src))  # mantém ordem e remove duplicados
-            for src in sources
-        ]
+        sources = [list(dict.fromkeys(src)) for src in sources]  # mantém ordem e remove duplicados
 
         # ---------------------------------------------------------
         # fusão final

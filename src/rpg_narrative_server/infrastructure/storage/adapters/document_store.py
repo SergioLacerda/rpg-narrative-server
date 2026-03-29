@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Any
 
 from rpg_narrative_server.vector_index.components import DocumentStore
 
@@ -19,7 +19,7 @@ class DocumentStoreAdapter(DocumentStore):
     # API
     # ---------------------------------------------------------
 
-    def set(self, doc_id: str, document: Dict[str, Any]) -> None:
+    def set(self, doc_id: str, document: dict[str, Any]) -> None:
         if not doc_id:
             raise ValueError("doc_id cannot be empty")
 
@@ -28,7 +28,7 @@ class DocumentStoreAdapter(DocumentStore):
 
         self._store.set(doc_id, document)
 
-    def get(self, doc_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, doc_id: str) -> dict[str, Any] | None:
         if not doc_id:
             return None
 

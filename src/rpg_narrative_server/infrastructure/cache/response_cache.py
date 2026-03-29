@@ -1,5 +1,4 @@
 import asyncio
-from typing import Optional
 
 
 class ResponseCache:
@@ -19,7 +18,7 @@ class ResponseCache:
 
         return self._cache
 
-    async def get(self, key: str) -> Optional[str]:
+    async def get(self, key: str) -> str | None:
         cache = await self._load()
         return cache.get(key)
 

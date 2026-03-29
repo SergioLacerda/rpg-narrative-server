@@ -1,13 +1,13 @@
-import pytest
 import asyncio
+
+import pytest
 
 from rpg_narrative_server.infrastructure.rag.retrieval_engine import RetrievalEngine
 from tests.config.fakes.retrieval import (
-    DummyIndex,
     DummyEmbeddingCache,
+    DummyIndex,
     DummySemanticCache,
 )
-
 
 # --------------------------------------------------
 # FIXTURE

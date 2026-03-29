@@ -1,22 +1,19 @@
 from dataclasses import dataclass
 from typing import Protocol
 
-
 # ---------------------------------------------------------
-# BASE NODE (AST)
+# BASE NODE
 # ---------------------------------------------------------
 
 
 class DiceNode:
-    """
-    Base class for all dice AST nodes.
-    """
+    """Base class for all dice AST nodes."""
 
-    pass
+    ...
 
 
 # ---------------------------------------------------------
-# CONDITION PROTOCOL
+# CONDITION
 # ---------------------------------------------------------
 
 
@@ -25,7 +22,7 @@ class DiceCondition(Protocol):
 
 
 # ---------------------------------------------------------
-# NODES
+# BASE ROLL
 # ---------------------------------------------------------
 
 
@@ -35,24 +32,36 @@ class RollNode(DiceNode):
     sides: int
 
 
+# ---------------------------------------------------------
+# OPERATIONS (PIPELINE)
+# ---------------------------------------------------------
+
+
 @dataclass(slots=True)
 class ExplodeNode(DiceNode):
-    child: DiceNode
+    child: "Node"
 
 
 @dataclass(slots=True)
 class RerollNode(DiceNode):
-    child: DiceNode
+    child: "Node"
     condition: DiceCondition
 
 
 @dataclass(slots=True)
 class KeepHighestNode(DiceNode):
-    child: DiceNode
+    child: "Node"
     k: int
 
 
 @dataclass(slots=True)
 class DropLowestNode(DiceNode):
-    child: DiceNode
+    child: "Node"
     k: int
+
+
+# ---------------------------------------------------------
+# UNION
+# ---------------------------------------------------------
+
+Node = RollNode | ExplodeNode | RerollNode | KeepHighestNode | DropLowestNode

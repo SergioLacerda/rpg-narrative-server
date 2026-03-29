@@ -1,8 +1,8 @@
 # src/rpg_narrative_server/infrastructure/events/narrative_handler.py
 
 import logging
-from rpg_narrative_server.domain.events.player_action import PlayerActionEvent
 
+from rpg_narrative_server.domain.events.player_action import PlayerActionEvent
 
 logger = logging.getLogger("rpg_narrative_server.events.narrative")
 

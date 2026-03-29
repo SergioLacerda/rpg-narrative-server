@@ -1,5 +1,5 @@
-from rpg_narrative_server.domain.narrative.narrative_memory import NarrativeMemory
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
+from rpg_narrative_server.domain.narrative.narrative_memory import NarrativeMemory
 
 
 class MemoryService:
@@ -19,6 +19,9 @@ class MemoryService:
         self.compressor = compressor or self._default_compress
 
     # ---------------------------------------------------------
+
+    def create_empty(self) -> NarrativeMemory:
+        return NarrativeMemory()
 
     async def load_memory(self, campaign_id: str) -> NarrativeMemory:
         data = await self.repo.get_events(campaign_id)

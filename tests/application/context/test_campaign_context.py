@@ -2,7 +2,6 @@ from pathlib import Path
 
 from rpg_narrative_server.application.context.campaign_context import CampaignContext
 
-
 # ---------------------------------------------------------
 # TESTES
 # ---------------------------------------------------------

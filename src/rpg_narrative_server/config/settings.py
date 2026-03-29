@@ -1,7 +1,6 @@
-from dataclasses import dataclass
-from typing import Optional, Literal
 import logging
-
+from dataclasses import dataclass
+from typing import Literal
 
 StorageType = Literal["json", "chroma", "memory"]
 EmbeddingProfile = Literal["local", "hybrid", "cloud"]
@@ -16,8 +15,8 @@ EmbeddingProfile = Literal["local", "hybrid", "cloud"]
 class LLMSettings:
     provider: Literal["openai", "lmstudio", "ollama", "groq", "anthropic"]
     model: str
-    api_key: Optional[str] = None
-    base_url: Optional[str] = None
+    api_key: str | None = None
+    base_url: str | None = None
 
 
 # ==========================================================
@@ -32,11 +31,11 @@ class EmbeddingSettings:
     provider: str
     model: str
 
-    api_key: Optional[str] = None
-    base_url: Optional[str] = None
+    api_key: str | None = None
+    base_url: str | None = None
 
     batch_size: int = 32
-    dimension: Optional[int] = None
+    dimension: int | None = None
 
 
 # ==========================================================
@@ -47,7 +46,7 @@ class EmbeddingSettings:
 @dataclass(frozen=True)
 class RuntimeSettings:
     environment: str
-    device: Optional[str] = None
+    device: str | None = None
     log_level: int = logging.INFO
     execution_timeout: int = 180
 

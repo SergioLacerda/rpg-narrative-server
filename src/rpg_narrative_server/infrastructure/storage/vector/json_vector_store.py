@@ -1,11 +1,11 @@
-from pathlib import Path
-import numpy as np
 from datetime import datetime
+from pathlib import Path
+
+import numpy as np
 
 from rpg_narrative_server.infrastructure.storage.vector_store_config import (
     VectorStoreConfig,
 )
-
 from rpg_narrative_server.vector_index.storage.json_utils import load_json, save_json
 
 # ---------------------------------------------------------
@@ -43,9 +43,7 @@ class JSONVectorStore:
         if self.config.enable_rotation:
             size_kb = self._get_file_size_kb(self.path)
 
-            if size_kb > self.config.max_file_size_kb or self._should_rotate(
-                self._cache
-            ):
+            if size_kb > self.config.max_file_size_kb or self._should_rotate(self._cache):
                 self._rotate_file()
 
         save_json(self.path, self._cache)

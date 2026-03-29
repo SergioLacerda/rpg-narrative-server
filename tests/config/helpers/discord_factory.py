@@ -50,6 +50,12 @@ class DummyChannel:
         pass
 
 
+class DummyServices:
+    def __init__(self):
+        self.campaign_state = {}
+        self.intent_classifier = None
+
+
 class DummyAuthor:
     def __init__(self, user_id="user1"):
         self.id = user_id
@@ -111,6 +117,7 @@ class DummyUsecase:
 class DummySettings:
     class runtime:
         execution_timeout = 10
+        environment = "test"
 
 
 class DummyExecutor:

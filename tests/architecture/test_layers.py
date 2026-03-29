@@ -1,14 +1,15 @@
 # tests/architecture/test_layers.py
-
 from pathlib import Path
 
-from .utils import extract_imports
-from .rules import RULES
+import pytest
 
+from .rules import RULES
+from .utils import extract_imports
 
 SRC = Path("src/rpg_narrative_server")
 
 
+@pytest.mark.architecture
 def get_layer(file: Path) -> str:
     path = str(file)
 
@@ -29,6 +30,7 @@ def get_layer(file: Path) -> str:
 SRC = Path("src/rpg_narrative_server")
 
 
+@pytest.mark.architecture
 def test_layer_dependencies():
     errors = []
 
@@ -48,13 +50,12 @@ def test_layer_dependencies():
                     if any(imp.startswith(a) for a in allowed):
                         continue
 
-                    errors.append(
-                        f"{file} → {layer} cannot depend on {forbidden} ({imp})"
-                    )
+                    errors.append(f"{file} → {layer} cannot depend on {forbidden} ({imp})")
 
     assert not errors, "\n".join(errors)
 
 
+@pytest.mark.architecture
 def test_no_cross_layer_leak():
     errors = []
 

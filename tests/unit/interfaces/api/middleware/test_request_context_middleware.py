@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import pytest
 from starlette.responses import Response
 
@@ -6,10 +8,14 @@ from rpg_narrative_server.interfaces.api.middleware.request_context_middleware i
     request_context_middleware,
 )
 
-
 # ---------------------------------------------------------
 # DUMMIES
 # ---------------------------------------------------------
+
+
+class FakeRequest:
+    def __init__(self, container):
+        self.app = SimpleNamespace(state=SimpleNamespace(container=container))
 
 
 class DummyRequest:
@@ -42,7 +48,11 @@ class DummyContainer:
 def fake_container(monkeypatch):
     container = DummyContainer()
 
-    monkeypatch.setattr(dependencies, "get_container", lambda: container)
+    monkeypatch.setattr(
+        dependencies,
+        "get_container",
+        lambda *args, **kwargs: container,
+    )
 
     return container
 
@@ -77,34 +87,41 @@ async def test_request_context_exception():
 
 
 def test_get_narrative(fake_container):
-    assert dependencies.get_narrative_usecase() == "narrative"
+    request = FakeRequest(fake_container)
+
+    assert dependencies.get_narrative_usecase(request) == "narrative"
 
 
 def test_get_roll_dice(fake_container):
-    assert dependencies.get_roll_dice_usecase() == "dice"
+    request = FakeRequest(fake_container)
+
+    assert dependencies.get_roll_dice_usecase(request) == "dice"
 
 
 def test_get_end_session(fake_container):
-    assert dependencies.get_end_session_usecase() == "end"
+    request = FakeRequest(fake_container)
+
+    assert dependencies.get_end_session_usecase(request) == "end"
 
 
 def test_get_event_bus(fake_container):
-    assert dependencies.get_event_bus() == "bus"
+    request = FakeRequest(fake_container)
+
+    assert dependencies.get_event_bus(request) == "bus"
 
 
 @pytest.mark.asyncio
 async def test_get_health_service(fake_container):
-    service = dependencies.get_health_service()
+    request = FakeRequest(fake_container)
+
+    service = dependencies.get_health_service(request)
 
     assert await service.is_ready() is True
 
 
-def test_get_health_service_fallback(monkeypatch):
-    class NoHealthContainer:
-        pass
+def test_get_health_service_fallback():
+    request = FakeRequest(container=None)
 
-    monkeypatch.setattr(dependencies, "get_container", lambda: NoHealthContainer())
-
-    service = dependencies.get_health_service()
+    service = dependencies.get_health_service(request)
 
     assert hasattr(service, "is_ready")

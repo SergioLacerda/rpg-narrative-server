@@ -1,4 +1,5 @@
 from typing import Any
+
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
 
 

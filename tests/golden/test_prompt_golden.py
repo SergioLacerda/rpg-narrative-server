@@ -1,14 +1,11 @@
-import pytest
-
 from pathlib import Path
 
-from tests.config.helpers.golden_assert import assert_golden, normalize
+import pytest
 
-from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
 from rpg_narrative_server.domain.narrative.narrative_builder import NarrativeBuilder
-
+from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
 from tests.config.fakes.narrative.memory_service import DummyMemoryService
-
+from tests.config.helpers.golden_assert import assert_golden, normalize
 
 GOLDEN_DIR = Path(__file__).parent / "prompts"
 UPDATE_GOLDEN = False
@@ -39,12 +36,13 @@ def build_prompt(ctx: dict, action: str) -> str:
 
 
 @pytest.mark.asyncio
+@pytest.mark.golden
 async def test_prompt_with_history_golden():
     memory_service = DummyMemoryService(history=["open door"])
 
     context_builder = ContextBuilder(memory_service=memory_service)
 
-    ctx = await context_builder.build(
+    ctx, _ = await context_builder.build(
         campaign_id="test",
         action="enter room",
         history=["open door", "look around"],
@@ -68,12 +66,13 @@ async def test_prompt_with_history_golden():
 
 
 @pytest.mark.asyncio
+@pytest.mark.golden
 async def test_prompt_with_memory_golden():
     memory_service = DummyMemoryService(history=["abriu a porta"])
 
     context_builder = ContextBuilder(memory_service=memory_service)
 
-    ctx = await context_builder.build(
+    ctx, _ = await context_builder.build(
         campaign_id="test",
         action="entrar na sala",
         history=["abriu a porta"],

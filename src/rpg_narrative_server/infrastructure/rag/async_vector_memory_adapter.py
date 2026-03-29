@@ -1,6 +1,6 @@
 import asyncio
-import uuid
 import time
+import uuid
 
 
 class AsyncVectorMemoryAdapter:
@@ -62,7 +62,7 @@ class AsyncVectorMemoryAdapter:
                 )
                 buffer.append(item)
 
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 pass
 
             now = time.time()

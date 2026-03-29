@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 SRC_PATH = Path("src")
 
 FORBIDDEN = [

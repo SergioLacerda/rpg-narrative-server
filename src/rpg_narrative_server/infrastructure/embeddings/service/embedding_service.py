@@ -1,12 +1,11 @@
 import asyncio
 import logging
-from typing import Sequence, Iterable, List
+from collections.abc import Iterable, Sequence
 
 from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGateway
 from rpg_narrative_server.infrastructure.embeddings.core.fallback import (
     deterministic_vector,
 )
-
 
 logger = logging.getLogger("rpg_narrative_server.embedding")
 
@@ -31,15 +30,15 @@ class EmbeddingService:
     # internal
     # -----------------------------------------
 
-    def _fallback(self, text: str) -> List[float]:
+    def _fallback(self, text: str) -> list[float]:
         logger.debug("Embedding fallback → deterministic")
         return deterministic_vector(text, self.target_dim)
 
-    async def _call_provider(self, provider, text: str) -> List[float]:
+    async def _call_provider(self, provider, text: str) -> list[float]:
         async with self._semaphore:
             return await provider.embed(text)
 
-    def _validate_vector(self, vec: List[float], provider_name: str) -> List[float]:
+    def _validate_vector(self, vec: list[float], provider_name: str) -> list[float]:
         if not isinstance(vec, list):
             raise RuntimeError(f"{provider_name} returned invalid vector type")
 
@@ -60,7 +59,7 @@ class EmbeddingService:
     # single
     # -----------------------------------------
 
-    async def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> list[float]:
         text = (text or "").strip()
 
         if not text:
@@ -109,7 +108,7 @@ class EmbeddingService:
     # batch
     # -----------------------------------------
 
-    async def embed_batch(self, texts: Iterable[str]) -> List[List[float]]:
+    async def embed_batch(self, texts: Iterable[str]) -> list[list[float]]:
         texts = [(t or "").strip() for t in texts]
 
         if not texts:

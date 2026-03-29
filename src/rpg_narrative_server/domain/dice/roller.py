@@ -1,6 +1,7 @@
 # domain/dice/rules.py
-from .value_objects import DiceExpression
 from rpg_narrative_server.domain.random.random_provider import RandomProvider
+
+from .value_objects import DiceExpression
 
 
 def roll_dice(expr: DiceExpression, rng: RandomProvider) -> int:

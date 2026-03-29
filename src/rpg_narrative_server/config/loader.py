@@ -1,20 +1,19 @@
-import os
 import logging
+import os
 from functools import lru_cache
 from typing import cast
 
-from rpg_narrative_server.config.types import EmbeddingDefaults, LLMProvider
 from rpg_narrative_server.config.env_loader import load_environment
 from rpg_narrative_server.config.profile import load_profile
-
 from rpg_narrative_server.config.settings import (
-    Settings,
-    RuntimeSettings,
-    LLMSettings,
-    EmbeddingSettings,
     AppSettings,
+    EmbeddingProfile,
+    EmbeddingSettings,
+    LLMSettings,
+    RuntimeSettings,
+    Settings,
 )
-
+from rpg_narrative_server.config.types import EmbeddingDefaults, LLMProvider
 
 # ---------------------------------------------------------
 # bootstrap ENV
@@ -23,10 +22,8 @@ from rpg_narrative_server.config.settings import (
 ENVIRONMENT, ENV_FILES, CLI_OVERRIDES = load_environment()
 
 device = os.getenv("DEVICE", "").lower()
-
 if device == "cpu":
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
-
 
 # ---------------------------------------------------------
 # helpers
@@ -74,6 +71,7 @@ def _get_embedding_defaults(profile_embedding: str) -> EmbeddingDefaults:
 def _validate_llm_provider(value: str) -> LLMProvider:
     if value not in {"openai", "lmstudio", "ollama", "groq", "anthropic"}:
         raise ValueError(f"Invalid LLM provider: {value}")
+
     return cast(LLMProvider, value)
 
 
@@ -84,12 +82,33 @@ def _validate_llm_provider(value: str) -> LLMProvider:
 
 @lru_cache
 def load_settings() -> Settings:
-    profile = load_profile()
+    # -----------------------------------------------------
+    # profile (fonte de verdade)
+    # -----------------------------------------------------
+    profile_config = load_profile()
+    embedding_profile = cast(EmbeddingProfile, profile_config.embedding)
 
-    embedding_defaults = _get_embedding_defaults(profile.embedding)
+    # -----------------------------------------------------
+    # embedding defaults (derivado do profile)
+    # -----------------------------------------------------
+    embedding_defaults = _get_embedding_defaults(profile_config.embedding)
 
-    provider = _get("EMBEDDING_PROVIDER", embedding_defaults["provider"])
+    # -----------------------------------------------------
+    # EMBEDDING
+    # -----------------------------------------------------
+    embedding_provider = (
+        _get("EMBEDDING_PROVIDER", embedding_defaults["provider"]) or embedding_defaults["provider"]
+    )
 
+    embedding_model = (
+        _get("EMBEDDING_MODEL", embedding_defaults["model"]) or embedding_defaults["model"]
+    )
+
+    embedding_dimension = _get_int("EMBEDDING_DIMENSION", embedding_defaults["dimension"])
+
+    # -----------------------------------------------------
+    # SETTINGS FINAL
+    # -----------------------------------------------------
     settings = Settings(
         runtime=RuntimeSettings(
             environment=ENVIRONMENT,
@@ -104,24 +123,25 @@ def load_settings() -> Settings:
             base_url=_get("LLM_BASE_URL"),
         ),
         embeddings=EmbeddingSettings(
-            profile=profile.embedding,
-            provider=provider or "openai",
-            model=_get("EMBEDDING_MODEL", embedding_defaults["model"])
-            or embedding_defaults["model"],
+            profile=embedding_profile,
+            provider=embedding_provider,
+            model=embedding_model,
             api_key=_get("EMBEDDING_API_KEY"),
             base_url=_get("EMBEDDING_BASE_URL"),
             batch_size=_get_int("EMBEDDING_BATCH_SIZE", 32),
-            dimension=_get_int("EMBEDDING_DIMENSION", embedding_defaults["dimension"]),
+            dimension=embedding_dimension,
         ),
         app=AppSettings(
             discord_token=_require("DISCORD_TOKEN"),
             max_cache_size=_get_int("MAX_CACHE_SIZE", 10000),
             campaign_file=_get("CAMPAIGN_PATH", "./data") or "./data",
-            storage=profile.storage,
+            storage=profile_config.storage,
         ),
     )
 
+    # -----------------------------------------------------
     # validação leve
+    # -----------------------------------------------------
     if settings.embeddings.provider not in {
         "openai",
         "sentence",

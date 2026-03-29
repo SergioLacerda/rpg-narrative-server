@@ -1,6 +1,6 @@
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Protocol, runtime_checkable, Iterable, Any, Optional
-
+from typing import Any, Protocol, runtime_checkable
 
 # ==========================================================
 # PROTOCOLS (CONTRATOS)
@@ -120,8 +120,8 @@ class VectorIndexComponents:
     # narrativa (opcional)
     # ---------------------------------------------------------
 
-    temporal_index: Optional[Any] = None
-    causal_graph: Optional[Any] = None
+    temporal_index: Any | None = None
+    causal_graph: Any | None = None
 
     # ---------------------------------------------------------
     # config
@@ -133,7 +133,7 @@ class VectorIndexComponents:
     # opcionais (🔥 SEMPRE NO FINAL)
     # ---------------------------------------------------------
 
-    cluster_router: Optional[ClusterRouter] = None
+    cluster_router: ClusterRouter | None = None
 
     # ==========================================================
     # VALIDATION
@@ -171,21 +171,15 @@ class VectorIndexComponents:
         assert isinstance(self.stage2_ranker, Ranker), "Invalid stage2_ranker"
 
         # classifier
-        assert isinstance(
-            self.query_classifier, QueryClassifier
-        ), "Invalid query_classifier"
+        assert isinstance(self.query_classifier, QueryClassifier), "Invalid query_classifier"
 
         # ANN
         assert isinstance(self.ivf_builder, IVFBuilder), "Invalid ivf_builder"
         assert isinstance(self.ivf_router, IVFRouter), "Invalid ivf_router"
 
         # clustering
-        assert isinstance(
-            self.cluster_manager, ClusterManager
-        ), "Invalid cluster_manager"
+        assert isinstance(self.cluster_manager, ClusterManager), "Invalid cluster_manager"
 
         # opcional
         if self.cluster_router is not None:
-            assert isinstance(
-                self.cluster_router, ClusterRouter
-            ), "Invalid cluster_router"
+            assert isinstance(self.cluster_router, ClusterRouter), "Invalid cluster_router"

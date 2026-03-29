@@ -28,17 +28,13 @@ class RankingFinal:
 
         lazy = LazyVectorSimilarity(ctx.vector_store)
 
-        base_scores = {
-            doc_id: lazy.similarity(ctx.q_vec, doc_id) for doc_id in candidates
-        }
+        base_scores = {doc_id: lazy.similarity(ctx.q_vec, doc_id) for doc_id in candidates}
 
         query_tokens = set(getattr(ctx, "query_tokens", []) or [])
 
         get_tokens = getattr(ctx, "get_tokens", None)
 
-        docs_tokens = [
-            get_tokens(doc_id) if get_tokens else [] for doc_id in candidates
-        ]
+        docs_tokens = [get_tokens(doc_id) if get_tokens else [] for doc_id in candidates]
 
         context_scores = (
             self.contextual_score.batch_score(docs_tokens)

@@ -1,66 +1,69 @@
 import pytest
-
-from tests.config.helpers.ctx import make_ctx
-
 from discord.ext import commands
+
 from rpg_narrative_server.frameworks.discord.bot import create_bot
+from tests.config.factories.context import make_context
+from tests.config.factories.deps import make_deps
+
+# ---------------------------------------------------------
+# HELPERS
+# ---------------------------------------------------------
 
 
-class DummySettings:
-    class runtime:
-        environment = "dev"
+def make_test_bot():
+    return create_bot(
+        settings=type(
+            "Settings", (), {"runtime": type("Runtime", (), {"environment": "test"})()}
+        )(),
+        deps=make_deps(),
+    )
 
 
-class DummyUsecases:
-    pass
+# ---------------------------------------------------------
+# BOT CREATION
+# ---------------------------------------------------------
 
 
 @pytest.mark.asyncio
 async def test_bot_creation():
-    bot = create_bot(
-        settings=DummySettings(),
-        usecases=DummyUsecases(),
-    )
+    bot = make_test_bot()
 
     assert bot is not None
 
 
+# ---------------------------------------------------------
+# COOLDOWN ERROR
+# ---------------------------------------------------------
+
+
 @pytest.mark.asyncio
 async def test_on_command_error_cooldown():
-    bot = create_bot(
-        settings=DummySettings(),
-        usecases=DummyUsecases(),
-    )
-
-    class DummyCtx:
-        def __init__(self):
-            self.sent = []
-
-        async def send(self, msg):
-            self.sent.append(msg)
-
-    ctx = make_ctx()
+    bot = make_test_bot()
+    ctx = make_context(guild_id=None, user_id="999")
 
     cooldown = commands.Cooldown(1, 3)
     error = commands.CommandOnCooldown(cooldown, 1.5, commands.BucketType.user)
 
     await bot.on_command_error(ctx, error)
 
-    assert "⏳" in ctx.sent[0]
+    assert ctx.sent_messages
+    assert "⏳" in ctx.sent_messages[0]
+
+
+# ---------------------------------------------------------
+# READY SUCCESS
+# ---------------------------------------------------------
 
 
 @pytest.mark.asyncio
 async def test_on_ready_sync_called(monkeypatch):
+    bot = make_test_bot()
+
     called = {}
 
     async def fake_sync():
         called["ok"] = True
         return []
-
-    bot = create_bot(
-        settings=DummySettings(),
-        usecases=DummyUsecases(),
-    )
 
     bot.tree.sync = fake_sync
 
@@ -69,38 +72,34 @@ async def test_on_ready_sync_called(monkeypatch):
     assert called.get("ok") is True
 
 
+# ---------------------------------------------------------
+# READY FAILURE
+# ---------------------------------------------------------
+
+
 @pytest.mark.asyncio
 async def test_on_ready_sync_failure(monkeypatch):
+    bot = make_test_bot()
+
     async def fake_sync():
         raise RuntimeError("fail")
-
-    bot = create_bot(
-        settings=DummySettings(),
-        usecases=DummyUsecases(),
-    )
 
     bot.tree.sync = fake_sync
 
     await bot.on_ready()
 
 
+# ---------------------------------------------------------
+# GENERIC ERROR
+# ---------------------------------------------------------
+
+
 @pytest.mark.asyncio
-async def test_on_command_error_generic(container):
-    bot = create_bot(
-        settings=DummySettings(),
-        usecases=DummyUsecases(),
-        container=container,
-    )
-
-    class DummyCtx:
-        def __init__(self):
-            self.sent = []
-
-        async def send(self, msg):
-            self.sent.append(msg)
-
-    ctx = make_ctx()
+async def test_on_command_error_generic():
+    bot = make_test_bot()
+    ctx = make_context(guild_id=None, user_id="999")
 
     await bot.on_command_error(ctx, RuntimeError("boom"))
 
-    assert "⚠️" in ctx.sent[0]
+    assert ctx.sent_messages
+    assert "⚠️" in ctx.sent_messages[0]

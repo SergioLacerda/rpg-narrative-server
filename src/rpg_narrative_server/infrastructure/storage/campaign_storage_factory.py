@@ -1,8 +1,8 @@
-from rpg_narrative_server.infrastructure.storage.backends.json_backend import (
-    JSONStorageBackend,
-)
 from rpg_narrative_server.infrastructure.storage.backends.chroma_backend import (
     ChromaStorageBackend,
+)
+from rpg_narrative_server.infrastructure.storage.backends.json_backend import (
+    JSONStorageBackend,
 )
 
 

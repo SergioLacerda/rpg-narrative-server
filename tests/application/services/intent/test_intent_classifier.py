@@ -1,13 +1,12 @@
 import pytest
 
-from tests.config.fakes.llm.llm_intent import DummyLLM
 from rpg_narrative_server.application.services.intent.intent_classifier import (
     IntentClassifier,
 )
 from rpg_narrative_server.application.services.intent.language_profiles import (
     SUPPORTED_LANGUAGES,
 )
-
+from tests.config.fakes.llm.llm_intent import DummyLLM
 
 # ---------------------------------------------------------
 # SCORE BASE

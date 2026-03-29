@@ -1,5 +1,7 @@
-import pytest
 import asyncio
+
+import pytest
+
 from rpg_narrative_server.shared.resilience import resilient_call
 
 

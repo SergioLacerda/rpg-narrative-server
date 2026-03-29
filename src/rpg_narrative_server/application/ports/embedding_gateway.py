@@ -1,6 +1,6 @@
-from abc import ABC, abstractmethod
-from typing import Iterable, Optional
 import asyncio
+from abc import ABC, abstractmethod
+from collections.abc import Iterable
 
 
 class EmbeddingGateway(ABC):
@@ -13,7 +13,7 @@ class EmbeddingGateway(ABC):
     # ---------------------------------------------
 
     @property
-    def dimension(self) -> Optional[int]:
+    def dimension(self) -> int | None:
         """
         Embedding vector size (e.g. 1536).
         Can be None if unknown.

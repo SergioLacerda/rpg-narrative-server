@@ -1,13 +1,13 @@
 import pytest
 
-from rpg_narrative_server.domain.dice.parser import DiceParser
 from rpg_narrative_server.domain.dice.ast.nodes import (
-    RollNode,
+    DropLowestNode,
     ExplodeNode,
     KeepHighestNode,
-    DropLowestNode,
     RerollNode,
+    RollNode,
 )
+from rpg_narrative_server.domain.dice.parser import DiceParser
 
 
 @pytest.fixture

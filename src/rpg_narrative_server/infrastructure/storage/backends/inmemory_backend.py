@@ -1,22 +1,20 @@
-from .base import StorageBackend
-
-from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
-    InMemoryKVStore,
-)
-
 from rpg_narrative_server.infrastructure.storage.adapters.document_store import (
     DocumentStoreAdapter,
-)
-from rpg_narrative_server.infrastructure.storage.adapters.token_store import (
-    TokenStoreAdapter,
 )
 from rpg_narrative_server.infrastructure.storage.adapters.metadata_store import (
     MetadataStoreAdapter,
 )
+from rpg_narrative_server.infrastructure.storage.adapters.token_store import (
+    TokenStoreAdapter,
+)
 from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
     VectorStoreAdapter,
 )
+from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
+    InMemoryKVStore,
+)
 
+from .base import StorageBackend
 
 # ---------------------------------------------------------
 # vector store simples

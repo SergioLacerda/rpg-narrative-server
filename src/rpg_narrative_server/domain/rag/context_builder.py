@@ -1,4 +1,5 @@
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 
 class ContextBuilder:
@@ -24,20 +25,21 @@ class ContextBuilder:
         *,
         campaign_id: str,
         action: str,
+        intent: str = "DEFAULT",
         memory: Any | None = None,
         history: Iterable[str] | None = None,
         retrieved: str | Iterable[str] | None = None,
         scene_type: str = "DEFAULT",
-    ) -> dict[str, Any]:
+    ) -> tuple[dict[str, Any], Any]:
 
         # ----------------------------------
-        # 1. MEMORY (com reuse)
+        # 1. MEMORY (com fallback seguro)
         # ----------------------------------
         if memory is None:
             try:
                 memory = await self.memory.load_memory(campaign_id)
             except Exception:
-                memory = None
+                memory = self.memory.create_empty()
 
         summary: str = ""
         recent_events: list[str] = []
@@ -108,7 +110,7 @@ class ContextBuilder:
                 retrieved_context = "\n".join(str(x).strip() for x in retrieved if x)
 
         # ----------------------------------
-        # 5. HISTORY (compat)
+        # 5. HISTORY
         # ----------------------------------
         history_context: list[str] = list(history) if history else []
 
@@ -118,9 +120,9 @@ class ContextBuilder:
         scene_type = (scene_type or "DEFAULT").upper()
 
         # ----------------------------------
-        # 7. OUTPUT FINAL
+        # 7. CONTEXT FINAL
         # ----------------------------------
-        return {
+        ctx = {
             "summary": summary,
             "recent_events": recent_events,
             "history": history_context,
@@ -128,4 +130,7 @@ class ContextBuilder:
             "entities": entities,
             "related_entities": related_entities,
             "scene_type": scene_type,
+            "intent": intent,
         }
+
+        return ctx, memory

@@ -1,11 +1,10 @@
-import httpx
-import logging
 import asyncio
-from typing import List
+import logging
+
+import httpx
 
 from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGateway
 from rpg_narrative_server.shared.resilience import resilient_call
-
 
 logger = logging.getLogger("rpg_narrative_server.embedding.ollama")
 
@@ -44,7 +43,7 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
     # single
     # ---------------------------------------------------------
 
-    async def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> list[float]:
         if not text or not text.strip():
             return self._zero_vector()
 
@@ -83,7 +82,7 @@ class OllamaEmbeddingProvider(EmbeddingGateway):
     # batch (paralelo controlado)
     # ---------------------------------------------------------
 
-    async def embed_batch(self, texts: List[str]):
+    async def embed_batch(self, texts: list[str]):
         if not texts:
             return []
 

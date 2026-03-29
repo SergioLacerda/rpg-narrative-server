@@ -1,181 +1,125 @@
-# 🚀 Retrieval Engine Benchmark (EN)
+# 🚀 Retrieval Engine Benchmark
 
-Official documentation for the RAG retrieval benchmark tool.
+Official tool for performance analysis of the Retrieval (RAG) pipeline.
 
----
+------------------------------------------------------------------------
 
 ## 🧠 Purpose
 
-Evaluate retrieval system performance under different scenarios:
+Evaluate system behavior under different conditions:
 
-- Latency
-- Scalability
-- CPU usage
-- Cache and deduplication efficiency
+-   Latency (avg / p95 / p99)
+-   Throughput (req/s)
+-   Concurrency scalability
+-   CPU vs IO impact
+-   Deduplication efficiency
+-   Batching benefits
 
----
+------------------------------------------------------------------------
 
-## ▶️ Quick Start
+## ▶️ Execution
 
-```bash
-python scripts/benchmark_retrieval.py
+``` bash
+python scripts/benchmark/run.py --compare
 ```
 
----
+> ⚠️ Run from project root
+
+------------------------------------------------------------------------
 
 ## ⚙️ Parameters
 
-```text
-| Flag | Description |
-|------|------------|
-| `--n` | Number of requests (default: 50) |
-| `--no-dedup` | Disable deduplication |
-| `--mode` | Load type (`io`, `cpu`, `jitter`) |
-| `--memory` | Enable memory pressure test |
-| `--batch` | Enable embedding batching |
-```
+  Flag           Description
+  -------------- ---------------------------------------
+  `--n`          Number of requests (default: 50)
+  `--mode`       Workload type (`io`, `cpu`, `jitter`)
+  `--compare`    Run all modes automatically
+  `--no-dedup`   Disable deduplication
+  `--batch`      Enable embedding batching
+  `--workers`    Number of executor workers
+  `--cpu-work`   CPU workload intensity
 
----
+------------------------------------------------------------------------
 
-## 🔥 Test Scenarios
+## 🔥 Execution Modes
 
 ### 🧊 IO-bound (default)
 
-```bash
-python scripts/benchmark_retrieval.py
+``` bash
+python scripts/benchmark/run.py --mode io
 ```
 
-Simulates fixed network latency.
+------------------------------------------------------------------------
 
----
+### 🌐 Jitter (realistic scenario)
 
-### 🌐 Jitter (real-world)
-
-```bash
-python scripts/benchmark_retrieval.py --mode jitter
+``` bash
+python scripts/benchmark/run.py --mode jitter
 ```
 
-Simulates variable latency.
-
----
+------------------------------------------------------------------------
 
 ### 🧠 CPU-bound
 
-```bash
-python scripts/benchmark_retrieval.py --mode cpu
+``` bash
+python scripts/benchmark/run.py --mode cpu
 ```
 
-Validates CPU bottlenecks.
+------------------------------------------------------------------------
 
----
+### 🔄 Full comparison
 
-### 🧨 No deduplication
-
-```bash
-python scripts/benchmark_retrieval.py --no-dedup
+``` bash
+python scripts/benchmark/run.py --compare
 ```
 
-Measures impact of redundant calls.
-
----
-
-### 📈 Stress test
-
-```bash
-python scripts/benchmark_retrieval.py --n 200
-```
-
-High concurrency scenario.
-
----
-
-### 🧠 Memory pressure
-
-```bash
-python scripts/benchmark_retrieval.py --memory
-```
-
-Evaluates cache growth.
-
----
-
-### 🚀 Batching
-
-```bash
-python scripts/benchmark_retrieval.py --batch
-```
-
-Tests embedding batching efficiency.
-
----
-
-### 🔥 Full scenario (recommended)
-
-```bash
-python scripts/benchmark_retrieval.py --n 200 --mode jitter --batch --memory
-```
-
-Simulates production-like conditions.
-
----
+------------------------------------------------------------------------
 
 ## 📊 Metrics
 
-- **Total time** → total execution time
-- **Avg latency** → average latency
-- **P95 / P99** → latency tail
-- **Index calls** → actual executions (dedup effect)
-- **Speedup** → concurrency gain
+  Metric       Description
+  ------------ -------------------------
+  throughput   requests per second
+  avg          average latency
+  p95          95th percentile latency
+  p99          tail latency
+  total_time   total execution time
+  calls        actual index calls
 
----
+------------------------------------------------------------------------
 
 ## 🧠 Interpretation
 
-```text
+  Scenario    Expected behavior
+  ----------- --------------------------
+  IO-bound    Scales well with threads
+  CPU-bound   Better with process
+  Jitter      Increases p95/p99
+  Dedup ON    Reduces calls
+  Batch ON    Improves throughput
 
-| Scenario | Expected Behavior |
-|----------|------------------|
-| IO-bound | Scales well |
-| CPU-bound | Limited by GIL |
-| Dedup ON | Reduces real calls |
-| Batch ON | Reduces embedding cost |
-| Jitter | Increases P95/P99 |
-```
-
----
-
-## 💡 Recommendations
-
-- Use `--mode jitter` to simulate production
-- Combine `--batch` + `--memory` for realistic scenarios
-- Use `--mode cpu` to validate parallelism
-
----
-
-## 🧩 Architecture Integration
-
-This benchmark directly validates:
-
-- RetrievalPort (Application layer)
-- Vector Index (Infrastructure)
-- Ranking and deduplication strategies
-
----
+------------------------------------------------------------------------
 
 ## 📌 Best Practices
 
-- Run benchmarks in isolation (no Discord/API running)
-- Compare results across profiles (local / hybrid / cloud)
-- Monitor regressions when modifying the RAG pipeline
+-   Run benchmarks in isolation
+-   Compare multiple executions
+-   Use `--compare` for baseline
+-   Monitor regressions after RAG changes
 
----
+------------------------------------------------------------------------
 
-## 🚀 Summary
+## 🚀 Future Improvements
 
-This tool is essential to ensure:
+-   JSON export (for dashboards)
+-   CI integration (performance regression)
+-   Visualization (charts)
+-   Profiling (CPU/memory)
 
-- consistent performance
-- scalability under load
-- reliability of the retrieval layer
+------------------------------------------------------------------------
 
-It should be used continuously during development and optimization.
+## 💡 Tips
+
+-   Use `jitter` to simulate production
+-   Combine `batch + dedup` for best gains
+-   Use `cpu` to test parallelism limits

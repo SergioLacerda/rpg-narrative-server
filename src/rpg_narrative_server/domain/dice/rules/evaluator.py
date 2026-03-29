@@ -2,19 +2,18 @@ from typing import Protocol
 
 from rpg_narrative_server.domain.dice.ast.nodes import (
     DiceNode,
-    RollNode,
-    ExplodeNode,
-    RerollNode,
-    KeepHighestNode,
     DropLowestNode,
+    ExplodeNode,
+    KeepHighestNode,
+    RerollNode,
+    RollNode,
 )
-
 from rpg_narrative_server.domain.dice.rules.explode import explode
-from rpg_narrative_server.domain.dice.rules.reroll import reroll
 from rpg_narrative_server.domain.dice.rules.keep_drop import (
-    keep_highest,
     drop_lowest,
+    keep_highest,
 )
+from rpg_narrative_server.domain.dice.rules.reroll import reroll
 
 
 class RNG(Protocol):

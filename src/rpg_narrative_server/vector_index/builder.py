@@ -1,32 +1,30 @@
 import logging
 
-from rpg_narrative_server.vector_index.core.vector_index import VectorIndex
-from rpg_narrative_server.vector_index.components import VectorIndexComponents
-
-# ranking
-from rpg_narrative_server.vector_index.ranking.stage1_ranker import Stage1Ranker
-from rpg_narrative_server.vector_index.ranking.stage2_ranker import Stage2Ranker
-
-# clustering
-from rpg_narrative_server.vector_index.clustering.cluster_builder import ClusterBuilder
-from rpg_narrative_server.vector_index.clustering.cluster_manager import ClusterManager
-from rpg_narrative_server.vector_index.clustering.cluster_router import ClusterRouter
-
 # ANN
 from rpg_narrative_server.vector_index.ann.ivf_builder import IVFBuilder
 from rpg_narrative_server.vector_index.ann.ivf_router import IVFRouter
-
-# indexing
-# from rpg_narrative_server.vector_index.indexing.embedding_indexer import EmbeddingIndexer
-
-# narrativa
-from rpg_narrative_server.vector_index.narrative.timeline_index import TimelineIndex
-from rpg_narrative_server.vector_index.narrative.causality_graph import CausalityGraph
 
 # classifier
 from rpg_narrative_server.vector_index.classifiers.default_query_classifier import (
     DefaultQueryClassifier,
 )
+
+# clustering
+from rpg_narrative_server.vector_index.clustering.cluster_builder import ClusterBuilder
+from rpg_narrative_server.vector_index.clustering.cluster_manager import ClusterManager
+from rpg_narrative_server.vector_index.clustering.cluster_router import ClusterRouter
+from rpg_narrative_server.vector_index.components import VectorIndexComponents
+from rpg_narrative_server.vector_index.core.vector_index import VectorIndex
+from rpg_narrative_server.vector_index.narrative.causality_graph import CausalityGraph
+
+# indexing
+# from rpg_narrative_server.vector_index.indexing.embedding_indexer import EmbeddingIndexer
+# narrativa
+from rpg_narrative_server.vector_index.narrative.timeline_index import TimelineIndex
+
+# ranking
+from rpg_narrative_server.vector_index.ranking.stage1_ranker import Stage1Ranker
+from rpg_narrative_server.vector_index.ranking.stage2_ranker import Stage2Ranker
 
 logger = logging.getLogger("rpg_narrative_server.vector_index.builder")
 

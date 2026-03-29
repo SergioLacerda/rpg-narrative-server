@@ -1,14 +1,14 @@
 import pytest
 
-from tests.config.helpers.discord_factory import make_ctx
-
-from rpg_narrative_server.frameworks.discord.utils import (
+from rpg_narrative_server.frameworks.discord.utils.ids import (
     get_campaign_id,
     get_user_id,
-    send_long_response,
-    MAX_MESSAGE_LEN,
 )
-
+from rpg_narrative_server.frameworks.discord.utils.messaging import (
+    MAX_MESSAGE_LEN,
+    send_long_response,
+)
+from tests.config.factories.context import make_context
 
 # ----------------------------------------
 # get_campaign_id
@@ -16,8 +16,7 @@ from rpg_narrative_server.frameworks.discord.utils import (
 
 
 def test_campaign_id_from_guild():
-    ctx = make_ctx()
-    ctx.guild.id = "123"
+    ctx = make_context(guild_id="123", user_id="999")
 
     result = get_campaign_id(ctx)
 
@@ -25,9 +24,7 @@ def test_campaign_id_from_guild():
 
 
 def test_campaign_id_dm():
-    ctx = make_ctx()
-    ctx.guild = None
-    ctx.author.id = "999"
+    ctx = make_context(guild_id=None, user_id="999")
 
     result = get_campaign_id(ctx)
 
@@ -40,10 +37,9 @@ def test_campaign_id_dm():
 
 
 def test_get_user_id():
-    ctx = make_ctx()
-    ctx.author.id = "abc"
+    ctx = make_context(guild_id=None, user_id="999")
 
-    assert get_user_id(ctx) == "abc"
+    assert get_user_id(ctx) == "999"
 
 
 # ----------------------------------------
@@ -53,7 +49,7 @@ def test_get_user_id():
 
 @pytest.mark.asyncio
 async def test_send_long_response_short():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
     await send_long_response(ctx, "hello")
 
@@ -62,7 +58,7 @@ async def test_send_long_response_short():
 
 @pytest.mark.asyncio
 async def test_send_long_response_long():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
     long_text = "a" * 5000
 
@@ -74,7 +70,7 @@ async def test_send_long_response_long():
 
 @pytest.mark.asyncio
 async def test_send_long_response_with_interaction():
-    ctx = make_ctx(interaction=True)
+    ctx = make_context(interaction=True)
 
     await send_long_response(ctx, "hello")
 
@@ -83,7 +79,7 @@ async def test_send_long_response_with_interaction():
 
 @pytest.mark.asyncio
 async def test_send_long_response_long_interaction():
-    ctx = make_ctx(interaction=True)
+    ctx = make_context(interaction=True)
 
     long_text = "a" * 5000
 
@@ -95,7 +91,7 @@ async def test_send_long_response_long_interaction():
 
 @pytest.mark.asyncio
 async def test_send_long_response_empty():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
     await send_long_response(ctx, "")
 
@@ -104,7 +100,7 @@ async def test_send_long_response_empty():
 
 @pytest.mark.asyncio
 async def test_send_long_response_with_header_short():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
     header = "HEADER: "
     content = "hello"
@@ -116,7 +112,7 @@ async def test_send_long_response_with_header_short():
 
 @pytest.mark.asyncio
 async def test_send_long_response_with_header_long():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
     header = "HEADER: "
     content = "a" * 5000
@@ -132,7 +128,7 @@ async def test_send_long_response_with_header_long():
 
 @pytest.mark.asyncio
 async def test_chunk_size_respected():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
     content = "a" * (MAX_MESSAGE_LEN + 10)
 

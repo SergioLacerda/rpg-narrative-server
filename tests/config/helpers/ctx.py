@@ -30,7 +30,7 @@ class TestCtx:
         # ----------------------------------
         # MENSAGENS
         # ----------------------------------
-        self.sent_messages = []
+        self.sent_messages: list[str] = []
 
         # compat legacy
         self.sent = self.sent_messages

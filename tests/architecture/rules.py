@@ -1,4 +1,12 @@
-RULES = {
+from typing import TypedDict
+
+
+class LayerRule(TypedDict, total=False):
+    forbidden: list[str]
+    allowed: list[str]
+
+
+RULES: dict[str, LayerRule] = {
     "domain": {
         "forbidden": ["application", "interfaces", "infrastructure"],
     },

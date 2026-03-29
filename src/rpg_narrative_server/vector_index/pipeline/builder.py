@@ -1,32 +1,32 @@
 from rpg_narrative_server.vector_index.pipeline.pipeline import RetrievalPipeline
 
-# ranking
-from rpg_narrative_server.vector_index.ranking.stage1_ranker import Stage1Ranker
+# pipeline stages
+from rpg_narrative_server.vector_index.pipeline.stages import (
+    AdaptiveCandidateLimiter,
+    AdaptiveRankingStage,
+    ANNPrefilter,
+    CandidateRetriever,
+    CandidateSetReservoir,
+    CausalExpansion,
+    ClusterDedupStage,
+    DeduplicateStage,
+    EmbedStage,
+    HybridFusionStage,
+    NarrativeImportanceStage,
+    QueryExpansion,
+    RankingStage1,
+    RankingStage2,
+    ResetEmbeddingStage,
+    TemporalExpansion,
+    TemporalPriorityStage,
+    TimelineExpansion,
+)
 from rpg_narrative_server.vector_index.pipeline.stages.ranking_final_stage import (
     RankingFinalStage,
 )
 
-# pipeline stages
-from rpg_narrative_server.vector_index.pipeline.stages import (
-    QueryExpansion,
-    ResetEmbeddingStage,
-    EmbedStage,
-    ANNPrefilter,
-    CandidateRetriever,
-    CausalExpansion,
-    TemporalExpansion,
-    TimelineExpansion,
-    CandidateSetReservoir,
-    AdaptiveCandidateLimiter,
-    TemporalPriorityStage,
-    ClusterDedupStage,
-    DeduplicateStage,
-    RankingStage1,
-    RankingStage2,
-    AdaptiveRankingStage,
-    HybridFusionStage,
-    NarrativeImportanceStage,
-)
+# ranking
+from rpg_narrative_server.vector_index.ranking.stage1_ranker import Stage1Ranker
 
 
 class PipelineBuilder:
@@ -64,11 +64,7 @@ class PipelineBuilder:
             # 🧭 CONTEXT PRIORITIZATION
             # =================================================
             TemporalPriorityStage(),
-            *(
-                [ClusterDedupStage(self.deps.cluster_router)]
-                if self.deps.cluster_router
-                else []
-            ),
+            *([ClusterDedupStage(self.deps.cluster_router)] if self.deps.cluster_router else []),
             DeduplicateStage(),
             # =================================================
             # 🧮 RANKING PIPELINE (🔥 CORE)

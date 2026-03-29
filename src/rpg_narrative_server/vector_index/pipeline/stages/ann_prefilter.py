@@ -31,9 +31,7 @@ class ANNPrefilter:
 
                 candidates = []
                 for cid in cluster_ids:
-                    candidates.extend(
-                        getattr(self.ann, "inverted_lists", {}).get(cid, [])
-                    )
+                    candidates.extend(getattr(self.ann, "inverted_lists", {}).get(cid, []))
 
                 if candidates:
                     ctx.candidates = candidates

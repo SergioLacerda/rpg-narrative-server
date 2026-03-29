@@ -1,7 +1,6 @@
 import asyncio
 
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
-
 from rpg_narrative_server.domain.narrative.session_summarizer import SessionSummarizer
 
 

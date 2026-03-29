@@ -1,5 +1,7 @@
 import logging
 
+from rpg_narrative_server.application.contracts.response import Response
+
 logger = logging.getLogger("rpg_narrative_server.discord")
 
 
@@ -20,78 +22,66 @@ class MessageService:
         self.intent = intent_classifier
         self.settings = settings
 
-    async def handle(self, message, ctx):
+    # ---------------------------------------------------------
+    # ENTRYPOINT
+    # ---------------------------------------------------------
+    async def handle(self, message, ctx, responder):
         # ----------------------------------
-        # IGNORAR BOT
+        # IGNORA BOT
         # ----------------------------------
         if message.author.bot:
             return
 
         content = (message.content or "").strip()
+
+        # ----------------------------------
+        # IGNORA VAZIO
+        # ----------------------------------
         if not content:
             return
 
-        channel_id = ctx.channel_id
-        user_id = ctx.user_id
+        channel_id = ctx.channel.id
+        user_id = ctx.author.id
 
         # ----------------------------------
-        # CAMPANHA
-        # ----------------------------------
-        campaign_id = self.campaign_state.get(channel_id)
-
-        if not campaign_id:
-            if self.runtime.should_warn(channel_id, 30):
-                await ctx.send(
-                    "🎲 Nenhuma campanha ativa.\nUse `/campaign switch <nome>`"
-                )
-            return
-
-        # ----------------------------------
-        # COOLDOWN
+        # COOLDOWN (INFRA)
         # ----------------------------------
         if not self.runtime.check_cooldown(user_id, 3):
             logger.debug("Cooldown active, skipping message")
             return
 
         # ----------------------------------
-        # INTENT (SOFT DECISION)
+        # LOCK (INFRA)
+        # ----------------------------------
+        lock = self.runtime.get_lock(channel_id)
+
+        if lock.locked():
+            return
+
+        # ----------------------------------
+        # INTENT (INFRA / AI)
         # ----------------------------------
         try:
             intent = await self.intent.classify(content)
         except Exception:
             logger.exception("Intent classification failed")
-            intent = "ACTION"  # fallback seguro
-
-        logger.debug(
-            "[INTENT] campaign=%s user=%s intent=%s text='%s'",
-            campaign_id,
-            user_id,
-            intent,
-            content,
-        )
+            intent = "ACTION"
 
         # ----------------------------------
-        # FILTRO LEVE
+        # FILTRO (INTENT)
         # ----------------------------------
         if intent == "OOC":
-            logger.debug("Ignoring OOC message")
             return
 
         # ----------------------------------
-        # LOCK (ANTI OVERLAP)
+        # CAMPANHA (REGRA DE NEGÓCIO)
         # ----------------------------------
-        lock = self.runtime.get_lock(channel_id)
+        campaign_id = self.campaign_state.get(channel_id)
 
-        if lock.locked():
-            logger.debug("Channel busy, skipping message")
+        if not campaign_id:
+            if self.runtime.should_warn(channel_id, 30):
+                await responder.send("🎲 Nenhuma campanha ativa.\nUse `/campaign switch <nome>`")
             return
-
-        logger.debug(
-            "RP AUTO: campaign=%s user=%s action=%s",
-            campaign_id,
-            user_id,
-            content,
-        )
 
         # ----------------------------------
         # EXECUÇÃO
@@ -100,21 +90,20 @@ class MessageService:
             await self.executor.run(
                 ctx,
                 lambda: self._execute_and_send(
-                    ctx,
+                    responder,
                     campaign_id,
                     content,
                     user_id,
-                    intent,  # 🔥 agora passamos intent
+                    intent,
                 ),
             )
 
     # ---------------------------------------------------------
-    # execução principal
+    # EXECUÇÃO
     # ---------------------------------------------------------
-
     async def _execute_and_send(
         self,
-        ctx,
+        responder,
         campaign_id,
         content,
         user_id,
@@ -126,52 +115,52 @@ class MessageService:
                 action=content,
                 user_id=user_id,
             )
-
         except Exception:
             logger.exception("Narrative execution failed")
             raise
 
         if not response:
-            logger.debug("Empty narrative response")
             return
 
-        # ----------------------------------
-        # (OPCIONAL FUTURO) adaptar resposta
-        # ----------------------------------
         response = self._adapt_response_by_intent(response, intent)
 
-        await self._send_response(ctx, response)
+        await self._send_response(responder, response)
 
     # ---------------------------------------------------------
-    # adaptação por intent (extensível)
+    # ADAPTAÇÃO
     # ---------------------------------------------------------
-
-    def _adapt_response_by_intent(self, response: str, intent: str) -> str:
-        if not response:
+    def _adapt_response_by_intent(self, response, intent):
+        if isinstance(response, Response):
             return response
 
-        # 🔥 hooks simples (expansível depois)
-
-        if intent == "CHAT":
-            # resposta mais leve (futuro)
-            return response
-
-        if intent == "EXPLORATION":
-            return response
-
-        if intent == "ACTION":
-            return response
-
-        return response
+        return Response(
+            text=response,
+            type=intent.lower(),
+        )
 
     # ---------------------------------------------------------
-    # output
+    # OUTPUT
     # ---------------------------------------------------------
+    async def _send_response(self, responder, response):
+        MAX = 1900
 
-    async def _send_response(self, ctx, response: str):
-        if len(response) <= 1900:
-            await ctx.send(response)
+        # ----------------------------------
+        # NORMALIZAÇÃO
+        # ----------------------------------
+        if isinstance(response, Response):
+            content = response.text
+        else:
+            content = response
+
+        if not content:
             return
 
-        for i in range(0, len(response), 1900):
-            await ctx.send(response[i : i + 1900])
+        # ----------------------------------
+        # ENVIO
+        # ----------------------------------
+        if len(content) <= MAX:
+            await responder.send(content)
+            return
+
+        for i in range(0, len(content), MAX):
+            await responder.send(content[i : i + MAX])

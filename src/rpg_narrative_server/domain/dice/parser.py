@@ -1,14 +1,15 @@
-from rpg_narrative_server.shared.dice.dice_regex import DiceRegex
-from rpg_narrative_server.domain.dice.condition import _Condition
 from rpg_narrative_server.domain.dice.ast.nodes import (
     DiceCondition,
     DiceNode,
-    RollNode,
-    ExplodeNode,
-    RerollNode,
-    KeepHighestNode,
     DropLowestNode,
+    ExplodeNode,
+    KeepHighestNode,
+    Node,
+    RerollNode,
+    RollNode,
 )
+from rpg_narrative_server.domain.dice.condition import _Condition
+from rpg_narrative_server.shared.dice.dice_regex import DiceRegex
 
 
 class DiceParser:
@@ -27,7 +28,7 @@ class DiceParser:
         num = int(match.group("num"))
         sides = int(match.group("sides"))
 
-        node: DiceNode = RollNode(num, sides)
+        node: Node = RollNode(num, sides)
 
         # -------------------------
         # EXPLODE (!)
@@ -43,8 +44,8 @@ class DiceParser:
             try:
                 k = int(keep[2:])
                 node = KeepHighestNode(node, k)
-            except ValueError:
-                raise ValueError(f"Invalid keep modifier: {keep}")
+            except ValueError as err:
+                raise ValueError(f"Invalid keep modifier: {keep}") from err
 
         # -------------------------
         # DROP (dlX)
@@ -54,8 +55,8 @@ class DiceParser:
             try:
                 k = int(drop[2:])
                 node = DropLowestNode(node, k)
-            except ValueError:
-                raise ValueError(f"Invalid drop modifier: {drop}")
+            except ValueError as err:
+                raise ValueError(f"Invalid keep modifier: {keep}") from err
 
         # -------------------------
         # REROLL (r<3, r>=2, etc)

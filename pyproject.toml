@@ -2,11 +2,14 @@
 requires = ["setuptools>=72", "wheel"]
 build-backend = "setuptools.build_meta"
 
+# ---------------------------------------------------------
+# 📦 PROJECT
+# ---------------------------------------------------------
 [project]
 name = "rpg_narrative_server"
 version = "0.1.0"
 description = "Narrative engine for RPG storytelling (LLM + RAG)"
-requires-python = ">=3.11"   # removido <3.13 — Python 3.13 já é estável
+requires-python = ">=3.11"
 readme = "README.md"
 authors = [{ name = "Sergio Lacerda Vieira" }]
 
@@ -18,11 +21,11 @@ dependencies = [
     "python-dotenv>=1.0,<2.0",
     "openai>=1.51,<2.0",
     "tenacity>=9.0,<10.0",
-    "numpy>=1.26,<2.0",   # <2.0 mantido por compatibilidade binária com torch
+    "numpy>=1.26,<2.0",
 ]
 
 # ---------------------------------------------------------
-# Optional dependencies
+# 🧩 OPTIONAL DEPENDENCIES
 # ---------------------------------------------------------
 [project.optional-dependencies]
 
@@ -72,33 +75,58 @@ ci = [
     "ruff>=0.6,<1.0",
     "mypy>=1.10,<2.0",
     "types-cachetools",
+    "import-linter>=2.0,<3.0",
+    "pip-audit>=2.7,<3.0",
 ]
 
 # ---------------------------------------------------------
-# CLI
+# ⚙️ CLI
 # ---------------------------------------------------------
 [project.scripts]
 rpg_narrative_server = "rpg_narrative_server.app:run"
 
+# ---------------------------------------------------------
+# 🧪 PYTEST
+# ---------------------------------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+
+# logs mais úteis no CI
 log_cli = true
-log_cli_level = "WARNING"
+log_cli_level = "INFO"
+
+# fail rápido em erros críticos
+addopts = """
+--strict-markers
+--strict-config
+--tb=short
+"""
+
+markers = [
+    "unit: testes unitários puros",
+    "golden: validação de outputs esperados (snapshots/narrativa)",
+    "architecture: valida regras de arquitetura",
+]
 
 # ---------------------------------------------------------
-# COVERAGE
+# 📊 COVERAGE
 # ---------------------------------------------------------
 [tool.coverage.run]
 branch = true
 parallel = true
 source = ["src/rpg_narrative_server"]
-omit = ["*/tests/*", "*/conftest.py"]
+omit = [
+    "*/tests/*",
+    "*/conftest.py",
+]
 
 [tool.coverage.report]
 precision = 2
 show_missing = true
 skip_empty = true
+fail_under = 80
+
 exclude_lines = [
     "pragma: no cover",
     "if TYPE_CHECKING:",
@@ -106,14 +134,26 @@ exclude_lines = [
     "@(abc\\.)?abstractmethod",
 ]
 
+[tool.coverage.xml]
+output = "coverage.xml"
+
+# ---------------------------------------------------------
+# 🧠 MYPY
+# ---------------------------------------------------------
 [tool.mypy]
 mypy_path = "src"
 python_version = "3.11"
+
 explicit_package_bases = true
 ignore_missing_imports = true
+
 warn_unused_configs = true
-warn_return_any = false
-check_untyped_defs = false
+warn_unused_ignores = true
+
+check_untyped_defs = true
+disallow_untyped_defs = false  # evoluir depois
+
+no_implicit_optional = true
 
 [[tool.mypy.overrides]]
 module = [
@@ -123,7 +163,7 @@ module = [
 ignore_errors = true
 
 # ---------------------------------------------------------
-# RUFF
+# ⚡ RUFF
 # ---------------------------------------------------------
 [tool.ruff]
 line-length = 100
@@ -131,13 +171,15 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
-ignore = ["E501"]  # line-length já gerenciado pelo formatter
+ignore = ["E501",
+          "B008",  # FastAPI Depends
+        ]
 
 [tool.ruff.lint.isort]
 known-first-party = ["rpg_narrative_server"]
 
 # ---------------------------------------------------------
-# BLACK
+# 🎨 BLACK
 # ---------------------------------------------------------
 [tool.black]
 line-length = 100

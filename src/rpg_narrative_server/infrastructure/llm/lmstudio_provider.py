@@ -1,13 +1,7 @@
-from openai import AsyncOpenAI
 import httpx
-import asyncio
+from openai import AsyncOpenAI
 
 from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
-from rpg_narrative_server.application.services.llm.llm_errors import (
-    LLMRetryableError,
-    LLMTimeoutError,
-    LLMClientError,
-)
 
 
 class LMStudioProvider(BaseProvider):
@@ -38,14 +32,14 @@ class LMStudioProvider(BaseProvider):
                 max_tokens=min(request.max_tokens, 400),
             )
 
-        except asyncio.TimeoutError:
-            raise LLMTimeoutError("lmstudio timeout")
+        except TimeoutError as e:
+            raise TimeoutError("LM Studio timeout.") from e
 
         except ValueError as e:
-            raise LLMClientError(str(e))
+            raise ValueError("LM Studio error.") from e
 
         except Exception as e:
-            raise LLMRetryableError(str(e))
+            raise Exception("LM Studio exception.") from e
 
     # ---------------------------------------------------------
 

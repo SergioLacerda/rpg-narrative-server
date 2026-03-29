@@ -64,7 +64,15 @@ class NarrativeBuilder:
 
         context_block = "\n\n".join(parts).strip()
 
-        return f"{context_block}\n\nAção do jogador:\n{action}\n\n{instruction}"
+        instruction = self._get_instruction(scene_type)
+
+        # ---------------------------------------------------------
+        # OUTPUT FINAL
+        # ---------------------------------------------------------
+        if context_block:
+            return f"{context_block}\n\n" f"Ação do jogador:\n{action}\n\n" f"{instruction}"
+
+        return f"Ação do jogador:\n{action}\n\n" f"{instruction}"
 
     # ---------------------------------------------------------
     # STYLE
@@ -72,9 +80,7 @@ class NarrativeBuilder:
 
     def _get_style(self, scene_type: str) -> str:
         if scene_type in ("ACTION", "COMBAT"):
-            return (
-                "ESTILO:\n- Frases curtas\n- Ritmo rápido\n- Foco em ação imediata\n\n"
-            )
+            return "ESTILO:\n- Frases curtas\n- Ritmo rápido\n- Foco em ação imediata\n\n"
 
         if scene_type in ("CHAT", "DIALOGUE"):
             return "ESTILO:\n- Diálogo natural\n- Emoções e expressões\n\n"
@@ -130,7 +136,7 @@ class NarrativeBuilder:
     def _normalize_scene(self, scene_type: str) -> str:
         return (scene_type or "DEFAULT").upper()
 
-    def sanitize_output(self, text: str) -> str:
+    def sanitize_output(self, text: str | None) -> str:
         if text is None:
             raise ValueError("Output cannot be None")
 

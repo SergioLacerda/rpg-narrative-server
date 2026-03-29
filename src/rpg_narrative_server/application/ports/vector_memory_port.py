@@ -1,6 +1,3 @@
-from typing import List, Dict
-
-
 class VectorMemoryPort:
     """
     Porta para escrita no sistema vetorial (RAG write-side)
@@ -9,7 +6,7 @@ class VectorMemoryPort:
     async def store_event(
         self,
         campaign_id: str,
-        texts: List[str],
-        metadata: Dict,
+        texts: list[str],
+        metadata: dict,
     ):
         raise NotImplementedError

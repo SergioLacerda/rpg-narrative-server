@@ -1,13 +1,13 @@
 import pytest
 
-from tests.config.helpers.discord_factory import make_ctx, DummySettings
-
-from rpg_narrative_server.frameworks.discord.command_base import CommandExecutor
+from rpg_narrative_server.frameworks.discord.executor import CommandExecutor
+from tests.config.factories.context import make_context
+from tests.config.helpers.discord_factory import DummySettings
 
 
 @pytest.mark.asyncio
 async def test_executor_success():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
     executor = CommandExecutor(settings=DummySettings())
 
@@ -21,7 +21,7 @@ async def test_executor_success():
 
 @pytest.mark.asyncio
 async def test_executor_exception():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
     executor = CommandExecutor(settings=DummySettings(), debug=False)
 
     async def handler():
@@ -29,4 +29,5 @@ async def test_executor_exception():
 
     await executor.run(ctx, handler)
 
-    assert ctx.sent_messages[0] == "⚠️ Algo deu errado"
+    assert ctx.sent_messages
+    assert ctx.sent_messages[0] == "⚠️ Algo deu errado."

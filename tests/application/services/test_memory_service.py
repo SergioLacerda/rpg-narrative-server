@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import AsyncMock, MagicMock
+
+import pytest
 
 from rpg_narrative_server.application.services.memory_service import MemoryService
 from rpg_narrative_server.domain.narrative.narrative_memory import NarrativeMemory
@@ -64,9 +65,7 @@ async def test_save_memory():
 
     await service.save_memory("camp", memory)
 
-    repo.save_events.assert_called_once_with(
-        "camp", [{"text": "event1"}, {"text": "event2"}]
-    )
+    repo.save_events.assert_called_once_with("camp", [{"text": "event1"}, {"text": "event2"}])
 
 
 @pytest.mark.asyncio

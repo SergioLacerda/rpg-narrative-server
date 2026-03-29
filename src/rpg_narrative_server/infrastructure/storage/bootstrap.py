@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-
 DEFAULT_FILES = {
     "documents.json": {},
     "metadata.json": {},

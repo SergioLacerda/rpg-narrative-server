@@ -1,5 +1,5 @@
-from pathlib import Path
 import difflib
+from pathlib import Path
 
 
 def normalize(s: str) -> str:

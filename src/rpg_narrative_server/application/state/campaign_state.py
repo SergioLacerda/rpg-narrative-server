@@ -7,3 +7,6 @@ class CampaignState:
 
     def set(self, channel_id: str, campaign_id: str):
         self._active_campaign_by_channel[channel_id] = campaign_id
+
+    def clear(self, channel_id: str):
+        self._active_campaign_by_channel.pop(channel_id, None)

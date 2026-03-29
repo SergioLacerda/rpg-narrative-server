@@ -1,8 +1,7 @@
 # src/rpg_narrative_server/utils/string_utils.py
 
 import re
-from typing import Iterable
-
+from collections.abc import Iterable
 
 # ---------------------------------------------------------
 # NORMALIZAÇÃO
@@ -107,10 +106,7 @@ def deduplicate(items: Iterable[str]) -> list[str]:
 # ---------------------------------------------------------
 
 
-def safe_join(items: Iterable[str], sep: str = "\n") -> str:
-    """
-    Junta strings ignorando vazios.
-    """
+def safe_join(items: Iterable[str | None], sep: str = "\n") -> str:
     return sep.join(item for item in items if item)
 
 
@@ -128,9 +124,9 @@ def ensure_prefix(text: str, prefix: str) -> str:
 # ---------------------------------------------------------
 
 
-def count_chars(text: str) -> int:
+def count_chars(text: str | None) -> int:
     return len(text or "")
 
 
-def total_length(items: Iterable[str]) -> int:
+def total_length(items: Iterable[str | None]) -> int:
     return sum(len(i) for i in items if i)

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -7,12 +6,12 @@ class LLMResponse:
     content: str
 
     provider: str
-    model: Optional[str] = None
+    model: str | None = None
 
     # métricas
-    latency_ms: Optional[float] = None
-    tokens_input: Optional[int] = None
-    tokens_output: Optional[int] = None
+    latency_ms: float | None = None
+    tokens_input: int | None = None
+    tokens_output: int | None = None
 
     # debug
-    raw: Optional[dict] = None
+    raw: dict | None = None

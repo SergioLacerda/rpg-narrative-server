@@ -1,8 +1,8 @@
-from rpg_narrative_server.infrastructure.random.python_random_provider import (
-    PythonRandomProvider,
-)
 from rpg_narrative_server.infrastructure.random.default_random import (
     DefaultRandomProvider,
+)
+from rpg_narrative_server.infrastructure.random.python_random_provider import (
+    PythonRandomProvider,
 )
 
 

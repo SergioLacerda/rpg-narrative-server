@@ -6,7 +6,6 @@ from rpg_narrative_server.application.services.llm.llm_errors import (
     LLMRetryableError,
 )
 
-
 # ---------------------------------------------------------
 # 4xx → CLIENT ERROR
 # ---------------------------------------------------------

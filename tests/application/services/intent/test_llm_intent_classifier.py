@@ -1,10 +1,9 @@
 import pytest
 
-from tests.config.fakes.llm.llm import DummyLLM
-
 from rpg_narrative_server.application.services.intent.llm_intent_classifier import (
     LLMIntentClassifier,
 )
+from tests.config.fakes.llm.llm import DummyLLM
 
 
 @pytest.mark.asyncio

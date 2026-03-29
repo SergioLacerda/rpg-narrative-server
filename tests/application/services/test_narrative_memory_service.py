@@ -1,11 +1,11 @@
-import pytest
 import uuid
 
-from tests.config.fakes.narrative import DummyMemory, DummyMemoryRepo
+import pytest
 
 from rpg_narrative_server.application.services.narrative_memory_service import (
     NarrativeMemoryService,
 )
+from tests.config.fakes.narrative import DummyMemory, DummyMemoryRepo
 
 
 @pytest.fixture
@@ -68,10 +68,11 @@ def test_extract_tokens_removes_short_words(service):
 
 
 def test_add_event_deterministic(repo):
-    service = NarrativeMemoryService(repo)
-
-    service.now = lambda: 123.0
-    service.generate_event_id = lambda: "fixed-id"
+    service = NarrativeMemoryService(
+        repo,
+        now_fn=lambda: 123.0,
+        id_fn=lambda: "fixed-id",
+    )
 
     event = service.add_event("test")
 

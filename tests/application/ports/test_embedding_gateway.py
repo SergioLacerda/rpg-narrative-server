@@ -1,7 +1,8 @@
+from collections.abc import Iterable
+
 import pytest
 
 from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGateway
-
 
 # ---------------------------------------------------------
 # FAKES
@@ -9,7 +10,7 @@ from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGa
 
 
 class DummyEmbeddingGateway(EmbeddingGateway):
-    async def embed(self, text: str):
+    async def embed(self, text: str) -> list[float]:
         return [1.0]
 
 
@@ -23,10 +24,15 @@ class SpyEmbeddingGateway(EmbeddingGateway):
 
 
 class CustomBatchGateway(EmbeddingGateway):
-    async def embed(self, text: str):
+    async def embed(self, text: str) -> list[float]:
         raise AssertionError("embed should not be called")
 
-    async def embed_batch(self, texts):
+    async def embed_batch(
+        self,
+        texts: Iterable[str],
+        *,
+        concurrency: int = 5,
+    ) -> list[list[float]]:
         return [[42.0] for _ in texts]
 
 
@@ -49,7 +55,7 @@ def test_default_properties():
 
 def test_cannot_instantiate_abstract_class():
     with pytest.raises(TypeError):
-        EmbeddingGateway()
+        EmbeddingGateway()  # type: ignore[abstract]
 
 
 # ---------------------------------------------------------

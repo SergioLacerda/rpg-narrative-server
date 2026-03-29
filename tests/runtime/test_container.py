@@ -1,27 +1,24 @@
 import pytest
 
-from rpg_narrative_server.bootstrap.container import Container
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
-
+from tests.config.builders.test_container_builder import TestContainerBuilder
 from tests.config.fakes.fake_llm import FakeLLMService
 
 
 def test_container_builds_core(container):
     assert container.embedding is not None
     assert container.vector_index is not None
-    assert container.llm is not None
+
+    assert isinstance(container.llm, FakeLLMService)
 
 
 def test_container_lazy_loading():
-    c = Container()
+    c = TestContainerBuilder().build()
 
-    assert c._llm_service is None
+    first = c.llm
+    second = c.llm
 
-    c._build_llm_service = lambda: FakeLLMService()
-
-    _ = c.llm
-
-    assert c._llm_service is not None
+    assert first is second
 
 
 def test_narrative_usecase_wiring(container):
@@ -31,9 +28,13 @@ def test_narrative_usecase_wiring(container):
     assert usecase.llm is not None
     assert usecase.vector_index is not None
 
+    assert isinstance(usecase.llm, FakeLLMService)
+
 
 @pytest.mark.asyncio
 async def test_llm_integration(container):
+    assert isinstance(container.llm, FakeLLMService)
+
     response = await container.llm.generate(LLMRequest(prompt="teste"))
 
     assert response is not None

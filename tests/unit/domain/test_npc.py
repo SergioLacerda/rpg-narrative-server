@@ -1,4 +1,5 @@
 import pytest
+
 from rpg_narrative_server.domain.npc.generator import GenerateNPCUseCase
 
 
@@ -38,9 +39,7 @@ def test_generate_npc_deterministic(usecase, monkeypatch):
     def fake_choice(seq):
         return seq[0]
 
-    monkeypatch.setattr(
-        "rpg_narrative_server.domain.npc.generator.random.choice", fake_choice
-    )
+    monkeypatch.setattr("rpg_narrative_server.domain.npc.generator.random.choice", fake_choice)
 
     result = usecase.execute("teste")
 

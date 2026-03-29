@@ -2,8 +2,8 @@ from rpg_narrative_server.application.services.narrative_graph_service import (
     NarrativeGraphService,
 )
 from tests.config.fakes.narrative import (
-    DummyGraphRepo,
     DummyExtractor,
+    DummyGraphRepo,
 )
 
 

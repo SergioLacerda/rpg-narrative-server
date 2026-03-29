@@ -10,13 +10,10 @@ env:
 
 jobs:
 
-  # -----------------------------------------------------------
-  # LINT — ruff + black + mypy
-  # FIX: removido "|| true" do mypy. Erros de tipo agora falham
-  # o CI. Overrides no pyproject.toml controlam o que é ignorado
-  # (infraestrutura), então o gate é honesto.
-  # -----------------------------------------------------------
-  lint:
+  # ---------------------------------------------------------
+  # 🔧 PRE-COMMIT (consistência total)
+  # ---------------------------------------------------------
+  pre-commit:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,26 +24,18 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - run: pip install -e .[ci]
+      - name: Install deps
+        run: pip install pre-commit
 
-      - run: ruff check .
-      - run: black --check .
-      - run: mypy src   # sem || true — deixa falhar de verdade
+      - name: Run pre-commit
+        run: pre-commit run --all-files
 
-
-  # -----------------------------------------------------------
-  # TEST — matriz ubuntu + windows, com paralelismo via -n auto
-  # FIX: parallelismo ativado no CI por env (não no addopts global)
-  # para evitar falhas não-determinísticas em ambientes locais.
-  # -----------------------------------------------------------
-  test:
-    runs-on: ${{ matrix.os }}
-    needs: lint
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+  # ---------------------------------------------------------
+  # 🧹 LINT + TYPE CHECK
+  # ---------------------------------------------------------
+  lint:
+    runs-on: ubuntu-latest
+    needs: pre-commit
 
     steps:
       - uses: actions/checkout@v4
@@ -55,6 +44,45 @@ jobs:
         with:
           python-version: "3.12"
           cache: "pip"
+
+      - name: Cache pip (extra)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+
+      - run: pip install -e .[ci]
+
+      - run: ruff check .
+      - run: black --check .
+      - run: mypy src
+
+  # ---------------------------------------------------------
+  # 🧪 TESTES (matrix OS + Python)
+  # ---------------------------------------------------------
+  test:
+    runs-on: ${{ matrix.os }}
+    needs: lint
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Cache pip (extra)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
 
       - run: pip install -e .[ci]
 
@@ -68,36 +96,51 @@ jobs:
           pytest -n auto --dist=worksteal \
             --cov=src/rpg_narrative_server \
             --cov-report=term-missing \
-            --cov-append
+            --cov-append \
+            --cov-fail-under=50
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ matrix.os }}
+          name: coverage-${{ matrix.os }}-${{ matrix.python-version }}
           path: .coverage*
-          # FIX: if-no-files-found garante que o CI falha
-          # quando nenhum dado de coverage foi gerado
           if-no-files-found: error
 
-
-  # -----------------------------------------------------------
-  # COVERAGE — combina linux + windows e envia ao Codecov
-  #
-  # FIX (crítico): indentação do job estava incorreta no YAML
-  # original — name/runs-on/steps estavam fora do job, causando
-  # erro de parse silencioso.
-  #
-  # FIX: adicionado checkout + setup-python (necessários para
-  # que coverage xml mapeie corretamente as linhas do fonte).
-  #
-  # FIX: lógica do combine reescrita — após download, os arquivos
-  # ficam em subdiretórios e precisam ser achados com find antes
-  # de combinar.
-  # -----------------------------------------------------------
+  # ---------------------------------------------------------
+  # 📊 COVERAGE CONSOLIDADO
+  # ---------------------------------------------------------
   coverage:
-    name: Coverage (combined)
+    name: Coverage (robust)
     runs-on: ubuntu-latest
     needs: test
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: coverage
+
+      - name: Install coverage
+        run: pip install coverage
+
+      - name: Combine coverage
+        run: |
+          coverage combine coverage || echo "combine failed"
+          coverage report --fail-under=80
+          coverage xml -o combined.xml
+
+      - name: Upload to Codecov (opcional)
+        uses: codecov/codecov-action@v4
+        with:
+          files: combined.xml
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # ---------------------------------------------------------
+  # 🧠 VALIDAR ARQUITETURA
+  # ---------------------------------------------------------
+  architecture:
+    runs-on: ubuntu-latest
+    needs: lint
 
     steps:
       - uses: actions/checkout@v4
@@ -105,72 +148,51 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
 
-      - run: pip install -e .[ci] coverage[toml]
+      - run: pip install import-linter
 
-      - name: Download coverage artifacts
-        uses: actions/download-artifact@v4
+      - name: Run architecture validation
+        run: lint-imports
+
+  # ---------------------------------------------------------
+  # 🔐 SECURITY CHECK
+  # ---------------------------------------------------------
+  security:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
         with:
-          path: coverage-artifacts
+          python-version: "3.12"
 
-      - name: Flatten coverage files
-        # FIX: após o download, cada artefato fica em seu próprio
-        # subdiretório (coverage-artifacts/coverage-ubuntu-latest/.coverage).
-        # O "find" os move para o diretório raiz antes do combine.
-        run: |
-          find coverage-artifacts -name '.coverage*' -exec mv {} . \;
-          echo "Coverage files found:"
-          ls -la .coverage* || echo "none found"
+      - run: pip install pip-audit
+      - run: pip-audit
 
-      - name: Combine coverage
-        run: coverage combine
-
-      - name: Generate XML reports
-        run: |
-          coverage xml -o combined.xml
-          coverage xml \
-            --include="src/rpg_narrative_server/domain/*,src/rpg_narrative_server/application/*" \
-            -o domain.xml
-          coverage xml \
-            --include="src/rpg_narrative_server/infrastructure/*,src/rpg_narrative_server/frameworks/*" \
-            -o infra.xml
-
-      - name: Coverage summary (terminal)
-        run: coverage report --skip-empty
-
-      - name: Upload overall coverage
-        uses: codecov/codecov-action@v4
-        with:
-          files: combined.xml
-          flags: overall
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload domain coverage
-        uses: codecov/codecov-action@v4
-        with:
-          files: domain.xml
-          flags: domain
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload infra coverage
-        uses: codecov/codecov-action@v4
-        with:
-          files: infra.xml
-          flags: infra
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-
-  # -----------------------------------------------------------
-  # DOCKER — valida que a imagem builda sem erro
-  # -----------------------------------------------------------
+  # ---------------------------------------------------------
+  # 🐳 DOCKER (BUILD + RUN TEST)
+  # ---------------------------------------------------------
   docker:
     runs-on: ubuntu-latest
     needs: test
 
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t rpg-narrative-server:ci .
+
+      - name: Build image
+        run: docker build -t rpg-narrative-server:ci .
+
+      - name: Run container
+        run: |
+          docker run -d -p 8000:8000 --name app rpg-narrative-server:ci
+          sleep 5
+
+      - name: Healthcheck
+        run: |
+          curl -f http://localhost:8000/health || (docker logs app && exit 1)
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f app

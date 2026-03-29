@@ -7,7 +7,6 @@ from rpg_narrative_server.application.services.intent.language_profiles import (
     SUPPORTED_LANGUAGES,
 )
 
-
 # ---------------------------------------------------------
 # MATCH INTELIGENTE
 # ---------------------------------------------------------

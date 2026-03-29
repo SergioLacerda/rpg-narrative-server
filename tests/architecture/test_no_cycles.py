@@ -1,25 +1,27 @@
 import ast
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
 
+import pytest
 
 SRC = Path("src/rpg_narrative_server")
 
 
-def normalize(module: str) -> str:
+def _normalize(module: str) -> str:
     return module.split(":")[0].strip()
 
 
-def is_internal(module: str) -> bool:
+def _is_internal(module: str) -> bool:
     return module.startswith("rpg_narrative_server")
 
 
-def get_module_name(file: Path) -> str:
-    return "rpg_narrative_server." + str(file.relative_to("src")).replace(
-        "/", "."
-    ).replace(".py", "")
+def _get_module_name(file: Path) -> str:
+    return "rpg_narrative_server." + str(file.relative_to("src")).replace("/", ".").replace(
+        ".py", ""
+    )
 
 
+@pytest.mark.architecture
 def get_layer(module: str):
     if ".domain." in module:
         return "domain"
@@ -33,37 +35,39 @@ def get_layer(module: str):
     return "unknown"
 
 
+@pytest.mark.architecture
 def get_import_graph():
     graph = defaultdict(set)
 
     for file in SRC.rglob("*.py"):
-        module = get_module_name(file)
+        module = _get_module_name(file)
 
         tree = ast.parse(file.read_text(encoding="utf-8"))
 
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for n in node.names:
-                    name = normalize(n.name)
-                    if is_internal(name):
+                    name = _normalize(n.name)
+                    if _is_internal(name):
                         graph[module].add(name)
 
             elif isinstance(node, ast.ImportFrom):
                 if node.module:
-                    name = normalize(node.module)
-                    if is_internal(name):
+                    name = _normalize(node.module)
+                    if _is_internal(name):
                         graph[module].add(name)
 
     return graph
 
 
-def find_cycles(graph):
-    visited = set()
-    stack = []
+@pytest.mark.architecture
+def find_cycles(graph: dict[str, list[str]]) -> list[list[str]]:
+    visited: set[str] = set()
+    stack: list[str] = []
 
-    cycles = []
+    cycles: list[list[str]] = []
 
-    def visit(node):
+    def visit(node: str) -> None:
         if node in stack:
             idx = stack.index(node)
             cycles.append(stack[idx:] + [node])
@@ -86,6 +90,7 @@ def find_cycles(graph):
     return cycles
 
 
+@pytest.mark.architecture
 def test_no_cycles():
     graph = get_import_graph()
 
@@ -94,6 +99,7 @@ def test_no_cycles():
     assert not cycles, "\n\n".join(" -> ".join(cycle) for cycle in cycles)
 
 
+@pytest.mark.architecture
 def test_no_cross_layer_cycles():
     graph = get_import_graph()
     cycles = find_cycles(graph)

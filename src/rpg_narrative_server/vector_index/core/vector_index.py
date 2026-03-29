@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 from rpg_narrative_server.vector_index.core.search_context import SearchContext
 from rpg_narrative_server.vector_index.pipeline.builder import PipelineBuilder
@@ -23,10 +23,10 @@ class PipelineDeps:
     context_provider: Any
     ann: Any
 
-    temporal_index: Optional[Any] = None
-    causal_graph: Optional[Any] = None
-    cluster_router: Optional[Any] = None
-    importance: Optional[Any] = None
+    temporal_index: Any | None = None
+    causal_graph: Any | None = None
+    cluster_router: Any | None = None
+    importance: Any | None = None
 
 
 # ==========================================================
@@ -221,7 +221,7 @@ class VectorIndex:
 
             return ctx.results or []
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.warning("search timeout query_len=%s", len(query))
             return []
 

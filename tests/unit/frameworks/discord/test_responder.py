@@ -1,23 +1,26 @@
 import pytest
 
-from tests.config.helpers.discord_factory import make_ctx
-
-from rpg_narrative_server.frameworks.discord.responder import send
+from rpg_narrative_server.frameworks.discord.responder import DiscordResponder
+from tests.config.factories.context import make_context
 
 
 @pytest.mark.asyncio
 async def test_send_with_interaction():
-    ctx = make_ctx(interaction=True)
+    ctx = make_context(interaction=True)
 
-    await send(ctx, "hello")
+    responder = DiscordResponder(ctx)
+
+    await responder.send("hello")
 
     assert ctx.sent_messages[0] == "hello"
 
 
 @pytest.mark.asyncio
 async def test_send_fallback():
-    ctx = make_ctx()
+    ctx = make_context(guild_id=None, user_id="999")
 
-    await send(ctx, "hello")
+    responder = DiscordResponder(ctx)
+
+    await responder.send("hello")
 
     assert ctx.sent_messages[0] == "hello"

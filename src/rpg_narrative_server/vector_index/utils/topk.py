@@ -1,5 +1,5 @@
 import heapq
-from typing import Any, List, Tuple
+from typing import Any
 
 
 class TopK:
@@ -12,7 +12,7 @@ class TopK:
             raise ValueError("k must be > 0")
 
         self.k = k
-        self._heap: List[Tuple[float, Any]] = []
+        self._heap: list[tuple[float, Any]] = []
 
     # ---------------------------------------------------------
     # inserir item
@@ -28,14 +28,14 @@ class TopK:
     # retornar resultados ordenados
     # ---------------------------------------------------------
 
-    def results(self) -> List[Any]:
+    def results(self) -> list[Any]:
         return [item for _, item in sorted(self._heap, reverse=True)]
 
     # ---------------------------------------------------------
     # retornar com score (debug útil)
     # ---------------------------------------------------------
 
-    def results_with_scores(self) -> List[Tuple[float, Any]]:
+    def results_with_scores(self) -> list[tuple[float, Any]]:
         return sorted(self._heap, reverse=True)
 
     # ---------------------------------------------------------

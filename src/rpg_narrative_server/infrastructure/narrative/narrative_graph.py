@@ -1,5 +1,5 @@
-from rpg_narrative_server.utils.json_utils import load_json, save_json
 from rpg_narrative_server.infrastructure.nlp.entity_extractor import EntityExtractor
+from rpg_narrative_server.utils.json_utils import load_json, save_json
 
 GRAPH_FILE = "data/narrative_graph.json"
 

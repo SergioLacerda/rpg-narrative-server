@@ -1,5 +1,5 @@
-import json
 import hashlib
+import json
 import logging
 
 from rpg_narrative_server.shared.resilience import resilient_call

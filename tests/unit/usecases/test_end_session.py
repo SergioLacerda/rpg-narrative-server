@@ -1,6 +1,5 @@
 import pytest
 
-
 # ---------------------------------------------------------
 # HELPERS
 # ---------------------------------------------------------
@@ -21,19 +20,17 @@ class EmptyLLM:
 # ---------------------------------------------------------
 
 
-@pytest.mark.integration
+@pytest.mark.unit
 @pytest.mark.asyncio
 async def test_end_session_basic(container):
     result = await container.end_session.execute("test")
     assert result is not None
 
 
-@pytest.mark.integration
+@pytest.mark.unit
 @pytest.mark.asyncio
 async def test_end_session_persists_summary(container):
-    await container.narrative.execute(
-        campaign_id="test", action="something", user_id="user1"
-    )
+    await container.narrative.execute(campaign_id="test", action="something", user_id="user1")
 
     result = await container.end_session.execute("test")
 
@@ -96,9 +93,7 @@ async def test_end_session_no_memory(container):
 
 @pytest.mark.asyncio
 async def test_end_session_clears_memory(container):
-    await container.narrative.execute(
-        campaign_id="test", action="action", user_id="user"
-    )
+    await container.narrative.execute(campaign_id="test", action="action", user_id="user")
 
     await container.end_session.execute("test")
 

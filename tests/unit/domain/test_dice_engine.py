@@ -6,9 +6,7 @@ def test_roll_returns_expected_rolls_and_total(monkeypatch):
         assert ast == "fake"
         return [3, 4]
 
-    monkeypatch.setattr(
-        "rpg_narrative_server.domain.dice.dice_engine.evaluate", fake_evaluate
-    )
+    monkeypatch.setattr("rpg_narrative_server.domain.dice.dice_engine.evaluate", fake_evaluate)
 
     rolls, total = roll(ast="fake", rng=None)
 

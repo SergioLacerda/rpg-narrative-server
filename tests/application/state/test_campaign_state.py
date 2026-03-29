@@ -2,7 +2,6 @@ import pytest
 
 from rpg_narrative_server.application.state.campaign_state import CampaignState
 
-
 # ---------------------------------------------------------
 # FIXTURE
 # ---------------------------------------------------------

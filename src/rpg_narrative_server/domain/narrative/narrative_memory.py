@@ -1,6 +1,3 @@
-from typing import List
-
-
 class NarrativeMemory:
     """
     Representa o estado narrativo de uma campanha.
@@ -9,9 +6,9 @@ class NarrativeMemory:
 
     def __init__(
         self,
-        world_facts: List[str] | None = None,
-        scene_state: List[str] | None = None,
-        recent_events: List[str] | None = None,
+        world_facts: list[str] | None = None,
+        scene_state: list[str] | None = None,
+        recent_events: list[str] | None = None,
         summary: str = "",
     ):
         self.world_facts = world_facts or []

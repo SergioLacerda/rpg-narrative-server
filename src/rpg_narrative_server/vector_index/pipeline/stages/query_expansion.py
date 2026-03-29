@@ -50,9 +50,7 @@ class QueryExpansion:
 
         freq = Counter(tokens)
 
-        candidates = [
-            t for t, _ in freq.most_common() if len(t) >= self.min_token_length
-        ]
+        candidates = [t for t, _ in freq.most_common() if len(t) >= self.min_token_length]
 
         if not candidates:
             return ctx

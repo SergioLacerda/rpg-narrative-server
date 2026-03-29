@@ -1,4 +1,5 @@
 from openai import AsyncOpenAI
+
 from rpg_narrative_server.infrastructure.llm.base_provider import BaseProvider
 
 

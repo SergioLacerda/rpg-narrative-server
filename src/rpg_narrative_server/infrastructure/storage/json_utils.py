@@ -9,7 +9,7 @@ def read_json(path: Path, default):
         return default
 
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return default

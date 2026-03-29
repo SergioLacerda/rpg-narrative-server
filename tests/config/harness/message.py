@@ -1,12 +1,12 @@
+from rpg_narrative_server.application.contracts.response import Response
+from tests.config.factories.context import make_context
+from tests.config.fakes.intent.intent import DummyIntent
+from tests.config.fakes.runtime import DummyRuntime
+from tests.config.fakes.state import DummyCampaignState
 from tests.config.helpers.discord_factory import (
-    make_ctx,
     DummyExecutor,
     DummyUsecase,
 )
-
-from tests.config.fakes.runtime import DummyRuntime
-from tests.config.fakes.intent.intent import DummyIntent
-from tests.config.fakes.state import DummyCampaignState
 
 
 class MessageHarness:
@@ -15,33 +15,67 @@ class MessageHarness:
         *,
         campaign_id="camp1",
         response="ok",
-        intent=True,
+        intent="ACTION",
         cooldown=True,
         locked=False,
     ):
-        # ctx adapter
-        self.ctx = make_ctx()
-        self.ctx.channel_id = self.ctx.channel.id
-        self.ctx.user_id = self.ctx.author.id
-
+        # ---------------------------------------
+        # CONTEXT
+        # ---------------------------------------
+        self.ctx = make_context(guild_id=None, user_id="999")
         self.sent = self.ctx.sent_messages
         self.message_content = "attack"
 
-        # dependencies
+        # ---------------------------------------
+        # STATE
+        # ---------------------------------------
+        self.campaign_id = campaign_id
+        self.campaign_state = DummyCampaignState()
+
+        if self.campaign_id:
+            self.campaign_state.set(
+                self.ctx.channel.id,
+                self.campaign_id,
+            )
+
+        # ---------------------------------------
+        # RESPONSE
+        # ---------------------------------------
+        response_obj = Response(
+            text=response or "",
+            type="narrative",
+            metadata={},
+        )
+
+        # ---------------------------------------
+        # DEPENDENCIES
+        # ---------------------------------------
         self.usecases = type(
-            "Usecases", (), {"narrative": DummyUsecase(result=response)}
+            "Usecases",
+            (),
+            {
+                "narrative": DummyUsecase(result=response_obj),
+            },
         )()
 
         self.executor = DummyExecutor()
-        self.campaign_state = DummyCampaignState(campaign_id)
         self.runtime = DummyRuntime(cooldown=cooldown, locked=locked)
         self.intent = DummyIntent(intent)
 
-        self.settings = None
+        # settings mínimo
+        self.settings = type("Settings", (), {})()
+
+    # ---------------------------------------------------------
+    # HELPERS
+    # ---------------------------------------------------------
 
     def message(self, content: str):
         self.message_content = content
         return self
+
+    # ---------------------------------------------------------
+    # BUILD
+    # ---------------------------------------------------------
 
     def build(self):
         from rpg_narrative_server.application.services.message_service import (
@@ -57,6 +91,10 @@ class MessageHarness:
             settings=self.settings,
         )
 
+    # ---------------------------------------------------------
+    # EXECUTE
+    # ---------------------------------------------------------
+
     async def run(self):
         msg = type(
             "Msg",
@@ -68,4 +106,8 @@ class MessageHarness:
         )()
 
         service = self.build()
-        await service.handle(msg, self.ctx)
+
+        # 🔥 responder = ctx (como seus testes usam)
+        await service.handle(msg, self.ctx, self.ctx)
+
+        return self.sent

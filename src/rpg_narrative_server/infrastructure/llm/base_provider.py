@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
 from rpg_narrative_server.application.dto.llm_response import LLMResponse
-from rpg_narrative_server.application.services.llm.llm_errors import (
-    LLMRetryableError,
-    LLMClientError,
-)
 from rpg_narrative_server.application.services.llm.error_mapper import map_http_error
+from rpg_narrative_server.application.services.llm.llm_errors import (
+    LLMClientError,
+    LLMRetryableError,
+)
 
 
 class BaseProvider(ABC):
@@ -61,8 +61,14 @@ class BaseProvider(ABC):
                 **self._extract_usage(resp),
             )
 
+        except TimeoutError as e:
+            raise ValueError("timeout") from e
+
         except ValueError as e:
             raise LLMClientError(str(e)) from e
+
+        except LLMRetryableError:
+            raise
 
         except Exception as e:
             status = getattr(e, "status_code", None)

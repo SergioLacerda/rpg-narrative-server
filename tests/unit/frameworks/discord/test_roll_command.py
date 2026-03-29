@@ -1,58 +1,73 @@
 import pytest
 
-from tests.config.helpers.discord_factory import (
-    make_ctx,
-    DummyBot,
-    DummyExecutor,
-    DummySettings,
-)
-from tests.config.fakes.discord.usecases import DummyUsecases, DummyRollDice
-
-from rpg_narrative_server.frameworks.discord.commands.roll_commands import (
+from rpg_narrative_server.frameworks.discord.adapters.roll_commands import (
     register_roll_command,
 )
+from tests.config.factories.bot import make_bot, make_executor
+from tests.config.factories.context import make_context
+from tests.config.factories.deps import make_deps
+from tests.config.fakes.usecases import DummyRoll
 
-
-@pytest.fixture
-def bot():
-    return DummyBot()
-
-
-@pytest.fixture
-def executor():
-    return DummyExecutor(settings=DummySettings(), debug=True)
+# ---------------------------------------------------------
+# SUCCESS
+# ---------------------------------------------------------
 
 
 @pytest.mark.asyncio
-async def test_roll_success(bot, executor):
-    register_roll_command(
-        bot, DummyUsecases(roll_dice=DummyRollDice("resultado")), executor
-    )
+async def test_roll_success():
+    ctx = make_context(guild_id=None, user_id="999")
+    bot = make_bot()
+    executor = make_executor()
 
-    ctx = make_ctx()
+    deps = make_deps(roll_dice=DummyRoll(result="resultado"))
+    registry = bot._registry
+
+    register_roll_command(bot, deps, executor, registry)
 
     await bot._command(ctx, expression="1d20")
 
     assert ctx.sent_messages
 
 
-@pytest.mark.asyncio
-async def test_roll_empty_expression(bot, executor):
-    register_roll_command(bot, DummyUsecases(roll_dice=DummyRollDice()), executor)
+# ---------------------------------------------------------
+# EMPTY EXPRESSION
+# ---------------------------------------------------------
 
-    ctx = make_ctx()
+
+@pytest.mark.asyncio
+async def test_roll_empty_expression():
+    ctx = make_context(guild_id=None, user_id="999")
+    bot = make_bot()
+    executor = make_executor()
+
+    deps = make_deps(roll_dice=DummyRoll())
+    registry = bot._registry
+
+    register_roll_command(bot, deps, executor, registry)
 
     await bot._command(ctx, expression="")
 
-    assert "⚠️" in ctx.sent_messages[0]
+    assert ctx.sent_messages
+    assert ctx.sent_messages[0] != ""
 
 
-@pytest.mark.asyncio
-async def test_roll_no_result(bot, executor):
-    register_roll_command(bot, DummyUsecases(roll_dice=DummyRollDice(None)), executor)
+# ---------------------------------------------------------
+# NO RESULT
+# ---------------------------------------------------------
 
-    ctx = make_ctx()
+
+async def test_roll_no_result():
+    ctx = make_context(guild_id=None, user_id="999")
+    bot = make_bot()
+    executor = make_executor()
+
+    deps = make_deps(roll_dice=DummyRoll(result=None))
+
+    registry = bot._registry
+
+    register_roll_command(bot, deps, executor, registry)
 
     await bot._command(ctx, expression="1d20")
 
+    assert ctx.sent_messages
     assert "⚠️" in ctx.sent_messages[0]

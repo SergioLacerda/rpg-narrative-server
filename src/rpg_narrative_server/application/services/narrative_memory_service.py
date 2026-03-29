@@ -9,8 +9,10 @@ class NarrativeMemoryService:
     Orquestra memória narrativa + helpers para indexação.
     """
 
-    def __init__(self, repo):
+    def __init__(self, repo, now_fn=time.time, id_fn=lambda: str(uuid.uuid4())):
         self.repo = repo
+        self._now = now_fn
+        self._id = id_fn
 
     # ---------------------------------------------------------
     # leitura
@@ -23,11 +25,11 @@ class NarrativeMemoryService:
     # helpers
     # ---------------------------------------------------------
 
-    def now(self) -> float:
-        return time.time()
+    def now(self):
+        return self._now()
 
-    def generate_event_id(self) -> str:
-        return str(uuid.uuid4())
+    def generate_event_id(self):
+        return self._id()
 
     def get_last_event_id(self):
         memory = self.repo.load()

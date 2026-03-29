@@ -2,80 +2,61 @@
 # QUERY / EXPANSION
 # ==========================================================
 
-from .query_expansion import QueryExpansion
-from .causal_expansion import CausalExpansion
-from .temporal_expansion import TemporalExpansion
-from .timeline_expansion import TimelineExpansion
-
-
-# ==========================================================
-# EMBEDDING
-# ==========================================================
-
-from .embed_stage import EmbedStage
-from .reset_embedding_stage import ResetEmbeddingStage
-
-
-# ==========================================================
-# RETRIEVAL
-# ==========================================================
-
-from .candidate_retriever import CandidateRetriever
-
+from .adaptive_candidate_limiter import AdaptiveCandidateLimiter
+from .adaptive_ranking_stage import AdaptiveRankingStage
 
 # ==========================================================
 # PREFILTER / ANN
 # ==========================================================
-
 from .ann_prefilter import ANNPrefilter
 
-
 # ==========================================================
-# CACHE
+# RETRIEVAL
 # ==========================================================
-
-from .query_local_cache import QueryLocalCache
-
+from .candidate_retriever import CandidateRetriever
 
 # ==========================================================
 # CONTROL
 # ==========================================================
-
 from .candidate_set_reservoir import CandidateSetReservoir
-from .adaptive_candidate_limiter import AdaptiveCandidateLimiter
-
-
-# ==========================================================
-# CONTEXT
-# ==========================================================
-
-from .temporal_priority_stage import TemporalPriorityStage
+from .causal_expansion import CausalExpansion
 from .cluster_dedup_stage import ClusterDedupStage
 from .deduplicate_stage import DeduplicateStage
 
-
 # ==========================================================
-# RANKING
+# EMBEDDING
 # ==========================================================
-
-from .ranking_stage_1 import RankingStage1
-from .ranking_stage_2 import RankingStage2
-from .adaptive_ranking_stage import AdaptiveRankingStage
-
+from .embed_stage import EmbedStage
 
 # ==========================================================
 # FUSION
 # ==========================================================
-
 from .hybrid_fusion_stage import HybridFusionStage
-
 
 # ==========================================================
 # NARRATIVE
 # ==========================================================
-
 from .narrative_importance_stage import NarrativeImportanceStage
+from .query_expansion import QueryExpansion
 
+# ==========================================================
+# CACHE
+# ==========================================================
+from .query_local_cache import QueryLocalCache
+
+# ==========================================================
+# RANKING
+# ==========================================================
+from .ranking_stage_1 import RankingStage1
+from .ranking_stage_2 import RankingStage2
+from .reset_embedding_stage import ResetEmbeddingStage
+from .temporal_expansion import TemporalExpansion
+
+# ==========================================================
+# CONTEXT
+# ==========================================================
+from .temporal_priority_stage import TemporalPriorityStage
+from .timeline_expansion import TimelineExpansion
 
 # ==========================================================
 # EXPORT CONTROL

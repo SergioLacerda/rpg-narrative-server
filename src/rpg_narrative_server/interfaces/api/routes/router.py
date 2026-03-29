@@ -1,13 +1,13 @@
 from fastapi import APIRouter
 
-from rpg_narrative_server.interfaces.api.routes.narrative_controller import (
-    router as narrative_router,
-)
 from rpg_narrative_server.interfaces.api.routes.dice_controller import (
     router as dice_router,
 )
 from rpg_narrative_server.interfaces.api.routes.health_controller import (
     router as health_router,
+)
+from rpg_narrative_server.interfaces.api.routes.narrative_controller import (
+    router as narrative_router,
 )
 from rpg_narrative_server.interfaces.api.routes.system_controller import (
     router as system_router,

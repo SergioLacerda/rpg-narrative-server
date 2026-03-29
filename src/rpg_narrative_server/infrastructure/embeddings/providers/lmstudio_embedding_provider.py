@@ -1,6 +1,6 @@
-import httpx
 import logging
-from typing import List
+
+import httpx
 
 from rpg_narrative_server.shared.resilience import resilient_call
 
@@ -41,7 +41,7 @@ class LMStudioEmbeddingProvider:
     # single
     # ---------------------------------------------------------
 
-    async def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> list[float]:
         if not text or not text.strip():
             return self._zero_vector()
 
@@ -70,7 +70,7 @@ class LMStudioEmbeddingProvider:
     # batch
     # ---------------------------------------------------------
 
-    async def embed_batch(self, texts: List[str]):
+    async def embed_batch(self, texts: list[str]):
         if not texts:
             return []
 

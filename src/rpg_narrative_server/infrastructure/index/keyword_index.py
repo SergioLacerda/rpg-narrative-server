@@ -1,6 +1,5 @@
 import re
-from collections import defaultdict, Counter
-from typing import List, Tuple
+from collections import Counter, defaultdict
 
 
 class KeywordIndex:
@@ -16,7 +15,7 @@ class KeywordIndex:
     # tokenização
     # ---------------------------------------------------------
 
-    def _tokens(self, text: str) -> List[str]:
+    def _tokens(self, text: str) -> list[str]:
         return re.findall(r"\w+", text.lower())
 
     # ---------------------------------------------------------
@@ -36,7 +35,7 @@ class KeywordIndex:
         text: str,
         limit: int = 5,
         min_score: int = 1,
-    ) -> List[Tuple[str, int]]:
+    ) -> list[tuple[str, int]]:
         tokens = self._tokens(text)
 
         scores = Counter()

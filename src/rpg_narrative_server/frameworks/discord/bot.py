@@ -1,60 +1,59 @@
 import logging
+
 import discord
 from discord.ext import commands
 
-from rpg_narrative_server.bootstrap.container import get_container
-
-from rpg_narrative_server.frameworks.discord.command_base import CommandExecutor
-from rpg_narrative_server.frameworks.discord.context.message_context import (
-    MessageContext,
-)
-
-from rpg_narrative_server.frameworks.discord.commands.gm_commands import (
-    register_gm_command,
-)
-from rpg_narrative_server.frameworks.discord.commands.roll_commands import (
-    register_roll_command,
-)
-from rpg_narrative_server.frameworks.discord.commands.session_command import (
-    register_session_commands,
-)
-from rpg_narrative_server.frameworks.discord.commands.campaign_commands import (
+from rpg_narrative_server.application.commands.command_bus import CommandBus
+from rpg_narrative_server.application.commands.command_registry import CommandRegistry
+from rpg_narrative_server.application.services.message_service import MessageService
+from rpg_narrative_server.frameworks.discord.adapters.campaign_commands import (
     register_campaign_commands,
 )
-
-from rpg_narrative_server.frameworks.discord.responder import send
-
-# 🆕 application
-from rpg_narrative_server.application.services.message_service import MessageService
-
-# 🆕 runtime
+from rpg_narrative_server.frameworks.discord.adapters.gm_commands import register_gm_command
+from rpg_narrative_server.frameworks.discord.adapters.roll_commands import register_roll_command
+from rpg_narrative_server.frameworks.discord.adapters.session_commands import (
+    register_session_commands,
+)
+from rpg_narrative_server.frameworks.discord.context.message_context import MessageContext
+from rpg_narrative_server.frameworks.discord.executor import CommandExecutor
+from rpg_narrative_server.frameworks.discord.responder import DiscordResponder
 from rpg_narrative_server.infrastructure.runtime.message_runtime import MessageRuntime
-
 
 logger = logging.getLogger("rpg_narrative_server.discord")
 
 
-def create_bot(*, settings, usecases, container=None):
-    container = container or get_container()
+def create_bot(settings, deps, register_commands: bool = True):
+    # -------------------------------------------------
+    # DISCORD SETUP
+    # -------------------------------------------------
     intents = discord.Intents.default()
     intents.message_content = True
 
     bot = commands.Bot(command_prefix="!", intents=intents)
-
     bot.debug = settings.runtime.environment != "prod"
 
-    executor = CommandExecutor(settings=settings, debug=bot.debug)
+    # -------------------------------------------------
+    # CORE (Application wiring)
+    # -------------------------------------------------
+    registry = CommandRegistry()
+
+    executor = CommandExecutor(
+        settings=settings,
+        debug=bot.debug,
+    )
+
+    # 🔥 CommandBus disponível para outros adapters (CLI/API/testes)
+    command_bus = CommandBus(registry, executor)
 
     # -------------------------------------------------
-    # 🔥 BOOTSTRAP (fora de eventos)
+    # SERVICES
     # -------------------------------------------------
-
     message_service = MessageService(
-        usecases=usecases,
+        usecases=deps,
         executor=executor,
-        campaign_state=container.campaign_state,
+        campaign_state=deps.campaign_state,
         runtime=MessageRuntime(),
-        intent_classifier=container.intent_classifier,
+        intent_classifier=deps.intent_classifier,
         settings=settings,
     )
 
@@ -69,63 +68,51 @@ def create_bot(*, settings, usecases, container=None):
             settings.runtime.environment,
         )
 
-        if settings.runtime.environment in ("local", "dev"):
-            try:
-                synced = await bot.tree.sync()
-                logger.info("Synced %s commands", len(synced))
-            except Exception:
-                logger.exception("Sync failed")
-
-    @bot.event
-    async def on_disconnect():
-        logger.warning("Bot disconnected")
-
-    @bot.event
-    async def on_resumed():
-        logger.info("Bot resumed connection")
+        try:
+            await bot.tree.sync()
+            logger.info("Slash commands synced")
+        except Exception:
+            logger.exception("Failed to sync commands")
 
     @bot.event
     async def on_command_error(ctx, error):
+        responder = DiscordResponder(ctx)
+
         if isinstance(error, commands.CommandOnCooldown):
-            await send(ctx, f"⏳ Aguarde {error.retry_after:.1f}s.")
+            await responder.send("⏳ Aguarde antes de usar novamente.")
             return
 
         logger.exception("Command error: %s", error)
+        await responder.send("⚠️ Erro ao executar comando.")
 
-        try:
-            await send(ctx, "⚠️ Erro ao executar comando.")
-        except Exception:
-            pass
-
-    # -------------------------------------------------
-    # 🔥 RP AUTOMÁTICO (core)
-    # -------------------------------------------------
     @bot.event
     async def on_message(message):
-        # ignora bots
         if message.author.bot:
             return
 
-        # comandos prefixados
-        if message.content.startswith("!"):
-            await bot.process_commands(message)
-            return
-
-        # adapter → executor compatível
         ctx = MessageContext(message)
+        responder = DiscordResponder(ctx)
 
-        # fluxo principal
-        await message_service.handle(message, ctx)
+        # 🔥 pipeline narrativa (RAG + memória)
+        await message_service.handle(message, ctx, responder)
 
-        # garante compatibilidade com outros handlers futuros
+        # permite comandos !gm, !roll etc
         await bot.process_commands(message)
 
     # -------------------------------------------------
-    # COMMANDS
+    # COMMAND REGISTRATION (Discord Adapter)
     # -------------------------------------------------
-    register_gm_command(bot, usecases, executor)
-    register_roll_command(bot, usecases, executor)
-    register_session_commands(bot, usecases, executor)
-    register_campaign_commands(bot)
+    if register_commands:
+        bot.gm_command = register_gm_command(bot, deps, executor, registry)
+        bot.roll_command = register_roll_command(bot, deps, executor, registry)
+        bot.session_command = register_session_commands(bot, deps, executor, registry)
+        bot.campaign_command = register_campaign_commands(bot, deps, executor, registry)
+
+    # -------------------------------------------------
+    # OPTIONAL EXPOSURES (não obrigatórios)
+    # -------------------------------------------------
+    # 🔥 úteis para CLI / testes avançados / debug manual
+    bot.command_bus = command_bus
+    bot.command_registry = registry
 
     return bot

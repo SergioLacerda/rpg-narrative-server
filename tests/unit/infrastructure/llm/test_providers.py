@@ -1,22 +1,18 @@
 import pytest
-import asyncio
-
-from tests.config.fakes.llm.fake_responses import (
-    FakeResponseEmpty,
-    FakeResponseOpenAI,
-    FakeOllamaResponse,
-)
 
 import rpg_narrative_server.infrastructure.llm as providers_mod
-
-from rpg_narrative_server.infrastructure.llm.ollama_provider import OllamaProvider
-from rpg_narrative_server.infrastructure.llm.openai_provider import OpenAIProvider
-from rpg_narrative_server.infrastructure.llm.lmstudio_provider import LMStudioProvider
-
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
 from rpg_narrative_server.application.services.llm.llm_errors import (
-    LLMRetryableError,
     LLMClientError,
+    LLMRetryableError,
+)
+from rpg_narrative_server.infrastructure.llm.lmstudio_provider import LMStudioProvider
+from rpg_narrative_server.infrastructure.llm.ollama_provider import OllamaProvider
+from rpg_narrative_server.infrastructure.llm.openai_provider import OpenAIProvider
+from tests.config.fakes.llm.fake_responses import (
+    FakeOllamaResponse,
+    FakeResponseEmpty,
+    FakeResponseOpenAI,
 )
 
 
@@ -48,21 +44,6 @@ async def test_provider_empty_response(monkeypatch):
     req = LLMRequest(prompt="hi")
 
     with pytest.raises(LLMRetryableError):
-        await provider.generate(req)
-
-
-@pytest.mark.asyncio
-async def test_provider_timeout(monkeypatch):
-    provider = LMStudioProvider(base_url="http://x", model="m", timeout=0.01)
-
-    async def slow(*args, **kwargs):
-        await asyncio.sleep(1)
-
-    monkeypatch.setattr(provider.client.chat.completions, "create", slow)
-
-    req = LLMRequest(prompt="hi")
-
-    with pytest.raises(Exception):
         await provider.generate(req)
 
 

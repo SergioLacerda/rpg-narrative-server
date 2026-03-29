@@ -1,7 +1,7 @@
 from rpg_narrative_server.application.services.llm.llm_errors import (
     LLMClientError,
-    LLMRetryableError,
     LLMRateLimitError,
+    LLMRetryableError,
     LLMServerError,
 )
 

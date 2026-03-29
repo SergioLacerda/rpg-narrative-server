@@ -1,6 +1,5 @@
-from contextvars import ContextVar
 from contextlib import contextmanager
-
+from contextvars import ContextVar
 
 _current_campaign: ContextVar[str | None] = ContextVar("current_campaign", default=None)
 

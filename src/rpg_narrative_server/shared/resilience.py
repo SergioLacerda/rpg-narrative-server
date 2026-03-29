@@ -1,7 +1,7 @@
 import asyncio
 import inspect
-import random
 import logging
+import random
 
 logger = logging.getLogger("rpg_narrative_server.resilience")
 

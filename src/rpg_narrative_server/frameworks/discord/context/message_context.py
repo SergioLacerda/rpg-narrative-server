@@ -1,4 +1,3 @@
-from typing import Optional
 import discord
 
 
@@ -11,13 +10,13 @@ class MessageContext:
         self.author = message.author
         self.guild = getattr(message, "guild", None)
 
-        self.interaction: Optional[object] = None
+        self.interaction: discord.Interaction | None = None
 
     # -------------------------------------------------
     # API compatível com ctx.send()
     # -------------------------------------------------
-    async def send(self, content: str):
-        await self.channel.send(content)
+    async def send(self, content: str, **kwargs):
+        await self.channel.send(content, **kwargs)
 
     # -------------------------------------------------
     # Utilidades (opcional, mas útil)
@@ -31,8 +30,8 @@ class MessageContext:
         return str(self.author.id)
 
     @property
-    def guild_id(self) -> Optional[str]:
-        if self.guild and getattr(self.guild, "id", None):
+    def guild_id(self) -> str | None:
+        if self.guild:
             return str(self.guild.id)
         return None
 

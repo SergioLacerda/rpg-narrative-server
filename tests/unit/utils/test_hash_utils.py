@@ -1,5 +1,7 @@
-import pytest
 import hashlib
+from typing import Any, cast
+
+import pytest
 
 from rpg_narrative_server.utils.hash_utils import sha256_hash
 
@@ -54,9 +56,9 @@ def test_sha256_hash_unicode():
 
 def test_sha256_hash_invalid_type_int():
     with pytest.raises(TypeError):
-        sha256_hash(123)
+        sha256_hash(cast(Any, 123))
 
 
 def test_sha256_hash_invalid_type_object():
     with pytest.raises(TypeError):
-        sha256_hash(object())
+        sha256_hash(cast(Any, object()))

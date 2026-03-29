@@ -4,7 +4,6 @@ from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
     VectorStoreAdapter,
 )
 
-
 # ---------------------------------------------------------
 # DUMMY
 # ---------------------------------------------------------

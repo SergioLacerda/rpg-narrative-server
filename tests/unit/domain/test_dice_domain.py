@@ -1,4 +1,8 @@
+from dataclasses import FrozenInstanceError
+from typing import Any, cast
+
 import pytest
+
 from rpg_narrative_server.domain.dice.value_objects import DiceExpression
 
 
@@ -13,5 +17,5 @@ def test_dice_expression_creation():
 def test_dice_expression_immutable():
     expr = DiceExpression(1, 6)
 
-    with pytest.raises(Exception):
-        expr.quantity = 2
+    with pytest.raises(FrozenInstanceError):
+        cast(Any, expr).quantity = 2

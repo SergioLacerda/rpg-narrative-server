@@ -2,7 +2,6 @@ from rpg_narrative_server.application.state.campaign_state_store import (
     CampaignStateStore,
 )
 
-
 # ---------------------------------------------------------
 # HELPERS
 # ---------------------------------------------------------

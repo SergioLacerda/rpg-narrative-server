@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 
+from rpg_narrative_server.interfaces.api.dependencies import get_narrative_usecase
 from rpg_narrative_server.interfaces.api.schemas.narrative_schema import (
     NarrativeEventRequest,
 )
-from rpg_narrative_server.interfaces.api.dependencies import get_narrative_usecase
 
 router = APIRouter()
 

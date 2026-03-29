@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from rpg_narrative_server.config.paths import get_campaign_path
 
 

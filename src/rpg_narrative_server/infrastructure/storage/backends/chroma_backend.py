@@ -1,10 +1,9 @@
 from pathlib import Path
 
-from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
-
 from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
     VectorStoreAdapter,
 )
+from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
 from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
     InMemoryKVStore,
 )

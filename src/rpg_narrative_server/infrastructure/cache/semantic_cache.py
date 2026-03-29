@@ -1,11 +1,9 @@
 import hashlib
 import logging
-from typing import Any, Optional
-
-from rpg_narrative_server.vector_index.utils.similarity import cosine_similarity
+from typing import Any
 
 from rpg_narrative_server.infrastructure.cache.ttl_cache import TTLCache
-
+from rpg_narrative_server.vector_index.utils.similarity import cosine_similarity
 
 logger = logging.getLogger("rpg_narrative_server.semantic_cache")
 
@@ -69,7 +67,7 @@ class SemanticCache:
     # lookup
     # ---------------------------------------------------------
 
-    def get(self, query: str, vector) -> Optional[Any]:
+    def get(self, query: str, vector) -> Any | None:
         if not query:
             return None
 

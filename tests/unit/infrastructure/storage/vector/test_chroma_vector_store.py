@@ -2,7 +2,6 @@ from rpg_narrative_server.infrastructure.storage.vector.chroma_vector_store impo
     ChromaVectorStore,
 )
 
-
 # ---------------------------------------------------------
 # DUMMY
 # ---------------------------------------------------------

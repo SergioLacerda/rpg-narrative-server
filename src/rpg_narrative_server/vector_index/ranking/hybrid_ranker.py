@@ -10,7 +10,7 @@ class HybridRanker:
 
         scores = {}
 
-        for weight, rank_list in zip(weights, rank_lists):
+        for weight, rank_list in zip(weights, rank_lists, strict=False):
             if not rank_list:
                 continue
 

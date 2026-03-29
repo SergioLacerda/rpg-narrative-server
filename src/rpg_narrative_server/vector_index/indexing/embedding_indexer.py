@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Any
 
 
 class EmbeddingIndexer:
@@ -36,10 +36,10 @@ class EmbeddingIndexer:
         self,
         doc_id: str,
         text: str,
-        tokens: Optional[list[str]] = None,
-        metadata: Optional[Dict[str, Any]] = None,
-        timestamp: Optional[float] = None,
-        parent_id: Optional[str] = None,
+        tokens: list[str] | None = None,
+        metadata: dict[str, Any] | None = None,
+        timestamp: float | None = None,
+        parent_id: str | None = None,
     ):
         """
         Indexa um documento completo.

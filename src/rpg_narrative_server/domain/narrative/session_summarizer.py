@@ -1,6 +1,3 @@
-from typing import List, Dict
-
-
 class SessionSummarizer:
     """
     Responsável por transformar eventos narrativos em
@@ -16,7 +13,7 @@ class SessionSummarizer:
     # EXTRAÇÃO
     # ---------------------------------------------------------
 
-    def extract(self, events: List[Dict]) -> str:
+    def extract(self, events: list[dict]) -> str:
         """
         Extrai texto relevante dos eventos.
 

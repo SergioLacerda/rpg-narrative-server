@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from typing import List
 
 from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGateway
 from rpg_narrative_server.shared.resilience import resilient_call
@@ -15,12 +14,12 @@ logger = logging.getLogger("rpg_narrative_server.embedding.sentence")
 
 def _load_backend():
     try:
-        from sentence_transformers import SentenceTransformer
         import torch
+        from sentence_transformers import SentenceTransformer
 
         return SentenceTransformer, torch
-    except ImportError:
-        raise RuntimeError("sentence-transformers not installed")
+    except ImportError as err:
+        raise ImportError("msg") from err
 
 
 # ---------------------------------------------------------
@@ -140,7 +139,7 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
     # public API
     # ---------------------------------------------------------
 
-    async def embed(self, text: str) -> List[float]:
+    async def embed(self, text: str) -> list[float]:
         if not text or not text.strip():
             return [0.0] * self._dimension
 
@@ -158,7 +157,7 @@ class SentenceEmbeddingProvider(EmbeddingGateway):
             logger.exception("Sentence embedding failed")
             raise
 
-    async def embed_batch(self, texts: List[str]):
+    async def embed_batch(self, texts: list[str]):
         texts = [t for t in texts if t and t.strip()]
         if not texts:
             return []

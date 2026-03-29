@@ -1,4 +1,5 @@
 import pytest
+
 from rpg_narrative_server.domain.random.random_provider import RandomProvider
 
 
@@ -8,4 +9,4 @@ class Dummy(RandomProvider):
 
 def test_random_provider_abstract():
     with pytest.raises(TypeError):
-        Dummy()
+        Dummy()  # type: ignore[abstract]

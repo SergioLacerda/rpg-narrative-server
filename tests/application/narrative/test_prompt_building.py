@@ -1,15 +1,14 @@
 import pytest
 
-from rpg_narrative_server.usecases.narrative_event import NarrativeUseCase
 from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
-
+from rpg_narrative_server.usecases.narrative_event import NarrativeUseCase
 from tests.config.fakes.narrative import (
+    DummyDocumentResolver,
+    DummyEventBus,
     DummyLLM,
     DummyMemoryService,
     DummyVectorIndex,
-    DummyEventBus,
     DummyVectorMemory,
-    DummyDocumentResolver,
 )
 
 
@@ -33,22 +32,25 @@ async def test_narrative_calls_llm():
     )
 
     async def fake_build(**kwargs):
-        return {
-            "summary": "",
-            "recent_events": ["open door"],
-            "history": ["open door"],
-            "retrieved": "dark corridor",
-            "entities": [],
-            "related_entities": [],
-            "scene_type": "ACTION",
-        }
+        return (
+            {
+                "summary": "",
+                "recent_events": ["open door"],
+                "history": ["open door"],
+                "retrieved": "dark corridor",
+                "entities": [],
+                "related_entities": [],
+                "scene_type": "ACTION",
+            },
+            None,
+        )
 
     usecase.context_builder.build = fake_build
 
     await usecase.execute(campaign_id="c", action="enter room", user_id="u")
 
-    prompt = llm.calls[-1]
-
+    request = llm.calls[-1]
+    prompt = request.prompt
     # ---------------------------------------------------------
     # ASSERTS
     # ---------------------------------------------------------

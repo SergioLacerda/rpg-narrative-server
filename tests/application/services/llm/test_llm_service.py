@@ -1,10 +1,10 @@
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
 
-from tests.config.fakes.llm.fake_request import DummyRequest
-
-from rpg_narrative_server.application.services.llm.llm_service import LLMService
 from rpg_narrative_server.application.services.llm.circuit_breaker import CircuitBreaker
+from rpg_narrative_server.application.services.llm.llm_service import LLMService
+from tests.config.fakes.llm.fake_request import DummyRequest
 
 
 @pytest.mark.asyncio
@@ -107,11 +107,11 @@ async def test_generate_empty_response():
 async def test_generate_exception():
     with patch(
         "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
-        new=AsyncMock(side_effect=Exception("fail")),
+        new=AsyncMock(side_effect=ValueError("fail")),
     ):
         service = LLMService(provider=MagicMock())
 
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             await service.generate(DummyRequest())
 
 
@@ -209,14 +209,14 @@ async def test_failure_triggers_circuit():
 
     with patch(
         "rpg_narrative_server.application.services.llm.llm_service.resilient_call",
-        new=AsyncMock(side_effect=Exception()),
+        new=AsyncMock(side_effect=ValueError()),
     ):
         service = LLMService(
             provider=MagicMock(),
             circuit_breaker=cb,
         )
 
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             await service.generate(DummyRequest())
 
     assert cb.state == "OPEN"

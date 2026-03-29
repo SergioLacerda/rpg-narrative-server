@@ -1,6 +1,7 @@
 from pathlib import Path
-from rpg_narrative_server.infrastructure.storage.json_utils import read_json, write_json
+
 from rpg_narrative_server.config.settings import Settings
+from rpg_narrative_server.infrastructure.storage.json_utils import read_json, write_json
 
 
 class JSONKeyValueStore:

@@ -3,47 +3,38 @@ import pytest
 from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
 
 
+class IncompleteBackend(StorageBackend):
+    pass
+
+
 class DummyBackend(StorageBackend):
     def build_vector_store(self):
-        return super().build_vector_store()
+        return "vector"
 
     def build_document_store(self):
-        return super().build_document_store()
+        return "doc"
 
     def build_token_store(self):
-        return super().build_token_store()
+        return "token"
 
     def build_metadata_store(self):
-        return super().build_metadata_store()
+        return "meta"
 
 
-def test_abstract_methods():
+def test_storage_backend_contract():
     backend = DummyBackend()
 
-    with pytest.raises(NotImplementedError):
-        backend.build_vector_store()
-
-    with pytest.raises(NotImplementedError):
-        backend.build_document_store()
-
-    with pytest.raises(NotImplementedError):
-        backend.build_token_store()
-
-    with pytest.raises(NotImplementedError):
-        backend.build_metadata_store()
+    assert backend.build_vector_store() == "vector"
+    assert backend.build_document_store() == "doc"
+    assert backend.build_token_store() == "token"
+    assert backend.build_metadata_store() == "meta"
 
 
-def test_base_backend_not_implemented():
-    backend = DummyBackend()
+def test_storage_backend_is_abstract():
+    with pytest.raises(TypeError):
+        StorageBackend()  # type: ignore[abstract]
 
-    with pytest.raises(NotImplementedError):
-        backend.build_vector_store()
 
-    with pytest.raises(NotImplementedError):
-        backend.build_document_store()
-
-    with pytest.raises(NotImplementedError):
-        backend.build_token_store()
-
-    with pytest.raises(NotImplementedError):
-        backend.build_metadata_store()
+def test_incomplete_backend_fails():
+    with pytest.raises(TypeError):
+        IncompleteBackend()  # type: ignore[abstract]

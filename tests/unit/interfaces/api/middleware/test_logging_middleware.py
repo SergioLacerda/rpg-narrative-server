@@ -1,8 +1,7 @@
 from rpg_narrative_server.interfaces.api.middleware.logging_middleware import (
-    log_request_start,
     log_request_end,
+    log_request_start,
 )
-
 
 # ---------------------------------------------------------
 # DUMMIES

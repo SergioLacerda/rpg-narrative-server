@@ -1,6 +1,6 @@
 from pathlib import Path
-from rpg_narrative_server.config.loader import load_settings
 
+from rpg_narrative_server.config.loader import load_settings
 
 BASE_DATA_DIR = Path("data")
 BASE_CAMPAIGNS_DIR = BASE_DATA_DIR / "campaigns"

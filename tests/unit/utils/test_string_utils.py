@@ -1,18 +1,17 @@
 from rpg_narrative_server.utils.string_utils import (
-    normalize_whitespace,
-    normalize_linebreaks,
-    strip_lines,
-    remove_empty_lines,
     clean_text,
+    count_chars,
+    deduplicate,
+    ensure_prefix,
+    normalize_linebreaks,
+    normalize_whitespace,
+    remove_empty_lines,
+    safe_join,
+    strip_lines,
+    total_length,
     truncate,
     truncate_lines,
-    deduplicate,
-    safe_join,
-    ensure_prefix,
-    count_chars,
-    total_length,
 )
-
 
 # ---------------------------------------------------------
 # NORMALIZAÇÃO

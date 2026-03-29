@@ -27,7 +27,7 @@ class ClusterBuilder:
             cluster = [base_id]
             visited.add(base_id)
 
-            for rid, sim in zip(remaining_ids, sims):
+            for rid, sim in zip(remaining_ids, sims, strict=False):
                 if sim >= self.threshold:
                     cluster.append(rid)
                     visited.add(rid)

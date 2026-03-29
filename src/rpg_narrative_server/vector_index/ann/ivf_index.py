@@ -1,4 +1,5 @@
 import heapq
+
 from rpg_narrative_server.vector_index.utils.similarity import cosine_similarity
 
 

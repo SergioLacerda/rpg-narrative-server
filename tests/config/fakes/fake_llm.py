@@ -1,15 +1,8 @@
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
+from rpg_narrative_server.application.dto.llm_response import LLMResponse
 
 
 class FakeLLMService:
-    """
-    Fake do LLMService (não do provider)
-
-    ✔ compatível com arquitetura nova
-    ✔ previsível
-    ✔ fácil de controlar em testes
-    """
-
     def __init__(
         self,
         result: str | None = None,
@@ -19,7 +12,7 @@ class FakeLLMService:
         self.fail = fail
         self.calls: list[LLMRequest] = []
 
-    async def generate(self, request: LLMRequest) -> str:
+    async def generate(self, request: LLMRequest) -> LLMResponse:
         if not isinstance(request, LLMRequest):
             raise TypeError("FakeLLMService espera LLMRequest")
 
@@ -28,19 +21,36 @@ class FakeLLMService:
         if self.fail:
             raise RuntimeError("Fake LLM failure")
 
+        # ---------------------------------
+        # resposta explícita
+        # ---------------------------------
         if self.result is not None:
-            return self.result
+            return LLMResponse(
+                content=self.result,
+                provider="fake",
+                model="fake-model",
+            )
 
+        # ---------------------------------
+        # comportamento baseado no prompt
+        # ---------------------------------
         prompt = request.prompt.lower()
         tail = prompt[-200:]
 
         if "look" in tail:
-            return "you look around"
+            content = "you look around"
 
-        if "enter room" in tail:
-            return "you enter the room"
+        elif "enter room" in tail:
+            content = "you enter the room"
 
-        if "open door" in tail:
-            return "you open the door"
+        elif "open door" in tail:
+            content = "you open the door"
 
-        return "action processed"
+        else:
+            content = "action processed"
+
+        return LLMResponse(
+            content=content,
+            provider="fake",
+            model="fake-model",
+        )

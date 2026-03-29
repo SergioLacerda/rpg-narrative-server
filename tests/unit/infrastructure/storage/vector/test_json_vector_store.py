@@ -4,7 +4,6 @@ from rpg_narrative_server.infrastructure.storage.vector.json_vector_store import
     JSONVectorStore,
 )
 
-
 # ---------------------------------------------------------
 # FIXTURE
 # ---------------------------------------------------------

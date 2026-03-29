@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
+from typing import Any
 
 
 @dataclass
@@ -7,17 +7,17 @@ class LLMRequest:
     prompt: str
 
     # contexto
-    system_prompt: Optional[str] = None
+    system_prompt: str | None = None
 
     # geração
     temperature: float = 0.7
     max_tokens: int = 1000
 
     # execução
-    timeout: Optional[float] = None
+    timeout: float | None = None
 
     # metadata (🔥 importante)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     # ---------------------------------------------------------
     # validation

@@ -1,8 +1,8 @@
-from .openai_provider import OpenAIProvider
-from .lmstudio_provider import LMStudioProvider
 from .deepseek_provider import DeepSeekProvider
-from .ollama_provider import OllamaProvider
 from .groq_provider import GroqProvider
+from .lmstudio_provider import LMStudioProvider
+from .ollama_provider import OllamaProvider
+from .openai_provider import OpenAIProvider
 
 # ---------------------------------------------------------
 # OPTIONAL PROVIDERS

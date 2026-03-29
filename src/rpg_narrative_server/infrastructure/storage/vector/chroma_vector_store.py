@@ -1,5 +1,3 @@
-from typing import List
-
 from rpg_narrative_server.application.ports.storage import VectorStorePort
 
 
@@ -7,13 +5,13 @@ class ChromaVectorStore(VectorStorePort):
     def __init__(self, collection):
         self.collection = collection
 
-    def add(self, doc_id: str, vector: List[float]) -> None:
+    def add(self, doc_id: str, vector: list[float]) -> None:
         self.collection.add(
             ids=[doc_id],
             embeddings=[vector],
         )
 
-    def get(self, doc_id: str) -> List[float] | None:
+    def get(self, doc_id: str) -> list[float] | None:
         result = self.collection.get(ids=[doc_id])
 
         if not result or not result.get("embeddings"):
@@ -21,7 +19,7 @@ class ChromaVectorStore(VectorStorePort):
 
         return result["embeddings"][0]
 
-    def keys(self) -> List[str]:
+    def keys(self) -> list[str]:
         result = self.collection.get()
 
         if not result or not result.get("ids"):
@@ -29,7 +27,7 @@ class ChromaVectorStore(VectorStorePort):
 
         return result["ids"]
 
-    def search(self, query_vector: List[float], k: int) -> List[str]:
+    def search(self, query_vector: list[float], k: int) -> list[str]:
         results = self.collection.query(
             query_embeddings=[query_vector],
             n_results=k,

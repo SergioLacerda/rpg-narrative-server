@@ -1,7 +1,7 @@
 # application/services/embedding_strategy.py
 
 import logging
-from typing import Sequence
+from collections.abc import Sequence
 
 from rpg_narrative_server.application.ports.embedding_gateway import EmbeddingGateway
 

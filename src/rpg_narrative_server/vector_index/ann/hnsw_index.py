@@ -67,9 +67,7 @@ class HNSWIndex:
 
                 score = cosine_similarity(q_vec, neighbor["vector"])
 
-                if len(best) < self.ef or score > cosine_similarity(
-                    q_vec, best[-1]["vector"]
-                ):
+                if len(best) < self.ef or score > cosine_similarity(q_vec, best[-1]["vector"]):
                     best.append(neighbor)
                     best.sort(
                         key=lambda d: cosine_similarity(q_vec, d["vector"]),
@@ -93,7 +91,7 @@ class HNSWIndex:
 
         entry = self.entry_point
 
-        for layer in reversed(self.layers):
+        for _layer in reversed(self.layers):
             best = self._search_layer(q_vec, entry)
 
             if best:

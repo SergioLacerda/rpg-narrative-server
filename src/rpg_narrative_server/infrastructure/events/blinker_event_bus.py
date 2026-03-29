@@ -1,5 +1,6 @@
-from blinker import Signal
 from collections import defaultdict
+
+from blinker import Signal
 
 
 class BlinkerEventBus:
