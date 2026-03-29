@@ -1,4 +1,4 @@
-from discord.ext import commands
+import discord.ext.commands as commands
 
 from rpg_narrative_server.application.commands.command_bus import CommandBus
 from rpg_narrative_server.application.commands.command_registry import CommandRegistry
