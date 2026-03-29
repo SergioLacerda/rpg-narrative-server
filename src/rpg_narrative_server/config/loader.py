@@ -132,7 +132,7 @@ def load_settings() -> Settings:
             dimension=embedding_dimension,
         ),
         app=AppSettings(
-            discord_token=_require("DISCORD_TOKEN"),
+            discord_token=_get("DISCORD_TOKEN"),
             max_cache_size=_get_int("MAX_CACHE_SIZE", 10000),
             campaign_file=_get("CAMPAIGN_PATH", "./data") or "./data",
             storage=profile_config.storage,

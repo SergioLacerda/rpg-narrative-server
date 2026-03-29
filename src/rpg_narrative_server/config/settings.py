@@ -58,7 +58,7 @@ class RuntimeSettings:
 
 @dataclass(frozen=True)
 class AppSettings:
-    discord_token: str
+    discord_token: str | None
     max_cache_size: int
     campaign_file: str
 

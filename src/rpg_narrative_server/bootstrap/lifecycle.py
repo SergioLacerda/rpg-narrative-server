@@ -65,7 +65,9 @@ async def lifespan(app: FastAPI):
     bot = None
     task = None
 
-    if discord_enabled:
+    token = container.settings.app.discord_token
+
+    if discord_enabled and token:
         try:
             logger.info("🤖 Starting Discord bot")
 
@@ -81,7 +83,7 @@ async def lifespan(app: FastAPI):
             )
 
             async def run():
-                await bot.start(container.settings.app.discord_token)
+                await bot.start(token)
 
             task = asyncio.create_task(run())
 
