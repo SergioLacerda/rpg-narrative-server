@@ -70,6 +70,7 @@ jobs:
           name: coverage-${{ matrix.os }}-${{ matrix.python-version }}
           path: .coverage
           if-no-files-found: error
+          include-hidden-files: true
 
   # ---------------------------------------------------------
   # 📊 COVERAGE CONSOLIDADO
@@ -184,6 +185,7 @@ jobs:
       - name: Run container
         run: |
           docker run -d -p 8000:8000 \
+            -e ENABLE_DISCORD=false \
             -e DISCORD_TOKEN=test-token \
             -e ENVIRONMENT=prod \
             -e STORAGE=memory \
