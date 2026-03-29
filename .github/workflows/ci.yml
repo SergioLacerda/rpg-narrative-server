@@ -60,11 +60,12 @@ jobs:
           ENVIRONMENT: test
           LLM_PROVIDER: mock
           EMBEDDING_PROVIDER: mock
-        run: pytest -n auto --dist=worksteal --cov=rpg_narrative_server --cov-report=term-missing --cov-report=xml --cov-fail-under=50
+        run: pytest -n auto --dist=worksteal --cov=rpg_narrative_server --cov-report=xml
 
-      # 🔥 GARANTE que .coverage existe
-      - name: Combine coverage locally
-        run: coverage combine || true
+      - name: Ensure coverage file
+        run: |
+          coverage combine || true
+          coverage report
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
@@ -76,40 +77,34 @@ jobs:
   # 📊 COVERAGE CONSOLIDADO
   # ---------------------------------------------------------
   coverage:
-    name: Coverage
-    runs-on: ubuntu-latest
-    needs: test
+  name: Coverage
+  runs-on: ubuntu-latest
+  needs: test
 
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: .
+  steps:
+    - uses: actions/download-artifact@v4
+      with:
+        path: .
 
-      - name: Install coverage
-        run: pip install coverage
+    - name: Install coverage
+      run: pip install coverage
 
-      - name: Debug downloaded files
-        run: |
-          echo "Arquivos após download:"
-          ls -la
-          find . -name ".coverage*"
+    - name: Combine coverage
+      run: |
+        echo "Arquivos encontrados:"
+        find . -name ".coverage*"
 
-      - name: Combine coverage
-        run: |
-          echo "Arquivos encontrados:"
-          find . -name ".coverage*"
+        coverage combine
 
-          coverage combine
+        coverage report --fail-under=80
+        coverage xml -o combined.xml
 
-          coverage report --fail-under=80
-          coverage xml -o combined.xml
-
-      - name: Upload to Codecov (opcional)
-        uses: codecov/codecov-action@v4
-        with:
-          files: combined.xml
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload to Codecov (opcional)
+      uses: codecov/codecov-action@v4
+      with:
+        files: combined.xml
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   # ---------------------------------------------------------
   # 🧠 VALIDAR ARQUITETURA
