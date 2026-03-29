@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext.commands import Context
 
 from rpg_narrative_server.application.commands.gm_command import (
     build_gm_command,
@@ -13,7 +13,7 @@ def register_gm_command(bot, deps, executor, registry):
     adapter = BaseDiscordCommandAdapter(command, executor)
 
     @bot.hybrid_command(name="gm", description="Executa ação narrativa")
-    async def gm(ctx: commands.Context, *, action: str):
+    async def gm(ctx: Context, *, action: str):
         await adapter.run(ctx, action=action)
 
     registry.register(command.name, command)

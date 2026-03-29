@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext.commands import Context
 
 from rpg_narrative_server.application.commands.campaign_command import (
     build_campaign_command,
@@ -14,7 +14,7 @@ def register_campaign_commands(bot, deps, executor, registry):
 
     @bot.hybrid_command(name="campaign", description="Gerenciar campanha")
     async def campaign(
-        ctx: commands.Context,
+        ctx: Context,
         action: str | None = None,
         name: str | None = None,
     ):

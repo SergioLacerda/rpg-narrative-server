@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext.commands import Context
 
 from rpg_narrative_server.application.commands.roll_command import (
     build_roll_command,
@@ -13,7 +13,7 @@ def register_roll_command(bot, deps, executor, registry):
     adapter = BaseDiscordCommandAdapter(command, executor)
 
     @bot.hybrid_command(name="roll", description="Rola dados")
-    async def roll(ctx: commands.Context, *, expression: str):
+    async def roll(ctx: Context, *, expression: str):
         await adapter.run(ctx, expression=expression)
 
     registry.register(command.name, command)

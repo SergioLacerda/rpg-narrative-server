@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext.commands import Context
 
 from rpg_narrative_server.application.commands.session_command import (
     build_session_command,
@@ -13,7 +13,7 @@ def register_session_commands(bot, deps, executor, registry):
     adapter = BaseDiscordCommandAdapter(command, executor)
 
     @bot.hybrid_command(name="endsession", description="Finaliza sessão")
-    async def endsession(ctx: commands.Context):
+    async def endsession(ctx: Context):
         await adapter.run(ctx)
 
     registry.register(command.name, command)

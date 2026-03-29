@@ -1,11 +1,11 @@
 import logging
 
-from discord.ext import commands
+from discord.ext.commands import Context
 
 logger = logging.getLogger("rpg_narrative_server.discord")
 
 
-def get_campaign_id(ctx: commands.Context) -> str:
+def get_campaign_id(ctx: Context) -> str:
     """
     Retorna ID da campanha baseado no contexto:
 
@@ -26,7 +26,7 @@ def get_campaign_id(ctx: commands.Context) -> str:
     return "unknown_campaign"
 
 
-def get_user_id(ctx: commands.Context) -> str:
+def get_user_id(ctx: Context) -> str:
     """
     Retorna ID do usuário.
     """

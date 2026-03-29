@@ -14,6 +14,7 @@ from rpg_narrative_server.frameworks.discord.adapters.roll_commands import regis
 from rpg_narrative_server.frameworks.discord.adapters.session_commands import (
     register_session_commands,
 )
+from rpg_narrative_server.frameworks.discord.bot_types import RPGDiscordBot
 from rpg_narrative_server.frameworks.discord.context.message_context import MessageContext
 from rpg_narrative_server.frameworks.discord.executor import CommandExecutor
 from rpg_narrative_server.frameworks.discord.responder import DiscordResponder
@@ -22,14 +23,14 @@ from rpg_narrative_server.infrastructure.runtime.message_runtime import MessageR
 logger = logging.getLogger("rpg_narrative_server.discord")
 
 
-def create_bot(settings, deps, register_commands: bool = True):
+def create_bot(settings, deps, register_commands: bool = True) -> RPGDiscordBot:
     # -------------------------------------------------
     # DISCORD SETUP
     # -------------------------------------------------
     intents = discord.Intents.default()
     intents.message_content = True
 
-    bot = commands.Bot(command_prefix="!", intents=intents)
+    bot = RPGDiscordBot(command_prefix="!", intents=intents)
     bot.debug = settings.runtime.environment != "prod"
 
     # -------------------------------------------------
@@ -42,7 +43,6 @@ def create_bot(settings, deps, register_commands: bool = True):
         debug=bot.debug,
     )
 
-    # 🔥 CommandBus disponível para outros adapters (CLI/API/testes)
     command_bus = CommandBus(registry, executor)
 
     # -------------------------------------------------
@@ -93,14 +93,11 @@ def create_bot(settings, deps, register_commands: bool = True):
         ctx = MessageContext(message)
         responder = DiscordResponder(ctx)
 
-        # 🔥 pipeline narrativa (RAG + memória)
         await message_service.handle(message, ctx, responder)
-
-        # permite comandos !gm, !roll etc
         await bot.process_commands(message)
 
     # -------------------------------------------------
-    # COMMAND REGISTRATION (Discord Adapter)
+    # COMMAND REGISTRATION
     # -------------------------------------------------
     if register_commands:
         bot.gm_command = register_gm_command(bot, deps, executor, registry)
@@ -109,9 +106,8 @@ def create_bot(settings, deps, register_commands: bool = True):
         bot.campaign_command = register_campaign_commands(bot, deps, executor, registry)
 
     # -------------------------------------------------
-    # OPTIONAL EXPOSURES (não obrigatórios)
+    # EXPOSURES
     # -------------------------------------------------
-    # 🔥 úteis para CLI / testes avançados / debug manual
     bot.command_bus = command_bus
     bot.command_registry = registry
 

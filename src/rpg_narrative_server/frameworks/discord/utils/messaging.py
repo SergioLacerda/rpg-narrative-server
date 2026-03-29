@@ -1,6 +1,6 @@
 import logging
 
-from discord.ext import commands
+from discord.ext.commands import Context
 
 from rpg_narrative_server.frameworks.discord.responder import DiscordResponder
 
@@ -10,7 +10,7 @@ MAX_MESSAGE_LEN = 1900
 
 
 async def send_long_response(
-    ctx: commands.Context,
+    ctx: Context,
     content: str,
     header: str = "",
 ) -> None:
