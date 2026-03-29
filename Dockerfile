@@ -63,7 +63,7 @@ COPY README.md .
 RUN useradd -m appuser
 
 # Criar e dar permissão
-RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
+RUN mkdir -p /app/data /app/logs && chown -R appuser:appuser /app
 
 # Troca usuário
 USER appuser
