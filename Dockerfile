@@ -59,8 +59,13 @@ COPY src ./src
 COPY pyproject.toml .
 COPY README.md .
 
-# Usuário não-root
+# Cria usuário
 RUN useradd -m appuser
+
+# Criar e dar permissão
+RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
+
+# Troca usuário
 USER appuser
 
 # Porta
