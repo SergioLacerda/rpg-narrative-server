@@ -187,9 +187,9 @@ jobs:
           docker run -d -p 8000:8000 \
             -e APP_PROFILE=local \
             -e STORAGE=memory \
-            -e LLM_PROVIDER=ollama \
+            -e LLM_PROVIDER=lmstudio \
             -e LLM_BASE_URL=http://localhost:11434 \
-            -e EMBEDDING_PROVIDER=sentence \
+            -e EMBEDDING_PROVIDER=lmstudio \
             -e ENABLE_DISCORD=false \
             -e DISCORD_TOKEN=test-token \
             -e DISCORD_PUBLIC_KEY=test-public-key \
