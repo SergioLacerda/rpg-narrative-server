@@ -69,8 +69,11 @@ async def lifespan(app: FastAPI):
                     roll_dice=container.roll_dice,
                     narrative=container.narrative,
                     end_session=container.end_session,
-                    campaign_state=container.campaign_state,
                     intent_classifier=container.intent_classifier,
+                    campaign_state=container.campaign_state,
+                    create_campaign=container.create_campaign,
+                    list_campaigns=container.list_campaigns,
+                    delete_campaign=container.delete_campaign,
                 ),
             )
 

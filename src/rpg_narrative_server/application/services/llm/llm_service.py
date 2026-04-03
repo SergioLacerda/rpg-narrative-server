@@ -1,8 +1,8 @@
-import hashlib
 import json
 import logging
 
 from rpg_narrative_server.shared.resilience import resilient_call
+from rpg_narrative_server.utils.hash_utils import sha256_hash
 
 logger = logging.getLogger("rpg_narrative_server.llm")
 
@@ -24,35 +24,63 @@ class LLMService:
         self.circuit_breaker = circuit_breaker
 
     # ---------------------------------------------------------
+    # CACHE KEY (FINAL)
+    # ---------------------------------------------------------
+
+    def _cache_key(self, request):
+        campaign_id = getattr(request, "campaign_id", None)
+
+        payload = {
+            "campaign_id": campaign_id,
+            "prompt": request.prompt or "",
+            "system": request.system_prompt or "",
+            "temperature": request.temperature,
+            "max_tokens": request.max_tokens,
+        }
+
+        if hasattr(request, "metadata") and request.metadata:
+            payload["metadata"] = request.metadata
+
+        if hasattr(request, "tools") and request.tools:
+            payload["tools"] = request.tools
+
+        raw = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+
+        return sha256_hash(raw.encode("utf-8"))
+
+    # ---------------------------------------------------------
     # GENERATE
     # ---------------------------------------------------------
 
     async def generate(self, request):
         if not request.prompt:
+            print("Erroe: 1")
             return ""
 
         key = self._cache_key(request)
 
-        # L1 cache
+        # L1
         if self.ttl_cache:
             cached = self.ttl_cache.get(key)
             if cached:
+                print("Erroe: 2")
                 return cached
 
-        # L2 cache
+        # L2
         if self.response_cache:
             cached = await self.response_cache.get(key)
+
+            print("CACHE TYPE:", type(self.response_cache))
+            print("CACHE DIR:", dir(self.response_cache))
+
             if cached:
                 if self.ttl_cache:
                     self.ttl_cache.set(key, cached)
+                print("Erroe: 3")
                 return cached
 
-        # ----------------------------------
-        # 🔥 CIRCUIT BREAKER
-        # ----------------------------------
-
+        # Circuit breaker
         if self.circuit_breaker and not self.circuit_breaker.allow():
-            logger.warning("Circuit breaker OPEN - skipping LLM call")
             raise RuntimeError("LLM circuit open")
 
         try:
@@ -62,8 +90,9 @@ class LLMService:
                 timeout=self._compute_timeout(request),
             )
 
-            if not response:
-                return ""
+            if response is None:
+                print("Erroe: 4")
+                return None
 
             if self.circuit_breaker:
                 self.circuit_breaker.success()
@@ -74,6 +103,7 @@ class LLMService:
             if self.response_cache:
                 await self.response_cache.set(key, response)
 
+            print("Return ")
             return response
 
         except Exception:
@@ -84,25 +114,10 @@ class LLMService:
             raise
 
     # ---------------------------------------------------------
-    # STREAM (🔥)
-    # ---------------------------------------------------------
 
     async def stream(self, request):
         async for chunk in self.provider.stream(request):
             yield chunk
-
-    # ---------------------------------------------------------
-
-    def _cache_key(self, request):
-        payload = {
-            "prompt": request.prompt,
-            "system": request.system_prompt,
-            "temperature": request.temperature,
-            "max_tokens": request.max_tokens,
-        }
-
-        raw = json.dumps(payload, sort_keys=True)
-        return hashlib.sha256(raw.encode()).hexdigest()
 
     # ---------------------------------------------------------
 
@@ -111,5 +126,4 @@ class LLMService:
             return self.timeout
 
         dynamic = request.max_tokens * 0.2
-
         return max(30.0, min(dynamic, self.timeout))

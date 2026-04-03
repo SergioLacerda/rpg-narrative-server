@@ -1,5 +1,8 @@
 from fastapi import APIRouter
 
+from rpg_narrative_server.interfaces.api.routes.campaign_controller import (
+    router as campaign_router,
+)
 from rpg_narrative_server.interfaces.api.routes.dice_controller import (
     router as dice_router,
 )
@@ -20,6 +23,12 @@ api_router.include_router(
     narrative_router,
     prefix="/campaign",
     tags=["Narrative"],
+)
+
+api_router.include_router(
+    campaign_router,
+    prefix="/campaigns",
+    tags=["Campaign"],
 )
 
 # utilidades

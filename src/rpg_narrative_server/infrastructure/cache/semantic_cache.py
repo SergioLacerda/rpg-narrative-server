@@ -9,18 +9,6 @@ logger = logging.getLogger("rpg_narrative_server.semantic_cache")
 
 
 class SemanticCache:
-    """
-    Cache híbrido:
-
-    L1 → cache por query exata (hash)
-    L2 → cache por similaridade semântica (vetores)
-
-    Estratégias:
-    - promoção L2 → L1
-    - early exit
-    - validação de vetor
-    """
-
     def __init__(
         self,
         size: int = 256,
@@ -40,9 +28,10 @@ class SemanticCache:
     def _normalize(self, text: str) -> str:
         return text.lower().strip()
 
-    def _query_key(self, query: str) -> str:
+    def _query_key(self, campaign_id: str, query: str) -> str:
         q = self._normalize(query)
-        return hashlib.sha1(q.encode()).hexdigest()
+        raw = f"{campaign_id}:{q}"
+        return hashlib.sha1(raw.encode()).hexdigest()
 
     def _safe_similarity(self, v1, v2) -> float:
         try:
@@ -67,26 +56,19 @@ class SemanticCache:
     # lookup
     # ---------------------------------------------------------
 
-    def get(self, query: str, vector) -> Any | None:
+    def get(self, campaign_id: str, query: str, vector) -> Any | None:
         if not query:
             return None
 
-        qk = self._query_key(query)
+        qk = self._query_key(campaign_id, query)
 
-        # -----------------------------------
-        # L1: exact match
-        # -----------------------------------
-
+        # L1
         result = self.query_cache.get(qk)
-
         if result is not None:
             logger.debug("[SemanticCache] L1 hit")
             return result
 
-        # -----------------------------------
-        # L2: semantic search
-        # -----------------------------------
-
+        # L2
         if vector is None:
             return None
 
@@ -99,9 +81,7 @@ class SemanticCache:
 
             score = self._safe_similarity(vector, vec)
 
-            # early exit (ótimo match)
             if score >= 0.999:
-                logger.debug("[SemanticCache] early exit (perfect match)")
                 self.query_cache.set(qk, res)
                 return res
 
@@ -110,11 +90,8 @@ class SemanticCache:
                 best = res
 
         if best_score >= self.similarity_threshold:
-            logger.debug(f"[SemanticCache] L2 hit (score={best_score:.3f})")
-
-            # 🔥 promoção L2 → L1
+            logger.debug(f"[SemanticCache] L2 hit ({best_score:.3f})")
             self.query_cache.set(qk, best)
-
             return best
 
         return None
@@ -123,16 +100,14 @@ class SemanticCache:
     # insert
     # ---------------------------------------------------------
 
-    def set(self, query: str, vector, result) -> None:
+    def set(self, campaign_id: str, query: str, vector, result) -> None:
         if not query or result is None:
             return
 
-        qk = self._query_key(query)
+        qk = self._query_key(campaign_id, query)
 
-        # L1
         self.query_cache.set(qk, result)
 
-        # L2 (somente se vetor válido)
         if vector is not None:
             self.semantic_cache.set(
                 qk,
@@ -143,34 +118,9 @@ class SemanticCache:
             )
 
     # ---------------------------------------------------------
-    # extras
+    # maintenance
     # ---------------------------------------------------------
 
-    def invalidate(self, query: str) -> None:
-        """
-        Remove entrada específica
-        """
-        qk = self._query_key(query)
-
-        try:
-            self.query_cache.delete(qk)
-            self.semantic_cache.delete(qk)
-        except Exception:
-            pass
-
-    def clear(self) -> None:
-        """
-        Limpa todo cache
-        """
+    def clear(self):
         self.query_cache.clear()
         self.semantic_cache.clear()
-
-    def stats(self) -> dict:
-        """
-        Debug / observabilidade
-        """
-        return {
-            "l1_size": len(getattr(self.query_cache, "_data", {})),
-            "l2_size": len(getattr(self.semantic_cache, "_data", {})),
-            "threshold": self.similarity_threshold,
-        }

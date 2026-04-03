@@ -63,3 +63,40 @@ class JSONCampaignRepository(CampaignRepositoryPort):
 
     async def save_sessions(self, campaign_id: str, sessions: list):
         await self.save(self._sessions_path(campaign_id), sessions)
+
+    def _campaign_dir(self, campaign_id: str) -> Path:
+        return self.base_dir / str(campaign_id)
+
+    async def create(self, campaign_id: str) -> None:
+        path = self._campaign_dir(campaign_id)
+
+        def _create():
+            path.mkdir(parents=True, exist_ok=True)
+
+        await asyncio.to_thread(_create)
+
+    async def list(self) -> list[str]:
+        if not self.base_dir.exists():
+            return []
+
+        def _list():
+            return [p.name for p in self.base_dir.iterdir() if p.is_dir()]
+
+        return await asyncio.to_thread(_list)
+
+    async def delete(self, campaign_id: str) -> None:
+        import shutil
+
+        path = self._campaign_dir(campaign_id)
+
+        if not path.exists():
+            return
+
+        def _delete():
+            shutil.rmtree(path)
+
+        await asyncio.to_thread(_delete)
+
+    async def exists(self, campaign_id: str) -> bool:
+        path = self._campaign_dir(campaign_id)
+        return path.exists()

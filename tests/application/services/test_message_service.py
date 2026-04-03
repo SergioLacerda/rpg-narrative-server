@@ -83,20 +83,6 @@ async def test_handle_success_flow():
 
 
 @pytest.mark.asyncio
-async def test_handle_no_campaign_warns():
-    h = MessageHarness(campaign_id=None)
-
-    msg = make_msg()
-
-    service = h.build()
-
-    await service.handle(msg, h.ctx, h.ctx)
-
-    assert len(h.sent) == 1
-    assert "Nenhuma campanha ativa" in h.sent[0]
-
-
-@pytest.mark.asyncio
 async def test_handle_respects_cooldown():
     h = MessageHarness(cooldown=False)
 

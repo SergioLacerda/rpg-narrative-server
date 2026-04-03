@@ -29,10 +29,12 @@ class BaseProvider(ABC):
         self.logger = logging.getLogger(f"rpg_narrative_server.llm.{provider_name}")
 
     # ---------------------------------------------------------
+    # ENTRYPOINT
+    # ---------------------------------------------------------
 
-    async def generate(self, request: LLMRequest) -> str:
-        response = await self.generate_from_request(request)
-        return response.content
+    async def generate(self, request: LLMRequest) -> LLMResponse:
+        self.logger.warning("🔥 USING PROVIDER: %s", self.provider_name)
+        return await self.generate_from_request(request)
 
     # ---------------------------------------------------------
 
@@ -44,22 +46,47 @@ class BaseProvider(ABC):
 
             resp = await self._call_api(request)
 
+            # -------------------------------------------------
+            # EXTRAÇÃO + NORMALIZAÇÃO
+            # -------------------------------------------------
             content = self._extract_content(resp)
 
-            if not content:
+            if content is None:
+                content = ""
+
+            if not isinstance(content, str):
+                content = str(content)
+
+            # -------------------------------------------------
+            # VALIDAÇÃO ROBUSTA
+            # -------------------------------------------------
+            if not content.strip():
+                self._log_empty_response(resp)
                 raise LLMRetryableError("Empty response")
 
+            # -------------------------------------------------
+            # MÉTRICAS
+            # -------------------------------------------------
             latency = (time.perf_counter() - start) * 1000
 
             self.logger.debug("SUCCESS latency=%.2fms", latency)
 
+            usage = self._extract_usage(resp) or {}
+
+            # -------------------------------------------------
+            # RESPONSE PADRONIZADO
+            # -------------------------------------------------
             return LLMResponse(
                 content=content,
                 provider=self.provider_name,
                 model=self.model,
                 latency_ms=latency,
-                **self._extract_usage(resp),
+                **usage,
             )
+
+        # ---------------------------------------------------------
+        # ERROS
+        # ---------------------------------------------------------
 
         except TimeoutError as e:
             raise ValueError("timeout") from e
@@ -91,6 +118,26 @@ class BaseProvider(ABC):
     def _extract_content(self, resp) -> str:
         pass
 
-    # opcional
+    # ---------------------------------------------------------
+    # OPCIONAIS
+    # ---------------------------------------------------------
+
     def _extract_usage(self, resp) -> dict:
         return {}
+
+    # ---------------------------------------------------------
+    # DEBUG / OBSERVABILIDADE
+    # ---------------------------------------------------------
+
+    def _log_empty_response(self, resp):
+        try:
+            import json
+
+            if hasattr(resp, "model_dump"):
+                raw = resp.model_dump()
+                self.logger.error("EMPTY CONTENT | raw=%s", json.dumps(raw))
+            else:
+                self.logger.error("EMPTY CONTENT | raw=%s", repr(resp))
+
+        except Exception:
+            self.logger.error("EMPTY CONTENT | failed to serialize response")

@@ -31,7 +31,7 @@ class EndSessionUseCase:
 
         try:
             response = await self.llm.generate(LLMRequest(prompt=prompt))
-            summary = response.text
+            summary = response.content
         except Exception:
             summary = self._fallback_summary(text)
 

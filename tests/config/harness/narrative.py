@@ -2,18 +2,31 @@ from collections.abc import Callable
 from typing import Any
 
 
+class FakeVectorIndexManager:
+    def __init__(self, vector_index):
+        self._vector_index = vector_index
+
+    def get(self, campaign_id: str):
+        return self._vector_index
+
+
 class NarrativeHarness:
     def __init__(self, *, llm_result: str = "ok") -> None:
         from tests.config.fakes.fake_llm import FakeLLMService
         from tests.config.fakes.fake_vector_index import FakeVectorIndex
 
         self.llm = FakeLLMService(result=llm_result)
+
         self.vector_index = FakeVectorIndex()
+        self.vector_index_manager = FakeVectorIndexManager(self.vector_index)
 
         self.calls: list[dict[str, Any]] = []
 
     def build(self, container_factory: Callable[..., Any]) -> Any:
-        self.container = container_factory(llm=self.llm, vector_index=self.vector_index)
+        self.container = container_factory(
+            llm=self.llm,
+            vector_index=self.vector_index_manager,
+        )
         return self.container.narrative
 
     async def run(

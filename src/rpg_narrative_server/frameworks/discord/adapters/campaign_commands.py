@@ -1,3 +1,5 @@
+from typing import Literal
+
 from discord.ext.commands import Context
 
 from rpg_narrative_server.application.commands.campaign_command import (
@@ -15,10 +17,13 @@ def register_campaign_commands(bot, deps, executor, registry):
     @bot.hybrid_command(name="campaign", description="Gerenciar campanha")
     async def campaign(
         ctx: Context,
-        action: str | None = None,
+        action: Literal["start", "switch", "list", "delete", "stop"] | None = None,
         name: str | None = None,
     ):
-        await adapter.run(ctx, action=action, name=name)
+        if action in ["start", "switch", "delete"] and not name:
+            return await adapter.run(ctx, action=action, name=name)
+
+        return await adapter.run(ctx, action=action, name=name)
 
     registry.register(command.name, command)
 

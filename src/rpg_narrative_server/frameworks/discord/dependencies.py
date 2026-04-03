@@ -38,10 +38,25 @@ class IntentClassifierProtocol(Protocol):
 # =========================================================
 
 
+class CreateCampaignUseCase(Protocol):
+    async def execute(self, campaign_id: str) -> bool: ...
+
+
+class ListCampaignsUseCase(Protocol):
+    async def execute(self) -> list[str]: ...
+
+
+class DeleteCampaignUseCase(Protocol):
+    async def execute(self, campaign_id: str) -> bool: ...
+
+
 @dataclass
 class CommandDependencies:
     narrative: NarrativeUseCase
     roll_dice: RollUseCase
     end_session: EndSessionUseCase
-    campaign_state: CampaignStateProtocol
     intent_classifier: IntentClassifierProtocol
+    campaign_state: CampaignStateProtocol
+    create_campaign: CreateCampaignUseCase
+    list_campaigns: ListCampaignsUseCase
+    delete_campaign: DeleteCampaignUseCase

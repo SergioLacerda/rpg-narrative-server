@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from pathlib import Path
 
@@ -52,6 +53,7 @@ class Container:
         # lazy core
         self._embedding = None
         self._vector_index = None
+        self._vector_index_manager = None
         self._llm_service = None
 
         # infra lazy
@@ -76,6 +78,14 @@ class Container:
         self._document_resolver = None
         self._context_builder = None
         self._intent_classifier = None
+
+        self._create_campaign = None
+        self._list_campaigns = None
+        self._delete_campaign = None
+
+        self._embedding_cache_manager = None
+        self._semantic_cache_manager = None
+        self._response_cache_manager = None
 
     # ==========================================================
     # STORAGE
@@ -233,7 +243,7 @@ class Container:
             self._narrative = NarrativeUseCase(
                 repo=self.campaign_repo,
                 llm=self.llm,
-                vector_index=self.vector_index,
+                vector_index=self.vector_index_manager,
                 event_bus=self.event_bus,
                 memory_service=self.memory_service,
                 vector_memory=self.vector_memory,
@@ -266,3 +276,100 @@ class Container:
         if self._campaign_state is None:
             self._campaign_state = CampaignState()
         return self._campaign_state
+
+    # ==========================================================
+    # CAMPAIGN USE CASES
+    # ==========================================================
+
+    @property
+    def create_campaign(self):
+        if self._create_campaign is None:
+            from rpg_narrative_server.usecases.create_campaign import CreateCampaignUseCase
+
+            self._create_campaign = CreateCampaignUseCase(self.campaign_repo)
+        return self._create_campaign
+
+    @property
+    def list_campaigns(self):
+        if self._list_campaigns is None:
+            from rpg_narrative_server.usecases.list_campaigns import ListCampaignsUseCase
+
+            self._list_campaigns = ListCampaignsUseCase(self.campaign_repo)
+        return self._list_campaigns
+
+    @property
+    def delete_campaign(self):
+        if self._delete_campaign is None:
+            from rpg_narrative_server.usecases.delete_campaign import DeleteCampaignUseCase
+
+            self._delete_campaign = DeleteCampaignUseCase(self.campaign_repo, self)
+        return self._delete_campaign
+
+    def delete_campaign_runtime(self, campaign_id: str):
+        # vector index
+        if self._vector_index_manager:
+            self._vector_index_manager.clear(campaign_id)
+
+        # memory
+        if self._memory_service:
+            try:
+                asyncio.create_task(self._memory_service.clear(campaign_id))
+            except RuntimeError:
+                # fallback (sem loop ativo, ex: testes)
+                pass
+
+        # embedding cache
+        if self._embedding_cache_manager is not None:
+            self._embedding_cache_manager.clear(campaign_id)
+
+        # semantic cache
+        if self._semantic_cache_manager is not None:
+            self._semantic_cache_manager.clear(campaign_id)
+
+    @property
+    def vector_index_manager(self):
+        if self._vector_index_manager is None:
+            from rpg_narrative_server.vector_index.vector_index_manager import (
+                VectorIndexManager,
+            )
+
+            self._vector_index_manager = VectorIndexManager(
+                embedding_service=self.embedding,
+                storage_backend=self._storage,
+                tokenizer=self.tokenizer,
+            )
+
+        return self._vector_index_manager
+
+    @property
+    def embedding_cache_manager(self):
+        if self._embedding_cache_manager is None:
+            from rpg_narrative_server.infrastructure.cache.managers.embedding_cache_manager import (
+                EmbeddingCacheManager,
+            )
+
+            self._embedding_cache_manager = EmbeddingCacheManager(self.embedding)
+
+        return self._embedding_cache_manager
+
+    @property
+    def semantic_cache_manager(self):
+        if self._semantic_cache_manager is None:
+            from rpg_narrative_server.infrastructure.cache.managers.semantic_cache_manager import (
+                SemanticCacheManager,
+            )
+
+            self._semantic_cache_manager = SemanticCacheManager()
+
+        return self._semantic_cache_manager
+
+    @property
+    def response_cache_manager(self):
+        if self._response_cache_manager is None:
+            from rpg_narrative_server.infrastructure.cache.managers.response_cache_manager import (
+                ResponseCacheManager,
+            )
+
+            self._response_cache_manager = ResponseCacheManager()
+
+        return self._response_cache_manager

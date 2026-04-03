@@ -10,6 +10,9 @@ from rpg_narrative_server.frameworks.discord.adapters.campaign_commands import (
     register_campaign_commands,
 )
 from rpg_narrative_server.frameworks.discord.adapters.gm_commands import register_gm_command
+from rpg_narrative_server.frameworks.discord.adapters.help_commands import (
+    register_help_commands,
+)
 from rpg_narrative_server.frameworks.discord.adapters.roll_commands import register_roll_command
 from rpg_narrative_server.frameworks.discord.adapters.session_commands import (
     register_session_commands,
@@ -32,6 +35,8 @@ def create_bot(settings, deps, register_commands: bool = True) -> RPGDiscordBot:
 
     bot = RPGDiscordBot(command_prefix="!", intents=intents)
     bot.debug = settings.environment != "prod"
+
+    bot.help_command = None
 
     # -------------------------------------------------
     # CORE (Application wiring)
@@ -104,7 +109,7 @@ def create_bot(settings, deps, register_commands: bool = True) -> RPGDiscordBot:
         bot.roll_command = register_roll_command(bot, deps, executor, registry)
         bot.session_command = register_session_commands(bot, deps, executor, registry)
         bot.campaign_command = register_campaign_commands(bot, deps, executor, registry)
-
+        bot.help_command = register_help_commands(bot)
     # -------------------------------------------------
     # EXPOSURES
     # -------------------------------------------------

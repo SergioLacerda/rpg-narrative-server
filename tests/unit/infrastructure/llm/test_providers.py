@@ -29,7 +29,7 @@ async def test_provider_success(monkeypatch):
 
     result = await provider.generate(req)
 
-    assert result == "hello"
+    assert result.content == "hello"
 
 
 @pytest.mark.asyncio
@@ -90,7 +90,7 @@ async def test_ollama_response(monkeypatch):
 
     result = await provider.generate(req)
 
-    assert result == "dragon"
+    assert result.content == "dragon"
 
 
 @pytest.mark.asyncio
@@ -113,7 +113,7 @@ async def test_all_providers_success(monkeypatch, provider_cls, kwargs):
 
     result = await provider.generate(LLMRequest(prompt="test"))
 
-    assert result == "ok"
+    assert result.content == "ok"
 
 
 @pytest.mark.asyncio
@@ -130,4 +130,4 @@ async def test_lmstudio_success(monkeypatch):
 
     result = await provider.generate(LLMRequest(prompt="test"))
 
-    assert result == "ok"
+    assert result.content == "ok"

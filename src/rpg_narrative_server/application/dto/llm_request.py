@@ -5,19 +5,12 @@ from typing import Any
 @dataclass
 class LLMRequest:
     prompt: str
-
-    # contexto
     system_prompt: str | None = None
-
-    # geração
     temperature: float = 0.7
     max_tokens: int = 1000
-
-    # execução
     timeout: float | None = None
-
-    # metadata (🔥 importante)
     metadata: dict[str, Any] = field(default_factory=dict)
+    campaign_id: str | None = None
 
     # ---------------------------------------------------------
     # validation

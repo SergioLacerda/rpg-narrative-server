@@ -6,6 +6,33 @@ from rpg_narrative_server.application.commands.campaign_command import (
 from tests.config.factories.context import make_context
 from tests.config.fakes.state.campaign_state import DummyCampaignState
 
+
+class DummyCreateCampaign:
+    async def execute(self, name: str):
+        return True
+
+
+class DummyListCampaigns:
+    async def execute(self):
+        return ["aventura"]
+
+
+class DummyDeleteCampaign:
+    async def execute(self, name: str):
+        return True
+
+
+def make_command(state=None):
+    state = state or DummyCampaignState()
+
+    return CampaignCommand(
+        campaign_state=state,
+        create_campaign=DummyCreateCampaign(),
+        list_campaigns=DummyListCampaigns(),
+        delete_campaign=DummyDeleteCampaign(),
+    )
+
+
 # ---------------------------------------------------------
 # START
 # ---------------------------------------------------------
@@ -15,7 +42,7 @@ from tests.config.fakes.state.campaign_state import DummyCampaignState
 async def test_campaign_start_success():
     # ARRANGE
     ctx = make_context()
-    command = CampaignCommand(DummyCampaignState())
+    command = make_command()
 
     # ACT
     result = await command.execute(ctx, action="start", name="aventura")
@@ -29,7 +56,7 @@ async def test_campaign_start_success():
 async def test_campaign_start_without_name():
     # ARRANGE
     ctx = make_context()
-    command = CampaignCommand(DummyCampaignState())
+    command = make_command()
 
     # ACT
     result = await command.execute(ctx, action="start", name=None)
@@ -47,8 +74,7 @@ async def test_campaign_start_without_name():
 async def test_campaign_stop_success():
     # ARRANGE
     ctx = make_context()
-    state = DummyCampaignState()
-    command = CampaignCommand(state)
+    command = make_command()
 
     await command.execute(ctx, action="start", name="aventura")
 
@@ -63,7 +89,7 @@ async def test_campaign_stop_success():
 async def test_campaign_stop_without_active():
     # ARRANGE
     ctx = make_context()
-    command = CampaignCommand(DummyCampaignState())
+    command = make_command()
 
     # ACT
     result = await command.execute(ctx, action="stop")
@@ -81,8 +107,7 @@ async def test_campaign_stop_without_active():
 async def test_campaign_status_with_active():
     # ARRANGE
     ctx = make_context()
-    state = DummyCampaignState()
-    command = CampaignCommand(state)
+    command = make_command()
 
     await command.execute(ctx, action="start", name="aventura")
 
@@ -98,7 +123,7 @@ async def test_campaign_status_with_active():
 async def test_campaign_status_without_active():
     # ARRANGE
     ctx = make_context()
-    command = CampaignCommand(DummyCampaignState())
+    command = make_command()
 
     # ACT
     result = await command.execute(ctx)
@@ -114,12 +139,9 @@ async def test_campaign_status_without_active():
 
 @pytest.mark.asyncio
 async def test_campaign_unknown_action():
-    # ARRANGE
     ctx = make_context()
-    command = CampaignCommand(DummyCampaignState())
+    command = make_command()
 
-    # ACT
     result = await command.execute(ctx, action="invalid")
 
-    # ASSERT
     assert "⚠️" in result

@@ -4,11 +4,20 @@ from discord.ext import commands
 from rpg_narrative_server.frameworks.discord.bot import create_bot
 from tests.config.factories.context import make_context
 from tests.config.factories.deps import make_deps
+from tests.config.factories.help import make_help
 from tests.config.helpers.discord_factory import DummySettings
 
 # ---------------------------------------------------------
 # HELPERS
 # ---------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def mock_help_command(monkeypatch):
+    monkeypatch.setattr(
+        "rpg_narrative_server.frameworks.discord.bot.register_help_commands",
+        lambda bot: make_help(),
+    )
 
 
 def make_test_bot():

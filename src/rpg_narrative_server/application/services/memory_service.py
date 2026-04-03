@@ -69,6 +69,7 @@ class MemoryService:
                         temperature=0.3,
                         max_tokens=300,
                     )
+                    request.campaign_id = campaign_id
 
                     response = await self.llm.generate(request)
 

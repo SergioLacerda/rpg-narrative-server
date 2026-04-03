@@ -94,7 +94,7 @@ class VectorIndexBuilder:
     # build
     # ---------------------------------------------------------
 
-    def build(self):
+    def build(self, *, semantic_cache=None, campaign_id=None):
         # -----------------------------------------
         # stores
         # -----------------------------------------
@@ -174,6 +174,8 @@ class VectorIndexBuilder:
             memory_provider=self.memory_provider,
             entity_provider=self.entity_provider,
             context_provider=self.context_provider,
+            semantic_cache=semantic_cache,
+            campaign_id=campaign_id,
         )
 
         # -----------------------------------------

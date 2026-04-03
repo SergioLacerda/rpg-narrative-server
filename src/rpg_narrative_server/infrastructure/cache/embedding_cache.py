@@ -1,25 +1,45 @@
+import hashlib
+
 from cachetools import TTLCache
 
 
 class EmbeddingCache:
-    def __init__(self, client):
+    def __init__(self, client, ttl: int = 3600, max_items: int = 512):
         self.client = client
-        self.cache = TTLCache(ttl=3600, max_items=512)
+        self.cache = TTLCache(maxsize=max_items, ttl=ttl)
 
-    async def embed(self, text: str):
-        key = self._key(text)
+    # ---------------------------------------------------------
+    # EMBED
+    # ---------------------------------------------------------
+
+    async def embed(self, campaign_id: str, text: str):
+        if not text:
+            return None
+
+        key = self._key(campaign_id, text)
 
         cached = self.cache.get(key)
-        if cached:
+        if cached is not None:
             return cached
 
         vec = await self.client.embed(text)
 
-        self.cache.set(key, vec)
+        if vec is not None:
+            self.cache.set(key, vec)
 
         return vec
 
-    def _key(self, text: str):
-        import hashlib
+    # ---------------------------------------------------------
+    # KEY
+    # ---------------------------------------------------------
 
-        return hashlib.sha1(text.strip().lower().encode()).hexdigest()
+    def _key(self, campaign_id: str, text: str):
+        raw = f"{campaign_id}:{text.strip().lower()}"
+        return hashlib.sha1(raw.encode()).hexdigest()
+
+    # ---------------------------------------------------------
+    # INVALIDATION
+    # ---------------------------------------------------------
+
+    def clear(self):
+        self.cache.clear()

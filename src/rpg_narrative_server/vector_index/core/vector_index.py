@@ -43,6 +43,8 @@ class VectorIndex:
         memory_provider=None,
         entity_provider=None,
         context_provider=None,
+        semantic_cache=None,
+        campaign_id: str | None = None,
     ):
         self.components = components
 
@@ -60,6 +62,9 @@ class VectorIndex:
 
         self._fallback_ann = None
         self._ann = None
+
+        self.semantic_cache = semantic_cache
+        self.campaign_id = campaign_id
 
     # ==========================================================
     # EMBEDDING (SAFE WRAPPER)
@@ -209,6 +214,27 @@ class VectorIndex:
         logger.debug("search query_len=%s k=%s", len(query), k)
 
         try:
+            # -----------------------------------------------------
+            # EMBEDDING (necessário para semantic cache)
+            # -----------------------------------------------------
+            query_vector = await self._embed(query)
+
+            # -----------------------------------------------------
+            # 🔥 SEMANTIC CACHE (READ)
+            # -----------------------------------------------------
+            if self.semantic_cache and self.campaign_id:
+                cached = self.semantic_cache.get(
+                    self.campaign_id,
+                    query,
+                    query_vector,
+                )
+                if cached is not None:
+                    logger.debug("[VectorIndex] semantic cache hit")
+                    return cached
+
+            # -----------------------------------------------------
+            # PIPELINE
+            # -----------------------------------------------------
             pipeline = await self._ensure_pipeline()
 
             if pipeline is None:
@@ -216,10 +242,27 @@ class VectorIndex:
                 return []
 
             ctx = self._build_context(query, k)
+            ctx.q_vec = query_vector
 
             ctx = await pipeline.run(ctx)
 
-            return ctx.results or []
+            results = ctx.results or []
+
+            # -----------------------------------------------------
+            # 🔥 SEMANTIC CACHE (WRITE)
+            # -----------------------------------------------------
+            if self.semantic_cache and self.campaign_id:
+                try:
+                    self.semantic_cache.set(
+                        self.campaign_id,
+                        query,
+                        query_vector,
+                        results,
+                    )
+                except Exception:
+                    logger.debug("semantic cache write failed")
+
+            return results
 
         except TimeoutError:
             logger.warning("search timeout query_len=%s", len(query))

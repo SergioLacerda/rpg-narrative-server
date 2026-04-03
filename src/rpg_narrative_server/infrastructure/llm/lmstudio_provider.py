@@ -47,7 +47,45 @@ class LMStudioProvider(BaseProvider):
         if not resp or not resp.choices:
             return ""
 
-        return (resp.choices[0].message.content or "").strip()
+        choice = resp.choices[0]
+
+        # --------------------------------------------
+        # 1. padrão OpenAI
+        # --------------------------------------------
+        msg = getattr(choice, "message", None)
+        if msg:
+            content = getattr(msg, "content", None)
+            if content:
+                return content.strip()
+
+        # --------------------------------------------
+        # 2. LM Studio (delta)
+        # --------------------------------------------
+        delta = getattr(choice, "delta", None)
+        if delta:
+            content = getattr(delta, "content", None)
+            if content:
+                return content.strip()
+
+        # --------------------------------------------
+        # 3. fallback (text)
+        # --------------------------------------------
+        text = getattr(choice, "text", None)
+        if text:
+            return text.strip()
+
+        # --------------------------------------------
+        # 4. DEBUG CRÍTICO (deixe isso por enquanto)
+        # --------------------------------------------
+        try:
+            import json
+
+            raw = resp.model_dump()
+            print("⚠️ LLM RAW RESPONSE:", json.dumps(raw, indent=2))
+        except Exception:
+            print("⚠️ LLM RAW RESPONSE (repr):", resp)
+
+        return ""
 
     # ---------------------------------------------------------
     # STREAMING (🔥)

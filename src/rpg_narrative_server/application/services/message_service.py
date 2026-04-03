@@ -78,11 +78,6 @@ class MessageService:
         # ----------------------------------
         campaign_id = self.campaign_state.get(channel_id)
 
-        if not campaign_id:
-            if self.runtime.should_warn(channel_id, 30):
-                await responder.send("🎲 Nenhuma campanha ativa.\nUse `/campaign switch <nome>`")
-            return
-
         # ----------------------------------
         # EXECUÇÃO
         # ----------------------------------

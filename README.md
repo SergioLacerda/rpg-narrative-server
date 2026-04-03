@@ -95,7 +95,7 @@ http://localhost:8000/docs
 ## 🧪 Testing
 
 ```bash
-pytest --cov=src/rpgbot --cov-report=term-missing
+pytest --cov=src/rpg_narrative_server --cov-report=term-missing
 ```
 
 ---

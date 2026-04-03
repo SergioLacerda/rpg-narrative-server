@@ -1,5 +1,7 @@
 import asyncio
 
+from rpg_narrative_server.application.dto.llm_response import LLMResponse
+
 
 class ResponseCache:
     """
@@ -18,11 +20,21 @@ class ResponseCache:
 
         return self._cache
 
-    async def get(self, key: str) -> str | None:
+    async def get(self, key: str):
         cache = await self._load()
-        return cache.get(key)
+        data = cache.get(key)
 
-    async def set(self, key: str, response: str):
+        if not data:
+            return None
+
+        return LLMResponse.from_dict(data)
+
+    async def set(self, key: str, response):
         cache = await self._load()
-        cache[key] = response
+
+        if hasattr(response, "to_dict"):
+            cache[key] = response.to_dict()
+        else:
+            cache[key] = {"content": str(response)}
+
         await asyncio.to_thread(self._saver, cache)

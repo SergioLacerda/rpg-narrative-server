@@ -86,6 +86,7 @@ class NarrativeUseCase:
 
         config = builder.get_generation_config(scene)
 
+        print("NarrativeUseCase: Before request:")
         request = LLMRequest(
             prompt=user_prompt,
             system_prompt=system_prompt,
@@ -97,11 +98,16 @@ class NarrativeUseCase:
             },
         )
 
+        print("NarrativeUseCase: After request:")
+        request.campaign_id = campaign_id
+
         # -------------------------------------------------
         # 3. LLM
         # -------------------------------------------------
         try:
             response = await self.llm.generate(request)
+            print("NarrativeUseCase: response type =", type(response))
+            print("NarrativeUseCase: response =", response)
         except Exception:
             logger.warning("LLM failed", exc_info=True)
             return self._fallback_response(action, intent)

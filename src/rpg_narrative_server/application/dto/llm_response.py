@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any, Optional
 
 
 @dataclass
@@ -13,5 +14,65 @@ class LLMResponse:
     tokens_input: int | None = None
     tokens_output: int | None = None
 
-    # debug
-    raw: dict | None = None
+    # debug (NUNCA confiar totalmente nisso)
+    raw: dict[str, Any] | None = None
+
+    # ---------------------------------------------------------
+    # SERIALIZAÇÃO
+    # ---------------------------------------------------------
+
+    def to_dict(self) -> dict:
+        return {
+            "v": 1,
+            "content": self.content,
+            "provider": self.provider,
+            "model": self.model,
+            "latency_ms": self.latency_ms,
+            "tokens_input": self.tokens_input,
+            "tokens_output": self.tokens_output,
+            "raw": self._safe_raw(),
+        }
+
+    # ---------------------------------------------------------
+    # DESERIALIZAÇÃO
+    # ---------------------------------------------------------
+
+    @classmethod
+    def from_dict(cls, data: dict) -> Optional["LLMResponse"]:
+        if not data:
+            return None
+
+        if isinstance(data, str):
+            return cls(
+                content=data,
+                provider="unknown",
+            )
+
+        return cls(
+            content=data.get("content", ""),
+            provider=data.get("provider", "unknown"),
+            model=data.get("model"),
+            latency_ms=data.get("latency_ms"),
+            tokens_input=data.get("tokens_input"),
+            tokens_output=data.get("tokens_output"),
+            raw=data.get("raw"),
+        )
+
+    # ---------------------------------------------------------
+    # UTIL
+    # ---------------------------------------------------------
+
+    def _safe_raw(self):
+        """
+        Garante que raw não quebra JSON.
+        """
+        if self.raw is None:
+            return None
+
+        try:
+            import json
+
+            json.dumps(self.raw)
+            return self.raw
+        except Exception:
+            return str(self.raw)
