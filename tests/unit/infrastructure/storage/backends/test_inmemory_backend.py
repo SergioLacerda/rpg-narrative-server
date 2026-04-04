@@ -1,4 +1,4 @@
-from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import (
+from rpg_narrative_server.infrastructure.adapters.storage.backends.inmemory_backend import (
     InMemoryStorageBackend,
     InMemoryVectorStore,
 )

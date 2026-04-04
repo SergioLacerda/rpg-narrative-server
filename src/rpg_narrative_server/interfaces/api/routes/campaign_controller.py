@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
+from rpg_narrative_server.interfaces.api.api_responder import ApiResponder
 from rpg_narrative_server.interfaces.api.dependencies import get_container
-from rpg_narrative_server.interfaces.api.responder import ApiResponder
 
 router = APIRouter()
 

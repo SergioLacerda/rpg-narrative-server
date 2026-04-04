@@ -1,6 +1,6 @@
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.adapters.document_store import (
+from rpg_narrative_server.infrastructure.adapters.storage.adapters.document_store import (
     DocumentStoreAdapter,
 )
 from tests.config.fakes.storage.kv import DummyKV

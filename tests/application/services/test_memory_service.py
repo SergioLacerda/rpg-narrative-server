@@ -6,17 +6,29 @@ from rpg_narrative_server.application.services.memory_service import MemoryServi
 from rpg_narrative_server.domain.narrative.narrative_memory import NarrativeMemory
 
 
-@pytest.mark.asyncio
-async def test_load_memory_empty():
-    repo = MagicMock()
-    repo.get_events = AsyncMock(return_value=[])
+class DummyRepo:
+    def __init__(self, data=None):
+        self.data = data or []
+        self.saved = None
 
-    service = MemoryService(repo)
+    async def get_events(self, campaign_id):
+        return self.data
 
-    memory = await service.load_memory("camp")
+    async def save_events(self, campaign_id, events):
+        self.saved = (campaign_id, events)
 
-    assert isinstance(memory, NarrativeMemory)
-    assert memory.recent_events == []
+
+class DummySummarizer:
+    def extract(self, events):
+        return " ".join(e["text"] for e in events)
+
+    def build_prompt(self, text):
+        return f"SUMMARIZE: {text}"
+
+
+class DummyLLM:
+    async def generate(self, request):
+        return "LLM SUMMARY"
 
 
 @pytest.mark.asyncio
@@ -135,3 +147,123 @@ async def test_append_empty_text():
     await service.append("camp", "")
 
     repo.save_events.assert_not_called()
+
+
+def test_create_empty():
+    service = MemoryService(DummyRepo())
+
+    mem = service.create_empty()
+
+    assert isinstance(mem, NarrativeMemory)
+    assert mem.recent_events == []
+
+
+@pytest.mark.asyncio
+async def test_load_memory_empty():
+    service = MemoryService(DummyRepo([]))
+
+    mem = await service.load_memory("c1")
+
+    assert mem.recent_events == []
+
+
+@pytest.mark.asyncio
+async def test_load_memory_with_data():
+    repo = DummyRepo([{"text": "a"}, {"text": "b"}])
+    service = MemoryService(repo)
+
+    mem = await service.load_memory("c1")
+
+    assert mem.recent_events == ["a", "b"]
+
+
+@pytest.mark.asyncio
+async def test_append_no_overflow():
+    repo = DummyRepo([{"text": "a"}])
+    service = MemoryService(repo, max_events=5)
+
+    await service.append("c1", "b")
+
+    assert repo.saved is not None
+    _, events = repo.saved
+
+    assert len(events) == 2
+
+
+@pytest.mark.asyncio
+async def test_append_overflow_no_summarizer():
+    repo = DummyRepo([{"text": str(i)} for i in range(5)])
+
+    service = MemoryService(repo, max_events=3)
+
+    await service.append("c1", "new")
+
+    assert repo.saved is not None
+    _, events = repo.saved
+
+    assert len(events) == 3
+
+
+@pytest.mark.asyncio
+async def test_append_with_summarizer_no_llm():
+    repo = DummyRepo([{"text": str(i)} for i in range(5)])
+
+    service = MemoryService(
+        repo,
+        max_events=3,
+        summarizer=DummySummarizer(),
+    )
+
+    await service.append("c1", "new")
+
+    assert repo.saved is not None
+    _, events = repo.saved
+
+    assert len(events) == 3
+
+
+@pytest.mark.asyncio
+async def test_append_with_llm_summary():
+    repo = DummyRepo([{"text": str(i)} for i in range(5)])
+
+    service = MemoryService(
+        repo,
+        max_events=3,
+        summarizer=DummySummarizer(),
+        llm_service=DummyLLM(),
+    )
+
+    await service.append("c1", "new")
+
+    assert repo.saved is not None
+    _, events = repo.saved
+
+    assert len(events) == 3
+
+
+@pytest.mark.asyncio
+async def test_clear():
+    repo = DummyRepo([{"text": "a"}])
+    service = MemoryService(repo)
+
+    await service.clear("c1")
+
+    assert repo.saved == ("c1", [])
+
+
+def test_compress_short():
+    service = MemoryService(DummyRepo())
+
+    text = "hello"
+
+    assert service._default_compress(text) == "hello"
+
+
+def test_compress_long():
+    service = MemoryService(DummyRepo())
+
+    text = "word " * 100
+
+    result = service._default_compress(text)
+
+    assert len(result) <= 200

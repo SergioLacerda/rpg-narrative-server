@@ -1,6 +1,6 @@
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.adapters.metadata_store import (
+from rpg_narrative_server.infrastructure.adapters.storage.adapters.metadata_store import (
     MetadataStoreAdapter,
 )
 from tests.config.fakes.storage.kv import DummyKV

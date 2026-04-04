@@ -1,6 +1,6 @@
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.adapters.vector_store import (
+from rpg_narrative_server.infrastructure.adapters.storage.adapters.vector_store import (
     VectorStoreAdapter,
 )
 

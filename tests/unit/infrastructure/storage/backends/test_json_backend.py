@@ -1,5 +1,5 @@
 def test_json_backend_builds(tmp_path):
-    from rpg_narrative_server.infrastructure.storage.backends.json_backend import (
+    from rpg_narrative_server.infrastructure.adapters.storage.backends.json_backend import (
         JSONStorageBackend,
     )
 

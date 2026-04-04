@@ -9,7 +9,7 @@ from rpg_narrative_server.domain.dice.ast.nodes import (
     RollNode,
 )
 from rpg_narrative_server.domain.dice.condition import _Condition
-from rpg_narrative_server.shared.dice.dice_regex import DiceRegex
+from rpg_narrative_server.domain.dice.dice_regex import DiceRegex
 
 
 class DiceParser:

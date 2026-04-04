@@ -1,4 +1,4 @@
-from rpg_narrative_server.infrastructure.storage.kv.in_memory_kv_store import (
+from rpg_narrative_server.infrastructure.adapters.storage.kv.in_memory_kv_store import (
     InMemoryKVStore,
 )
 

@@ -1,8 +1,8 @@
 import json
 import logging
 
+from rpg_narrative_server.shared.hash_utils import sha256_hash
 from rpg_narrative_server.shared.resilience import resilient_call
-from rpg_narrative_server.utils.hash_utils import sha256_hash
 
 logger = logging.getLogger("rpg_narrative_server.llm")
 

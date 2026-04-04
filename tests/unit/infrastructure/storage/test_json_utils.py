@@ -1,4 +1,4 @@
-from rpg_narrative_server.infrastructure.storage.json_utils import read_json, write_json
+from rpg_narrative_server.infrastructure.adapters.storage.json_utils import read_json, write_json
 
 
 def test_read_json_file_not_exists(tmp_path):

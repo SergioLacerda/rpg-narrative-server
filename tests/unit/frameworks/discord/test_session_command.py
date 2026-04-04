@@ -1,62 +1,112 @@
 import pytest
 
-from rpg_narrative_server.frameworks.discord.adapters.session_commands import (
-    register_session_commands,
+from rpg_narrative_server.application.commands.session_command import (
+    SessionCommand,
+    build_session_command,
 )
-from tests.config.factories.bot import make_bot, make_executor
-from tests.config.factories.context import make_context
-from tests.config.factories.deps import make_deps
-from tests.config.fakes.usecases import DummyEndSession
-
-# ---------------------------------------------------------
-# SUCCESS
-# ---------------------------------------------------------
 
 
-@pytest.mark.asyncio
-async def test_endsession_success():
-    ctx = make_context(interaction=False)
-    bot = make_bot()
-    executor = make_executor()
-
-    deps = make_deps(end_session=DummyEndSession("summary"))
-
-    # 🔥 FIX
-    deps.campaign_state.set(ctx.channel.id, "test_campaign")
-
-    registry = bot._registry
-
-    register_session_commands(bot, deps, executor, registry)
-
-    cmd = bot.get_command("endsession")
-    assert cmd is not None
-
-    await cmd.callback(ctx)
-
-    assert ctx.sent_messages
-    assert any(keyword in ctx.sent_messages[0] for keyword in ("🛑", "encerrada"))
+class DummyCtx:
+    def __init__(self, channel_id="ch1"):
+        self.channel = type("Channel", (), {"id": channel_id})()
 
 
-# ---------------------------------------------------------
-# NO SUMMARY
-# ---------------------------------------------------------
+class DummyState:
+    def __init__(self, value=None):
+        self.value = value
+        self.cleared_keys = []
+
+    def get(self, key):
+        return self.value
+
+    def clear(self, key):
+        self.cleared_keys.append(key)
+
+
+class DummyUsecase:
+    def __init__(self, result):
+        self.result = result
+        self.called_with = None
+
+    async def execute(self, **kwargs):
+        self.called_with = kwargs
+        return self.result
 
 
 @pytest.mark.asyncio
-async def test_endsession_no_summary():
-    ctx = make_context()
-    bot = make_bot()
-    executor = make_executor()
+async def test_no_campaign_active():
+    state = DummyState(None)
+    usecase = DummyUsecase("irrelevant")
 
-    deps = make_deps(end_session=DummyEndSession(None))
-    registry = bot._registry
+    cmd = SessionCommand(usecase, state)
 
-    register_session_commands(bot, deps, executor, registry)
+    result = await cmd.execute(DummyCtx())
 
-    cmd = bot.get_command("endsession")
-    assert cmd is not None
+    assert "Nenhuma campanha ativa" in result
+    assert state.cleared_keys == []
 
-    await cmd.callback(ctx)
 
-    assert ctx.sent_messages
-    assert "⚠️" in ctx.sent_messages[0]
+@pytest.mark.asyncio
+async def test_successful_session_end():
+    state = DummyState("camp1")
+    usecase = DummyUsecase("Resumo final")
+
+    cmd = SessionCommand(usecase, state)
+
+    ctx = DummyCtx()
+
+    result = await cmd.execute(ctx)
+
+    assert "Sessão encerrada" in result
+    assert "Resumo final" in result
+
+    assert state.cleared_keys == ["ch1"]
+
+    assert usecase.called_with == {"campaign_id": "camp1"}
+
+
+@pytest.mark.asyncio
+async def test_result_none_returns_warning():
+    state = DummyState("camp1")
+    usecase = DummyUsecase(None)
+
+    cmd = SessionCommand(usecase, state)
+
+    ctx = DummyCtx()
+
+    result = await cmd.execute(ctx)
+
+    assert "Nenhum resumo gerado" in result
+
+    assert state.cleared_keys == ["ch1"]
+
+
+@pytest.mark.asyncio
+async def test_usecase_called_with_correct_campaign():
+    state = DummyState("campXYZ")
+    usecase = DummyUsecase("ok")
+
+    cmd = SessionCommand(usecase, state)
+
+    result = await cmd.execute(DummyCtx())
+
+    assert result is not None
+    assert "Sessão encerrada" in result
+
+    assert usecase.called_with is not None
+    assert usecase.called_with["campaign_id"] == "campXYZ"
+
+
+def test_build_session_command():
+    class Deps:
+        def __init__(self):
+            self.end_session = DummyUsecase("ok")
+            self.campaign_state = DummyState("camp1")
+
+    deps = Deps()
+
+    cmd = build_session_command(deps)
+
+    assert isinstance(cmd, SessionCommand)
+    assert cmd.end_session is deps.end_session
+    assert cmd.campaign_state is deps.campaign_state

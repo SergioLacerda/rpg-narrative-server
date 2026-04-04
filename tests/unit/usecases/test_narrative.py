@@ -1,66 +1,87 @@
 import pytest
 
-from rpg_narrative_server.application.contracts.response import Response
-from tests.config.helpers.asserts import assert_not_empty
-
-# ---------------------------------------------------------
-# HELPERS
-# ---------------------------------------------------------
+from rpg_narrative_server.usecases.narrative_event import NarrativeUseCase
 
 
-def assert_response_ok(response: Response):
-    assert isinstance(response, Response)
-    assert isinstance(response.text, str)
-    assert_not_empty(response)
+class MockContextBuilder:
+    async def build(self, **kwargs):
+        return {"scene_type": "default"}, None
 
 
-# ---------------------------------------------------------
-# TESTS
-# ---------------------------------------------------------
+class SuccessLLM:
+    async def generate(self, request):
+        return type("Resp", (), {"content": "You see a forest."})()
 
 
-@pytest.mark.unit
-@pytest.mark.asyncio
-async def test_narrative_basic_flow(container):
-    result = await container.narrative.execute(
-        user_id="user1",
-        campaign_id="test_campaign",
-        action="look around",
+def build_usecase(llm):
+    return NarrativeUseCase(
+        repo=None,
+        llm=llm,
+        vector_index=None,
+        event_bus=None,
+        memory_service=None,
+        vector_memory=None,
+        document_resolver=None,
+        context_builder=MockContextBuilder(),
     )
 
-    assert_response_ok(result)
 
-
-@pytest.mark.unit
 @pytest.mark.asyncio
-async def test_narrative_llm_failure(container_factory):
+async def test_narrative_success():
+    usecase = build_usecase(SuccessLLM())
+
+    result = await usecase.execute("c1", "look around", "u1")
+
+    assert result.type == "narrative"
+    assert "forest" in result.text
+    assert result.metadata["scene_type"] == "default"
+
+
+@pytest.mark.asyncio
+async def test_narrative_llm_failure_fallback():
     class FailingLLM:
-        async def generate(self, prompt):
-            raise Exception("LLM failed")
+        async def generate(self, request):
+            raise Exception("boom")
 
-    container = container_factory(llm=FailingLLM())
+    usecase = build_usecase(FailingLLM())
 
-    result = await container.narrative.execute(
-        user_id="1",
-        campaign_id="test",
-        action="test",
-    )
+    result = await usecase.execute("c1", "attack", "u1")
 
-    assert_response_ok(result)
+    assert result.type == "narrative"
+    assert result.metadata["fallback"] is True
 
 
-@pytest.mark.unit
 @pytest.mark.asyncio
-async def test_narrative_event_bus_failure(container, monkeypatch):
-    def fail(*args, **kwargs):
-        raise Exception("event bus failed")
+async def test_llm_returns_none():
+    class MockLLM:
+        async def generate(self, request):
+            return None
 
-    monkeypatch.setattr(container.event_bus, "publish", fail)
+    usecase = build_usecase(MockLLM())
 
-    result = await container.narrative.execute(
-        campaign_id="test",
-        action="test",
-        user_id="user",
-    )
+    with pytest.raises(RuntimeError, match="LLM returned None"):
+        await usecase.execute("c1", "attack", "u1")
 
-    assert_response_ok(result)
+
+@pytest.mark.asyncio
+async def test_llm_returns_empty():
+    class MockLLM:
+        async def generate(self, request):
+            return type("Resp", (), {"content": "   "})()
+
+    usecase = build_usecase(MockLLM())
+
+    with pytest.raises(RuntimeError):
+        await usecase.execute("c1", "attack", "u1")
+
+
+@pytest.mark.asyncio
+async def test_llm_returns_none_content():
+    class MockLLM:
+        async def generate(self, request):
+            return type("Resp", (), {"content": None})()
+
+    usecase = build_usecase(MockLLM())
+
+    with pytest.raises(RuntimeError):
+        await usecase.execute("c1", "attack", "u1")

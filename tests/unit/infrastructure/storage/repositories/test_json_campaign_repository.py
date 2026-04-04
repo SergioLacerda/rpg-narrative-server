@@ -1,6 +1,6 @@
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.repositories.json_campaign_repository import (
+from rpg_narrative_server.infrastructure.adapters.storage.repositories.json_campaign_repository import (
     JSONCampaignRepository,
 )
 

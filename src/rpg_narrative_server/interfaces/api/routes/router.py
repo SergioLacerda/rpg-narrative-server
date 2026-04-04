@@ -1,5 +1,8 @@
 from fastapi import APIRouter
 
+from rpg_narrative_server.interfaces.api.routes.benchmark_controller import (
+    router as benchmark_router,
+)
 from rpg_narrative_server.interfaces.api.routes.campaign_controller import (
     router as campaign_router,
 )
@@ -18,7 +21,6 @@ from rpg_narrative_server.interfaces.api.routes.system_controller import (
 
 api_router = APIRouter()
 
-# domínio narrativo
 api_router.include_router(
     narrative_router,
     prefix="/campaign",
@@ -31,14 +33,12 @@ api_router.include_router(
     tags=["Campaign"],
 )
 
-# utilidades
 api_router.include_router(
     dice_router,
     prefix="/utils",
     tags=["Dice"],
 )
 
-# sistema
 api_router.include_router(
     health_router,
     tags=["Health"],
@@ -47,4 +47,9 @@ api_router.include_router(
 api_router.include_router(
     system_router,
     tags=["System"],
+)
+
+api_router.include_router(
+    benchmark_router,
+    tags=["Benchmark"],
 )

@@ -16,25 +16,31 @@ from rpg_narrative_server.config.loader import load_settings
 from rpg_narrative_server.domain.narrative.session_summarizer import SessionSummarizer
 from rpg_narrative_server.domain.rag.context_builder import ContextBuilder
 from rpg_narrative_server.domain.rag.context_window import DynamicContextWindow
+from rpg_narrative_server.infrastructure.adapters.benchmark.benchmark_service import (
+    BenchmarkService,
+)
+from rpg_narrative_server.infrastructure.adapters.llm.factory import create_llm_provider
+from rpg_narrative_server.infrastructure.adapters.storage.repositories.json_campaign_repository import (
+    JSONCampaignRepository,
+)
+from rpg_narrative_server.infrastructure.adapters.storage.vector_store_config import (
+    VectorStoreConfig,
+)
 from rpg_narrative_server.infrastructure.cache.response_cache import ResponseCache
 from rpg_narrative_server.infrastructure.cache.response_cache_storage import build_file_storage
 from rpg_narrative_server.infrastructure.cache.ttl_cache import TTLCache
 from rpg_narrative_server.infrastructure.embeddings.factory import create_embedding
 from rpg_narrative_server.infrastructure.events.blinker_event_bus import BlinkerEventBus
-from rpg_narrative_server.infrastructure.llm.factory import create_llm_provider
 from rpg_narrative_server.infrastructure.rag.async_vector_memory_adapter import (
     AsyncVectorMemoryAdapter,
 )
 from rpg_narrative_server.infrastructure.random.python_random_provider import PythonRandomProvider
 from rpg_narrative_server.infrastructure.runtime.executor import Executor, ExecutorType
-from rpg_narrative_server.infrastructure.storage.repositories.json_campaign_repository import (
-    JSONCampaignRepository,
-)
-from rpg_narrative_server.infrastructure.storage.vector_store_config import VectorStoreConfig
 from rpg_narrative_server.interfaces.dice.parser_adapter import DiceParserAdapter
 from rpg_narrative_server.usecases.end_session import EndSessionUseCase
 from rpg_narrative_server.usecases.narrative_event import NarrativeUseCase
 from rpg_narrative_server.usecases.roll_dice import RollDiceUseCase
+from rpg_narrative_server.usecases.run_benchmark import RunBenchmarkUseCase
 from rpg_narrative_server.vector_index.builder import VectorIndexBuilder
 
 logger = logging.getLogger("rpg_narrative_server.container")
@@ -100,14 +106,14 @@ class Container:
         )
 
         if storage_type == "json":
-            from rpg_narrative_server.infrastructure.storage.backends.json_backend import (
+            from rpg_narrative_server.infrastructure.adapters.storage.backends.json_backend import (
                 JSONStorageBackend,
             )
 
             return JSONStorageBackend(base_path, config)
 
         if storage_type == "memory":
-            from rpg_narrative_server.infrastructure.storage.backends.inmemory_backend import (
+            from rpg_narrative_server.infrastructure.adapters.storage.backends.inmemory_backend import (
                 InMemoryStorageBackend,
             )
 
@@ -373,3 +379,11 @@ class Container:
             self._response_cache_manager = ResponseCacheManager()
 
         return self._response_cache_manager
+
+    @property
+    def benchmark(self):
+        return BenchmarkService()
+
+    @property
+    def run_benchmark(self):
+        return RunBenchmarkUseCase(self.benchmark)

@@ -7,6 +7,63 @@ from rpg_narrative_server.application.services.llm.llm_service import LLMService
 from tests.config.fakes.llm.fake_request import DummyRequest
 
 
+class DummyProvider:
+    async def generate(self, request):
+        return "ok"
+
+    async def stream(self, request):
+        yield "chunk"
+
+
+class DummyCache:
+    def __init__(self):
+        self.store = {}
+
+    def get(self, k):
+        return self.store.get(k)
+
+    def set(self, k, v):
+        self.store[k] = v
+
+
+class DummyAsyncCache:
+    def __init__(self):
+        self.store = {}
+
+    async def get(self, k):
+        return self.store.get(k)
+
+    async def set(self, k, v):
+        self.store[k] = v
+
+
+class DummyCB:
+    def __init__(self, allow=True):
+        self._allow = allow
+        self.failed = False
+        self.succeeded = False
+
+    def allow(self):
+        return self._allow
+
+    def success(self):
+        self.succeeded = True
+
+    def failure(self):
+        self.failed = True
+
+
+class Req:
+    def __init__(self, **kwargs):
+        self.prompt = kwargs.get("prompt", "hi")
+        self.system_prompt = kwargs.get("system_prompt", "")
+        self.temperature = kwargs.get("temperature", 0.5)
+        self.max_tokens = kwargs.get("max_tokens", 10)
+        self.campaign_id = kwargs.get("campaign_id", None)
+        self.metadata = kwargs.get("metadata", None)
+        self.tools = kwargs.get("tools", None)
+
+
 @pytest.mark.asyncio
 async def test_generate_empty_prompt():
     service = LLMService(provider=MagicMock())
@@ -153,24 +210,6 @@ def test_compute_timeout_default():
 
 
 @pytest.mark.asyncio
-async def test_stream():
-    async def fake_stream(_):
-        yield "a"
-        yield "b"
-
-    provider = MagicMock()
-    provider.stream = fake_stream
-
-    service = LLMService(provider=provider)
-
-    chunks = []
-    async for c in service.stream(DummyRequest()):
-        chunks.append(c)
-
-    assert chunks == ["a", "b"]
-
-
-@pytest.mark.asyncio
 async def test_circuit_open_blocks_call():
     cb = CircuitBreaker(failure_threshold=1)
     cb.failure()
@@ -220,3 +259,61 @@ async def test_failure_triggers_circuit():
             await service.generate(DummyRequest())
 
     assert cb.state == "OPEN"
+
+
+def test_cache_key_with_metadata_and_tools():
+    from rpg_narrative_server.application.services.llm.llm_service import LLMService
+
+    svc = LLMService(DummyProvider())
+
+    req = Req(
+        metadata={"a": 1},
+        tools=[{"name": "tool"}],
+    )
+
+    key = svc._cache_key(req)
+
+    assert isinstance(key, str)
+
+
+@pytest.mark.asyncio
+async def test_circuit_breaker_blocks():
+    from rpg_narrative_server.application.services.llm.llm_service import LLMService
+
+    svc = LLMService(
+        DummyProvider(),
+        circuit_breaker=DummyCB(allow=False),
+    )
+
+    req = Req()
+
+    with pytest.raises(RuntimeError):
+        await svc.generate(req)
+
+
+@pytest.mark.asyncio
+async def test_generate_returns_none():
+    from rpg_narrative_server.application.services.llm.llm_service import LLMService
+
+    class Provider:
+        async def generate(self, req):
+            return None
+
+    svc = LLMService(Provider())
+
+    result = await svc.generate(Req())
+
+    assert result is None
+
+
+@pytest.mark.asyncio
+async def test_stream():
+    from rpg_narrative_server.application.services.llm.llm_service import LLMService
+
+    svc = LLMService(DummyProvider())
+
+    chunks = []
+    async for c in svc.stream(Req()):
+        chunks.append(c)
+
+    assert chunks == ["chunk"]

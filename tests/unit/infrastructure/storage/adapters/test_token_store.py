@@ -1,6 +1,6 @@
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.adapters.token_store import (
+from rpg_narrative_server.infrastructure.adapters.storage.adapters.token_store import (
     TokenStoreAdapter,
 )
 from tests.config.fakes.storage.kv import DummyKV

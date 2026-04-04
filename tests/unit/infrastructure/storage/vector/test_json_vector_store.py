@@ -1,22 +1,18 @@
+from pathlib import Path
+
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.vector.json_vector_store import (
+from rpg_narrative_server.infrastructure.adapters.storage.vector.json_vector_store import (
     JSONVectorStore,
 )
-
-# ---------------------------------------------------------
-# FIXTURE
-# ---------------------------------------------------------
+from rpg_narrative_server.infrastructure.adapters.storage.vector_store_config import (
+    VectorStoreConfig,
+)
 
 
 @pytest.fixture
 def store(tmp_path):
     return JSONVectorStore(tmp_path / "vec.json")
-
-
-# ---------------------------------------------------------
-# TESTES
-# ---------------------------------------------------------
 
 
 def test_add_and_get(store):
@@ -57,7 +53,82 @@ def test_persistence(tmp_path):
     store = JSONVectorStore(path)
     store.add("doc1", [1, 0])
 
-    # novo instance
     new_store = JSONVectorStore(path)
 
     assert new_store.get("doc1") == [1, 0]
+
+
+def test_get_file_size_kb_file_not_exists():
+    path = Path("non_existent.json")
+
+    size = JSONVectorStore._get_file_size_kb(path)
+
+    assert size == 0.0
+
+
+def test_rotation_trigger_by_size(tmp_path):
+    path = tmp_path / "store.json"
+
+    config = VectorStoreConfig(
+        enable_rotation=True,
+        max_file_size_kb=1,
+        max_entries_per_file=1000,
+    )
+
+    store = JSONVectorStore(path, config)
+
+    store.add("doc1", [1.0, 2.0, 3.0])
+
+    assert path.exists()
+
+
+def test_no_rotation_when_disabled(tmp_path):
+    path = tmp_path / "store.json"
+
+    config = VectorStoreConfig(enable_rotation=False)
+
+    store = JSONVectorStore(path, config)
+
+    store.add("doc1", [1, 2, 3])
+
+    assert path.exists()
+
+
+def test_should_rotate_by_entries(tmp_path):
+    path = tmp_path / "store.json"
+
+    config = VectorStoreConfig(
+        enable_rotation=True,
+        max_entries_per_file=1,
+    )
+
+    store = JSONVectorStore(path, config)
+
+    store.add("doc1", [1])
+    store.add("doc2", [2])
+
+    assert path.exists()
+
+
+def test_rotate_file_no_file(tmp_path):
+    path = tmp_path / "store.json"
+
+    store = JSONVectorStore(path)
+
+    store._rotate_file()
+
+
+def test_rotate_file_renames(tmp_path):
+    path = tmp_path / "store.json"
+
+    store = JSONVectorStore(path)
+
+    path.write_text("{}")
+
+    store._rotate_file()
+
+    assert not path.exists()
+
+    files = list(tmp_path.glob("store_*.json"))
+
+    assert len(files) == 1

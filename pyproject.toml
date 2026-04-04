@@ -84,6 +84,7 @@ ci = [
 # ---------------------------------------------------------
 [project.scripts]
 rpg_narrative_server = "rpg_narrative_server.app:run"
+rpg-benchmark = "rpg_narrative_server.interfaces.cli.benchmark_cli:cli"
 
 # ---------------------------------------------------------
 # 🧪 PYTEST

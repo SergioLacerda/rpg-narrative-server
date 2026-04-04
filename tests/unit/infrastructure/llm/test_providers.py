@@ -1,14 +1,14 @@
 import pytest
 
-import rpg_narrative_server.infrastructure.llm as providers_mod
+import rpg_narrative_server.infrastructure.adapters.llm as providers_mod
 from rpg_narrative_server.application.dto.llm_request import LLMRequest
 from rpg_narrative_server.application.services.llm.llm_errors import (
     LLMClientError,
     LLMRetryableError,
 )
-from rpg_narrative_server.infrastructure.llm.lmstudio_provider import LMStudioProvider
-from rpg_narrative_server.infrastructure.llm.ollama_provider import OllamaProvider
-from rpg_narrative_server.infrastructure.llm.openai_provider import OpenAIProvider
+from rpg_narrative_server.infrastructure.adapters.llm.lmstudio_provider import LMStudioProvider
+from rpg_narrative_server.infrastructure.adapters.llm.ollama_provider import OllamaProvider
+from rpg_narrative_server.infrastructure.adapters.llm.openai_provider import OpenAIProvider
 from tests.config.fakes.llm.fake_responses import (
     FakeOllamaResponse,
     FakeResponseEmpty,

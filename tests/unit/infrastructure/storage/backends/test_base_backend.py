@@ -1,6 +1,6 @@
 import pytest
 
-from rpg_narrative_server.infrastructure.storage.backends.base import StorageBackend
+from rpg_narrative_server.infrastructure.adapters.storage.backends.base import StorageBackend
 
 
 class IncompleteBackend(StorageBackend):
